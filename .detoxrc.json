@@ -1,0 +1,30 @@
+{
+  "testRunner": "jest",
+  "runnerConfig": "e2e/config.json",
+  "configurations": {
+    "ios": {
+      "type": "ios.simulator",
+      "binaryPath": "SPECIFY_PATH_TO_YOUR_APP_BINARY",
+      "device": {
+        "type": "iPhone 11"
+      }
+    },
+    "android": {
+      "type": "android.emulator",
+      "binaryPath": "/home/michael/.android/avd/Pixel_29_AOSP.avd",
+      "build": "cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release --scan && cd ..",
+      "device": {
+        "avdName": "Pixel_29_AOSP"
+      }
+    },
+    "android.sim.debug": {
+      "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+      "utilBinaryPaths": ["e2e/util/test-butler-app.apk"],
+      "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
+      "type": "android.emulator",
+      "device": {
+        "avdName": "Pixel_29_AOSP"
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+// Connection related actions
+export const CONNECTION_ESTABLISHED = 'CONNECTION_ESTABLISHED';
+export const CONNECTION_ERROR = 'CONNECTION_ERROR';
+export const CONNECTION_LOST = 'CONNECTION_LOST';
+export const ATTEMPTING_CONNECTION = 'ATTEMPTING_CONNECTION';
+
+// Image selection related actions
+export const OPEN_CAMERA = 'OPEN_CAMERA';
+export const OPEN_GALLERY = 'OPEN_GALLERY';
+export const CLEAR_CURRENT_IMAGE = 'CLEAR_CURRENT_IMAGE';
+export const UPDATE_IMAGE_PICKER_STATUS = 'UPDATE_IMAGE_PICKER_STATUS';
+
+// Location related actions
+export const LOCATION_SERVICE_UNAVAILABLE = 'LOCATION_SERVICE_UNAVAILABLE';

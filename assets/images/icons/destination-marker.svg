@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32.848" height="35.961" viewBox="0 0 32.848 35.961">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.765" y1="-0.13" x2="0.689" y2="1.191" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ee8893"/>
+      <stop offset="0.494" stop-color="#ff4f61"/>
+      <stop offset="1" stop-color="#dc4050"/>
+    </linearGradient>
+  </defs>
+  <g id="Group_69607" data-name="Group 69607" transform="translate(-172 -252.887)">
+    <ellipse id="Ellipse_44" data-name="Ellipse 44" cx="10.5" cy="2" rx="10.5" ry="2" transform="translate(178 279)" fill="rgba(49,0,4,0.46)"/>
+    <g id="Component_262_9" data-name="Component 262 – 9" transform="translate(172 252.887)">
+      <rect id="bound" width="31" height="31" transform="translate(0 0.113)" fill="#000"/>
+      <g id="Stockholm-icons-_-Map-_-Marker_1" data-name="Stockholm-icons-/-Map-/-Marker#1">
+        <rect id="bound-2" data-name="bound" width="32" height="32" fill="#000"/>
+        <path id="Combined-Shape" d="M5,13.926C5,7.37,9.6,3,16.5,3A11.237,11.237,0,0,1,28,13.926q0,5.1-10.011,14A2.391,2.391,0,0,1,14.932,28Q5,20.018,5,13.926Zm11.5,2.185a3.741,3.741,0,0,0,3.833-3.642A3.741,3.741,0,0,0,16.5,8.827a3.741,3.741,0,0,0-3.833,3.642A3.741,3.741,0,0,0,16.5,16.111Z" fill="url(#linear-gradient)"/>
+      </g>
+    </g>
+  </g>
+</svg>

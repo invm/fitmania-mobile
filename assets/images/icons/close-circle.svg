@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Group_69968" data-name="Group 69968" transform="translate(-2 -2)">
+    <g id="Group_69967" data-name="Group 69967">
+      <path id="Oval-5" d="M10,0A10,10,0,1,1,0,10,10,10,0,0,1,10,0Z" transform="translate(2 2)" fill="#d3d3d3"/>
+    </g>
+    <path id="Combined-Shape" d="M12.036,10.621l2.828-2.828a1,1,0,1,1,1.414,1.414L13.45,12.036l2.828,2.828a1,1,0,1,1-1.414,1.414L12.036,13.45,9.207,16.278a1,1,0,1,1-1.414-1.414l2.828-2.828L7.793,9.207A1,1,0,0,1,9.207,7.793Z" fill="#fafafa" fill-rule="evenodd"/>
+  </g>
+</svg>

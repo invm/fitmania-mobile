@@ -1,0 +1,15 @@
+{
+  "translation": {
+    "home_title": "Home",
+    "hello_world": "Hello world",
+    "some_text": "Some text goes here, some more text goes here",
+    "row_text": "Row test",
+    "column_1": "column 1",
+    "column_2": "column 2",
+    "column_3": "column 3",
+    "textinput_test": "Textinput test",
+    "testing": "Testing",
+    "change_language": "Change language",
+    "goto_privacy": "Go to privacy policy ->"
+  }
+}

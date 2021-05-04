@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48" height="48" viewBox="0 0 48 48">
+  <defs>
+    <filter id="Ellipse_46" x="0" y="0" width="48" height="48" filterUnits="userSpaceOnUse">
+      <feOffset dy="1" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feFlood flood-opacity="0.451"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_69954" data-name="Group 69954" transform="translate(-9175.5 -6489.5)">
+    <g id="Component_301_1" data-name="Component 301 – 1" transform="translate(9183 6496)">
+      <g transform="matrix(1, 0, 0, 1, -7.5, -6.5)" filter="url(#Ellipse_46)">
+        <circle id="Ellipse_46-2" data-name="Ellipse 46" cx="16.5" cy="16.5" r="16.5" transform="translate(7.5 6.5)" fill="#000" opacity="0.692"/>
+      </g>
+      <g id="Component_263_4" data-name="Component 263 – 4" transform="translate(1 1)">
+        <circle id="Ellipse_40" data-name="Ellipse 40" cx="12.5" cy="12.5" r="12.5" transform="translate(3 3)" fill="#ff4f61"/>
+        <g id="icon_34_food" data-name="icon/34/food">
+          <g id="icon_34_food-2" data-name="icon/34/food">
+            <rect id="base" width="30" height="30" fill="#000"/>
+            <path id="food" d="M9.517,15.75c0-.03,0-.06,0-.089L9.8,11.63a.918.918,0,0,1,1.836,0l.276,4.032A1.233,1.233,0,0,1,10.8,17c-.028,0-.056,0-.085,0A1.224,1.224,0,0,1,9.517,15.75Zm-7.733-.02q0-.035,0-.07L2.1,9.841A.925.925,0,0,1,3,8.947a.925.925,0,0,1,.9.894l.309,5.819A1.252,1.252,0,0,1,3.067,17L3,17A1.244,1.244,0,0,1,1.783,15.73ZM8.571,8.947V3.579A3.506,3.506,0,0,1,12,0V8.947ZM0,4.026V0H.857l.386,4.029a.482.482,0,0,0,.471.445.481.481,0,0,0,.471-.445L2.571,0h.857l.386,4.029a.472.472,0,0,0,.942,0L5.143,0H6V4.026A3.068,3.068,0,0,1,3,7.158,3.068,3.068,0,0,1,0,4.026Z" transform="translate(9 7)" fill="#000"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
