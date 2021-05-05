@@ -1,8 +1,5 @@
 import Toast from 'react-native-toast-message';
 import { Linking, Platform } from 'react-native';
-import analytics from '@react-native-firebase/analytics';
-
-export const PHONE_REGEX = /(^(0(?:5[0-689]))((?:(?![1,0]{1}))\d{7})$)|9999999999/;
 
 export const showMessage = (
   title: string,
@@ -50,9 +47,3 @@ export const stripObject = (obj: { [any: string]: any }) => {
   return obj;
 };
 
-export const LogEvent = async (
-  event: string,
-  data?: { [key: string]: any },
-) => {
-  await analytics().logEvent(event, data);
-};

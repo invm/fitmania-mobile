@@ -6,10 +6,12 @@ import * as Reducers from './reducers';
 
 const root = combineReducers({
   user: Reducers.user,
+  search: Reducers.search,
 });
 
 export const RootState = {
   user: Reducers.userInitialState,
+  search: Reducers.searchInitialState,
 };
 
 const middleware = [thunk];

@@ -64,6 +64,15 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>Assistant-Bold.ttf</string>
+		<string>Assistant-ExtraBold.ttf</string>
+		<string>Assistant-ExtraLight.ttf</string>
+		<string>Assistant-Light.ttf</string>
+		<string>Assistant-Medium.ttf</string>
+		<string>Assistant-Regular.ttf</string>
+		<string>Assistant-SemiBold.ttf</string>
+		<string>Ubuntu-Bold.ttf</string>
+		<string>Ubuntu-Light.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

@@ -4,7 +4,7 @@ import * as types from '../types/user';
 import { Dispatch, SetStateAction } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { LogEvent, showMessage } from '../../utils/utils';
+import { showMessage } from '../../utils/utils';
 import i18n from '../../i18n';
 import { API_URL, ENV } from './../../../env';
 import store from '../index';
@@ -14,23 +14,14 @@ import IUser from '../../interfaces/User';
 
 export const verifySession = () => async (dispatch: Function) => {
   try {
-    // const token = await AsyncStorage.getItem('token');
-    // if (token) {
     let requestParams = {
       method: Methods.POST,
       endpoint: `/verify-authentication`,
-      // body: {
-      //   token,
-      // },
     };
 
     await Request(dispatch, requestParams);
-    // let res = await Request(dispatch, requestParams);
-    // res.data.token && storeData('token', res.data.token);
     dispatch({ type: types.AUTHENTICATE, payload: true });
     dispatch(getProfile());
-    // }
-    // dispatch({ type: types.AUTHENTICATE, payload: false });
   } catch (error) {
     dispatch({ type: types.AUTHENTICATE, payload: false });
   }
@@ -44,13 +35,11 @@ export const register = (email: string) => async (dispatch: Function) => {
     method: Methods.POST,
     endpoint: `/register`,
     body: {
-      phone: email,
+      email: email,
     },
   };
 
   await Request(dispatch, requestParams);
-
-  await LogEvent('register');
 };
 
 export const login = (email: string) => async (dispatch: Function) => {
@@ -58,7 +47,7 @@ export const login = (email: string) => async (dispatch: Function) => {
     method: Methods.POST,
     endpoint: `/login`,
     body: {
-      phone: email,
+      email: email,
     },
   };
 
@@ -67,15 +56,15 @@ export const login = (email: string) => async (dispatch: Function) => {
   return (ENV !== 'production' && res?.data?.data?.otp) ?? null;
 };
 
-export const verifyOTP = (email: string, OTP: string) => async (
+export const verifyOTP = (email: string, otp: string) => async (
   dispatch: Function,
 ) => {
   let requestParams = {
     method: Methods.POST,
     endpoint: `/login`,
     body: {
-      phone: email,
-      otp: OTP,
+      email,
+      otp,
     },
   };
 
@@ -143,11 +132,9 @@ export const getProfile = () => async (dispatch: Function) => {
 export const createProfile = ({
   firstName,
   lastName,
-  email,
 }: {
   firstName: string;
   lastName: string;
-  email: string;
 }) => async (dispatch: Function) => {
   let requestParams = {
     method: Methods.POST,
@@ -155,7 +142,6 @@ export const createProfile = ({
     body: {
       firstName,
       lastName,
-      email,
     },
   };
 
@@ -236,10 +222,10 @@ export const deleteProfilePicture = () => async (dispatch: Function) => {
 };
 
 /**
- * This function sends an OTP to clients if a phone is provided, if an OTP is provided, it attempts to log them in.
+ * This function sends an OTP to clients if a email is provided, if an OTP is provided, it attempts to log them in.
  *
  * @param action - Expected to be either login or register. If OTP is provided, it is assumed to be login.
- * @param email - Client phone number
+ * @param email - Client email number
  * @param setLoading
  * @param activateModal
  * @param navigation
@@ -247,7 +233,7 @@ export const deleteProfilePicture = () => async (dispatch: Function) => {
  * @param OTP
  */
 export const sendOTPorLogin = async ({
-  sendPhone,
+  sendEmail,
   sendCreds,
   email,
   setLoading,
@@ -255,7 +241,7 @@ export const sendOTPorLogin = async ({
   dispatch,
   OTP,
 }: {
-  sendPhone?: (email: string) => (dispatch: Function) => Promise<void>;
+  sendEmail?: (email: string) => (dispatch: Function) => Promise<void>;
   sendCreds?: (
     email: string,
     OTP: string,
@@ -271,8 +257,8 @@ export const sendOTPorLogin = async ({
       await dispatch(sendCreds(email, OTP)); // Assumed to be login
 
       await dispatch(getProfile()); // Profile is fetched in order to check if the user already created a profile, if so, skip the onboarding and profile creation
-    } else if (sendPhone) {
-      let otp = await dispatch(sendPhone(email));
+    } else if (sendEmail) {
+      let otp = await dispatch(sendEmail(email));
       setLoading(false);
 
       navigation.navigate('OtpConfirmation', { email, otp });

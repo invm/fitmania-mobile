@@ -1,15 +1,43 @@
 {
   "translation": {
-    "home_title": "Home",
-    "hello_world": "Hello world",
-    "some_text": "Some text goes here, some more text goes here",
-    "row_text": "Row test",
-    "column_1": "column 1",
-    "column_2": "column 2",
-    "column_3": "column 3",
-    "textinput_test": "Textinput test",
-    "testing": "Testing",
-    "change_language": "Change language",
-    "goto_privacy": "Go to privacy policy ->"
+    "screens": {
+      "register": "Register",
+      "login": "Login",
+      "confirmation": "Confirmation",
+      "create_profile": "Create profile",
+      "home": "Home",
+      "profile": "Profile",
+      "search": "Search"
+    },
+    "common": {
+      "error": "Error",
+      "success": "Success",
+      "confirm": "Confirm",
+      "no_results_found": "No results found",
+      "search": "Search for groups or users",
+      "accept": "Accept",
+      "cancel": "Cancel",
+      "version": "version",
+      "logout": "Logout",
+      "continue": "Continue",
+      "skip": "Skip"
+    },
+    "create_profile": {
+      "first_name": "First name",
+      "last_name": "Last name"
+    },
+    "auth": {
+      "provide_otp": "Please provide the 4 digit one time password that you've received to your email address:",
+      "provide_email": "Please provide your email in order to receive a one time password",
+      "resendOTP": "Resend password"
+    },
+    "errors": {
+      "server_errors": {
+        "A0": "Something went very wrong, please try again."
+      },
+      "all_fields_are_required": "All fields are required",
+      "required_field": "This field is required",
+      "invalid_client_name": "Please provide a valid name without special characters"
+    }
   }
 }

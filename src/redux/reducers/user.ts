@@ -7,7 +7,8 @@ interface userInitialState {
   authenticated: boolean;
   loading: boolean;
   user: IUser & {
-    profileLoaded: false;
+    profileCreated: boolean;
+    profileLoaded: boolean;
   };
 }
 
@@ -17,6 +18,7 @@ export const initialState: userInitialState = {
   loading: false,
   user: {
     profileLoaded: false,
+    profileCreated: false,
     _id: '',
     name: '',
     lastname: '',

@@ -1,18 +1,24 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux';
 
 import AuthNavigator from './AuthNavigator';
 import HomeNavigator from './HomeNavigator';
 
-const MainNavigatorStack = createStackNavigator();
+const MainNavigator = () => {
+  const user = useSelector((state: typeof RootState) => state.user);
 
-const MainNavigator = () => (
-  <MainNavigatorStack.Navigator
-    initialRouteName="Auth"
-    screenOptions={{ headerBackTitleVisible: false, headerShown: false }}>
-    <MainNavigatorStack.Screen name="Auth" component={AuthNavigator} />
-    <MainNavigatorStack.Screen name="Home" component={HomeNavigator} />
-  </MainNavigatorStack.Navigator>
-);
+  return (
+    <>
+      {user.authenticated &&
+      user.user?.profileLoaded &&
+      user.user?.profileCreated ? (
+        <HomeNavigator />
+      ) : (
+        <AuthNavigator />
+      )}
+    </>
+  );
+};
 
 export default MainNavigator;

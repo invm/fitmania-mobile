@@ -2,7 +2,6 @@ import api, { Res, RequestWrapperProps } from './Api';
 import i18n from '../i18n';
 import AppError from './AppError';
 import { AUTHENTICATE } from '../redux/types/user';
-import { CONNECTION_LOST } from '../redux/types/meta';
 
 // All supported http methods of the system
 export const Methods = {
@@ -56,16 +55,6 @@ export const Request = async (
           display: true,
           code: response.data.errors[0].errorCode,
         });
-      case 402:
-        // Premium client content access error
-        throw new AppError({
-          message: i18n.t(
-            `errors.server_errors.${response.data.errors[0].errorCode}`,
-            { defaultValue: i18n.t(`errors.server_errors.A27`) },
-          ),
-          display: true,
-          code: response.data.errors[0].errorCode,
-        });
       case 413:
         throw new AppError({
           message: i18n.t(`errors.server_errors.file_too_large`),
@@ -73,7 +62,6 @@ export const Request = async (
           code: response.data.errors[0].errorCode,
         });
       case 999:
-        dispatch({ type: CONNECTION_LOST });
         throw new AppError({
           message: 'Connection to server failed',
           data: { connectionAborted: true },

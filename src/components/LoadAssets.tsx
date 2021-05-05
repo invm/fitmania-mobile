@@ -14,7 +14,6 @@ import {
 import SplashScreen from 'react-native-splash-screen';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
-import analytics from '@react-native-firebase/analytics';
 
 const NAVIGATION_STATE_KEY = `NAVIGATION_STATE_KEY-${1}`;
 
@@ -52,7 +51,6 @@ const LoadAssets = ({
   children,
 }: LoadAssetsProps): ReactElement => {
   const navigationRef: React.RefObject<NavigationContainerRef> = useRef(null);
-  const routeNameRef = useRef<string | undefined>();
   const [isNavigationReady, setIsNavigationReady] = useState(!__DEV__);
   const [initialState, setInitialState] = useState<InitialState | undefined>();
   const ready = useLoadAssets(assets || [], fonts || {});
@@ -80,22 +78,6 @@ const LoadAssets = ({
 
   const onStateChange = useCallback(async state => {
     AsyncStorage.setItem(NAVIGATION_STATE_KEY, JSON.stringify(state));
-    const previousRouteName = routeNameRef.current;
-    const currentRouteName = navigationRef?.current?.getCurrentRoute()?.name;
-
-    if (previousRouteName !== currentRouteName) {
-      // The line below uses the expo-firebase-analytics tracker
-      // https://docs.expo.io/versions/latest/sdk/firebase-analytics/
-      // Change this line to use another Mobile analytics SDK
-
-      // Firebase Analytics only available in standalone apps
-      await analytics().logScreenView({
-        screen_name: currentRouteName,
-        screen_class: currentRouteName,
-      });
-    }
-    // Save the current route name for later comparison
-    routeNameRef.current = currentRouteName;
   }, []);
 
   if (!ready || !isNavigationReady) {
@@ -105,9 +87,6 @@ const LoadAssets = ({
   return (
     <NavigationContainer
       ref={navigationRef}
-      onReady={() =>
-        (routeNameRef.current = navigationRef?.current?.getCurrentRoute()?.name)
-      }
       {...{ onStateChange, initialState }}>
       {children}
     </NavigationContainer>

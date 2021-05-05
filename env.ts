@@ -9,7 +9,7 @@ type Env = {
 const config: Env = {
   ENV: 'development',
   API_URL: {
-    development: '',
+    development: 'http://192.168.43.27',
     production: '',
   },
   VERSION: require('./package.json').version,

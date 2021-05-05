@@ -1,30 +1,136 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import LottieView from 'lottie-react-native';
-
+import React, { useState } from 'react';
+import { View, I18nManager, ActivityIndicator, Keyboard } from 'react-native';
 import { AuthRoutes, StackNavigationProps } from '../../navigation';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import {
+  Text,
+  Button,
+  Card,
+  Input,
+  FocusAwareStatusBar,
+  ScreenWrapper,
+} from '../../components';
+import { useTranslation } from 'react-i18next';
+import { colors, CONTENT_WIDTH, PADDING, width } from '../../components/Theme';
+import { useDispatch } from 'react-redux';
+import { login, sendOTPorLogin } from '../../redux/actions';
 
-export const assets = [require('../../../assets/images/logo.png')];
+const Login = ({ navigation }: StackNavigationProps<AuthRoutes, 'Login'>) => {
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
+  const loginSchema = Yup.object().shape({
+    email: Yup.string().email().required(t('errors.required_field')),
+  });
 
-const Login = ({}: StackNavigationProps<AuthRoutes, 'Login'>) => {
+  const loginHandler = async ({ email }: { email: string }) => {
+    setLoading(true);
+    Keyboard.dismiss();
+    await sendOTPorLogin({
+      sendEmail: login,
+      email,
+      setLoading,
+      navigation,
+      dispatch,
+    });
+  };
+
   return (
-    <View style={styles.container}>
-      <View style={{ width: 200, height: 200 }}>
-        <LottieView
-          source={require('../../../assets/images/animations/animation.json')}
-          autoPlay
-          loop
-        />
-      </View>
-    </View>
+    <ScreenWrapper>
+      <FocusAwareStatusBar
+        barStyle="dark-content"
+        backgroundColor={colors.white}
+      />
+      <Formik
+        initialValues={{
+          email: '',
+        }}
+        validationSchema={loginSchema}
+        onSubmit={loginHandler}>
+        {({
+          touched,
+          handleSubmit,
+          values,
+          errors,
+          setFieldTouched,
+          isValid,
+          dirty,
+          setFieldValue,
+        }) => (
+          <>
+            <View
+              style={{
+                paddingHorizontal: PADDING,
+                flex: 1,
+                paddingTop: 20,
+                justifyContent: 'space-between',
+              }}>
+              <View>
+                <View style={{ width: width * 0.6, paddingBottom: 40 }}>
+                  <Text lines={2} align="left" variant="regular16">
+                    {t('auth.provide_email')}
+                  </Text>
+                </View>
+                <Card
+                  style={{
+                    width: CONTENT_WIDTH,
+                    flex: 0,
+                    paddingVertical: 10,
+                  }}>
+                  <View>
+                    <Input
+                      testID="email"
+                      returnKeyType="next"
+                      accessibilityLabel="email"
+                      keyboardType="numeric"
+                      onChangeText={e =>
+                        setFieldValue('email', e.replace(/\D/, ''))
+                      }
+                      onBlur={() => setFieldTouched('email')}
+                      value={values.email}
+                      touched={touched.email}
+                      valid={!errors.email}
+                      error={errors.email}
+                      maxLength={10}
+                      style={{ textAlign: 'left', fontSize: 18, flex: 0 }}
+                    />
+                    {values.email.length >= 7 && errors.email && (
+                      <View
+                        style={{
+                          width: '100%',
+                          flexDirection: 'row',
+                          justifyContent: I18nManager.isRTL
+                            ? 'flex-end'
+                            : 'flex-start',
+                        }}>
+                        <Text align="left" variant="error">
+                          {errors.email}
+                        </Text>
+                      </View>
+                    )}
+                  </View>
+                </Card>
+              </View>
+              <View style={{ alignItems: 'center', marginBottom: 50 }}>
+                <Button
+                  testID="continue_button"
+                  disabled={!isValid || !dirty || loading}
+                  variant="primary"
+                  onPress={handleSubmit}>
+                  {loading ? (
+                    <ActivityIndicator size="small" color={colors.white} />
+                  ) : (
+                    <Text variant="white">{t('common.continue')}</Text>
+                  )}
+                </Button>
+              </View>
+            </View>
+          </>
+        )}
+      </Formik>
+    </ScreenWrapper>
   );
 };
 

@@ -31,13 +31,17 @@
     "expo-asset": "^8.2.1",
     "expo-font": "^9.0.0",
     "expo-image-picker": "^10.0.0",
+    "formik": "^2.2.6",
     "i18next": "19.8.4",
     "lottie-ios": "^3.1.8",
     "lottie-react-native": "^3.5.0",
+    "moment-timezone": "^0.5.33",
     "react": "17.0.1",
     "react-i18next": "11.8.4",
     "react-native": "0.64.0",
+    "react-native-actions-sheet": "^0.4.7",
     "react-native-code-push": "^7.0.0",
+    "react-native-confirmation-code-field": "^7.1.0",
     "react-native-gesture-handler": "^1.8.0",
     "react-native-keyboard-aware-scroll-view": "0.9.3",
     "react-native-push-notification": "6.1.2",
@@ -54,7 +58,8 @@
     "react-redux": "7.2.2",
     "redux": "4.0.5",
     "redux-devtools-extension": "2.13.8",
-    "redux-thunk": "2.3.0"
+    "redux-thunk": "2.3.0",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

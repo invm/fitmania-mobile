@@ -7,7 +7,7 @@ import i18n, {
 import { initReactI18next } from 'react-i18next';
 import { resources } from './resources';
 
-export const appLangs = ['en', 'he'];
+export const appLangs = ['en'];
 
 const languageDetector: LanguageDetectorAsyncModule = {
   type: 'languageDetector',

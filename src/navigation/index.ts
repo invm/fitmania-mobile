@@ -12,14 +12,16 @@ export interface StackNavigationProps<
 export type AuthRoutes = {
   Register: undefined;
   Login: undefined;
-  TermsOfUse: undefined;
-  PrivacyPolicy: undefined;
+  Onboarding: undefined;
+  OtpConfirmation: { email: string; otp?: string };
+  Home: undefined;
+  CreateProfile: undefined;
 };
 
 export type HomeRoutes = {
-  TermsOfUse: undefined;
-  PrivacyPolicy: undefined;
   Home: undefined;
+  Search: undefined;
+  Profile: undefined;
 };
 
 export { default } from './MainNavigator';
