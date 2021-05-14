@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     height: 50,
     flex: 1,
     padding: 0,
+    color: colors.black,
   },
 });
 
@@ -84,6 +85,7 @@ const Input = ({
   return (
     <TextInput
       placeholder={placeholder}
+	  placeholderTextColor={colors.darkGrey}
       {...{
         onChangeText,
         value,

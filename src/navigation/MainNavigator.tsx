@@ -10,9 +10,7 @@ const MainNavigator = () => {
 
   return (
     <>
-      {user.authenticated &&
-      user.user?.profileLoaded &&
-      user.user?.profileCreated ? (
+      {user.authenticated && user.user?.profileLoaded && user.user?.name ? (
         <HomeNavigator />
       ) : (
         <AuthNavigator />

@@ -15,7 +15,7 @@ import {
 import { BORDER_RADIUS, colors } from '../../../components/Theme';
 
 const { Value, Text: AnimatedText } = Animated;
-export const CELL_SIZE = 65;
+export const CELL_SIZE = 52;
 
 interface CodeInputProps {
   value: string;
@@ -38,7 +38,7 @@ const CodeInput = ({
 }: CodeInputProps) => {
   const ref = useRef<any>();
   const setValue = onChangeText;
-  const CELL_COUNT = 4;
+  const CELL_COUNT = 6;
 
   const getCellOnLayoutHandler = useClearByFocusCell({
     value,
@@ -125,22 +125,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cellWrapper: {
-    marginHorizontal: 8,
+    marginHorizontal: 4,
     height: CELL_SIZE,
     width: CELL_SIZE,
     borderRadius: BORDER_RADIUS.small,
+    borderWidth: 0.5,
+    borderColor: colors.black,
     backgroundColor: colors.white,
     // IOS
-    shadowColor: `rgba(0, 0, 0, 0.19)`,
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 20,
-
+    // shadowColor: `rgba(0, 0, 0, 0.19)`,
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 10,
+    // },
+    // shadowOpacity: 1,
+    // shadowRadius: 20,
     // Android
-    elevation: 15,
+    elevation: 3,
   },
   cellText: {
     lineHeight: CELL_SIZE - 5,

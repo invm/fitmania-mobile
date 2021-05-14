@@ -17,14 +17,9 @@ require('./src/utils/initFirebase');
 
 const fonts = {
   'Assistant-Bold': require('./assets/fonts/Assistant-Bold.ttf'),
-  'Assistant-ExtraBold': require('./assets/fonts/Assistant-ExtraBold.ttf'),
-  'Assistant-ExtraLight': require('./assets/fonts/Assistant-ExtraLight.ttf'),
-  'Assistant-Light': require('./assets/fonts/Assistant-Light.ttf'),
   'Assistant-Medium': require('./assets/fonts/Assistant-Medium.ttf'),
   'Assistant-Regular': require('./assets/fonts/Assistant-Regular.ttf'),
   'Assistant-SemiBold': require('./assets/fonts/Assistant-SemiBold.ttf'),
-  'Ubuntu-Bold': require('./assets/fonts/Ubuntu-Bold.ttf'),
-  'Ubuntu-Light': require('./assets/fonts/Ubuntu-Light.ttf'),
 };
 const assets = [...AuthAssets];
 

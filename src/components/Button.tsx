@@ -7,7 +7,7 @@ import { BORDER_RADIUS, colors } from './Theme';
 import Touchable from './Touchable';
 
 type ButtonProps = {
-  variant?: 'primary' | 'white' | 'transparent' | 'bordered';
+  variant?: 'primary' | 'white' | 'transparent' | 'bordered' | 'secondary';
   props?: any | any[];
   children?: React.ReactElement | string;
   testID?: string;
@@ -68,6 +68,11 @@ const buttonStyles = StyleSheet.create({
   },
   primary: {
     backgroundColor: colors.primary,
+    borderRadius: BORDER_RADIUS.small,
+    ...shadow,
+  },
+  secondary: {
+    backgroundColor: colors.secondary,
     borderRadius: BORDER_RADIUS.small,
     ...shadow,
   },

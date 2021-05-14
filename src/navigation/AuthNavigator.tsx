@@ -7,6 +7,7 @@ import {
   Onboarding,
   OtpConfirmation,
   CreateProfile,
+  Welcome,
 } from '../screens/Auth';
 import { AuthRoutes } from '.';
 import { Header } from '../components';
@@ -37,12 +38,17 @@ const AuthNavigator = () => {
       initialRouteName={
         authenticated && user?.profileLoaded && !user?.profileCreated
           ? 'CreateProfile'
-          : 'Login'
+          : 'Welcome'
       }>
+      <AuthStack.Screen
+        name="Welcome"
+        {...{ options, gestureEnabled: false }}
+        component={Welcome}
+      />
       <AuthStack.Screen
         name="Login"
         options={{
-          header: () => null,
+          header: () => <Header title={t('screens.login')} canGoBack />,
         }}
         component={Login}
       />

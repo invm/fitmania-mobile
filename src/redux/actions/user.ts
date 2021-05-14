@@ -15,8 +15,8 @@ import IUser from '../../interfaces/User';
 export const verifySession = () => async (dispatch: Function) => {
   try {
     let requestParams = {
-      method: Methods.POST,
-      endpoint: `/verify-authentication`,
+      method: Methods.GET,
+      endpoint: `/auth/`,
     };
 
     await Request(dispatch, requestParams);
@@ -45,7 +45,7 @@ export const register = (email: string) => async (dispatch: Function) => {
 export const login = (email: string) => async (dispatch: Function) => {
   let requestParams = {
     method: Methods.POST,
-    endpoint: `/login`,
+    endpoint: `/auth/otp`,
     body: {
       email: email,
     },
@@ -61,21 +61,29 @@ export const verifyOTP = (email: string, otp: string) => async (
 ) => {
   let requestParams = {
     method: Methods.POST,
-    endpoint: `/login`,
+    endpoint: `/auth/login`,
     body: {
       email,
       otp,
     },
   };
 
-  await Request(dispatch, requestParams);
-  dispatch(verifySession());
+  try {
+    await Request(dispatch, requestParams);
+    dispatch(verifySession());
+  } catch (error) {
+    showMessage(
+      i18n.t('common.error'),
+      'error',
+      error.message, // The message is expected to already be translated by this point
+    );
+  }
 };
 
 export const logout = () => async (dispatch: Function) => {
   let requestParams = {
     method: Methods.POST,
-    endpoint: `/logout`,
+    endpoint: `/auth/logout`,
   };
   dispatch({ type: types.LOGOUT });
 
@@ -99,7 +107,7 @@ export const getProfile = () => async (dispatch: Function) => {
   dispatch({ type: types.USER_LOADING });
   let requestParams = {
     method: Methods.GET,
-    endpoint: `/profile`,
+    endpoint: `/user/`,
   };
 
   try {
@@ -130,18 +138,18 @@ export const getProfile = () => async (dispatch: Function) => {
 };
 
 export const createProfile = ({
-  firstName,
-  lastName,
+  name,
+  lastname,
 }: {
-  firstName: string;
-  lastName: string;
+  name: string;
+  lastname: string;
 }) => async (dispatch: Function) => {
   let requestParams = {
-    method: Methods.POST,
-    endpoint: `/profile`,
+    method: Methods.PATCH,
+    endpoint: `/user`,
     body: {
-      firstName,
-      lastName,
+      name,
+      lastname,
     },
   };
 
@@ -168,7 +176,7 @@ export const updateProfile = (
   if (profileData) {
     let requestParams = {
       method: Methods.PATCH,
-      endpoint: `/profile`,
+      endpoint: `/user`,
       body: {
         ...profileData,
       },
@@ -176,22 +184,6 @@ export const updateProfile = (
 
     await Request(dispatch, requestParams);
   }
-
-  await dispatch(getProfile());
-};
-
-export const updateNotificationSettings = (enabled: boolean) => async (
-  dispatch: Function,
-) => {
-  let requestParams = {
-    method: Methods.PATCH,
-    endpoint: `/notifications/settings`,
-    body: {
-      enabled,
-    },
-  };
-
-  await Request(dispatch, requestParams);
 
   await dispatch(getProfile());
 };
@@ -279,11 +271,11 @@ export const sendOTPorLogin = async ({
     return err;
   }
 };
-export const updateFcmToken = async (firebaseToken: string) => {
+export const updateFcmToken = async (fcmToken: string) => {
   store.getState().user.authenticated &&
     (await axios.patch(
-      `${API_URL}/profile`,
-      { firebaseToken },
+      `${API_URL}/user`,
+      { fcmToken },
       { withCredentials: true },
     ));
 };

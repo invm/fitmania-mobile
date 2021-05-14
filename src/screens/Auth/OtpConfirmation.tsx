@@ -130,7 +130,7 @@ const OtpConfirmation = ({
             <Text lines={3} align="left" variant="regular16">
               {t('auth.provide_otp')}
             </Text>
-            <Text align="left" variant="semi16">
+            <Text align="left" variant="semibold16">
               {email}
             </Text>
           </View>
@@ -149,7 +149,7 @@ const OtpConfirmation = ({
             {OTPExpired && (
               <TouchableWithoutFeedback onPress={resendOTPHandler}>
                 <View>
-                  <Text>{t('auth.resendOTP')}</Text>
+                  <Text variant="semibold16">{t('auth.resendOTP')}</Text>
                 </View>
               </TouchableWithoutFeedback>
             )}
@@ -164,7 +164,9 @@ const OtpConfirmation = ({
             {loading ? (
               <ActivityIndicator size="small" color={colors.white} />
             ) : (
-              <Text variant="white">{t('common.continue')}</Text>
+              <Text variant="semibold16" color={colors.white}>
+                {t('common.continue')}
+              </Text>
             )}
           </Button>
         </View>

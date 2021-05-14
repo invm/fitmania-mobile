@@ -25,6 +25,8 @@ export const Request = async (
 ) => {
   let response: Res = await api(requestParams);
 
+  console.log('response', response);
+
   console.log(
     `Server request wrapper, ${requestParams.method} '${requestParams.endpoint}' result:`,
   );

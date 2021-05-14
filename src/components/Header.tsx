@@ -138,7 +138,7 @@ const Header = ({
 
                     <View>
                       <Text
-                        variant="headerTitle"
+                        variant="semibold22"
                         color={
                           color === 'primary' ? colors.white : colors.dark
                         }>
@@ -163,7 +163,7 @@ const Header = ({
               {!!subtitle && (
                 <View style={styles.subtitleContainer}>
                   <View style={{ width: 40 }} />
-                  <Text>{subtitle}</Text>
+                  <Text variant="medium16">{subtitle}</Text>
                 </View>
               )}
             </View>
@@ -214,7 +214,6 @@ const styles = StyleSheet.create({
   },
   backIconContainer: {
     paddingEnd: 15,
-    paddingTop: 5,
   },
   innerTextContainer: {
     flexDirection: 'row',

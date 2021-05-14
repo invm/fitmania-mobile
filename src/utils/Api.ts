@@ -41,7 +41,6 @@ export default async function requestWrapper({
   let res: Res;
 
   try {
-    instance.defaults.headers.common['Accept-Language'] = i18n.language;
     // @ts-ignore
     let response = await instance?.[method](
       API_URL + endpoint,

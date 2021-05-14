@@ -22,7 +22,9 @@ const Login = ({ navigation }: StackNavigationProps<AuthRoutes, 'Login'>) => {
   const [loading, setLoading] = useState(false);
 
   const loginSchema = Yup.object().shape({
-    email: Yup.string().email().required(t('errors.required_field')),
+    email: Yup.string()
+      .email(t('errors.invalid_email'))
+      .required(t('errors.required_field')),
   });
 
   const loginHandler = async ({ email }: { email: string }) => {
@@ -79,38 +81,37 @@ const Login = ({ navigation }: StackNavigationProps<AuthRoutes, 'Login'>) => {
                     flex: 0,
                     paddingVertical: 10,
                   }}>
-                  <View>
-                    <Input
-                      testID="email"
-                      returnKeyType="next"
-                      accessibilityLabel="email"
-                      keyboardType="numeric"
-                      onChangeText={e =>
-                        setFieldValue('email', e.replace(/\D/, ''))
-                      }
-                      onBlur={() => setFieldTouched('email')}
-                      value={values.email}
-                      touched={touched.email}
-                      valid={!errors.email}
-                      error={errors.email}
-                      maxLength={10}
-                      style={{ textAlign: 'left', fontSize: 18, flex: 0 }}
-                    />
-                    {values.email.length >= 7 && errors.email && (
-                      <View
-                        style={{
-                          width: '100%',
-                          flexDirection: 'row',
-                          justifyContent: I18nManager.isRTL
-                            ? 'flex-end'
-                            : 'flex-start',
-                        }}>
-                        <Text align="left" variant="error">
-                          {errors.email}
-                        </Text>
-                      </View>
-                    )}
-                  </View>
+                  <Input
+                    testID="email"
+                    returnKeyType="next"
+                    accessibilityLabel="email"
+                    keyboardType="default"
+                    onChangeText={e => setFieldValue('email', e)}
+                    onBlur={() => setFieldTouched('email')}
+                    value={values.email}
+                    touched={touched.email}
+                    valid={!errors.email}
+                    error={errors.email}
+                    maxLength={100}
+                    style={{ textAlign: 'left', fontSize: 18, flex: 0 }}
+                  />
+                  {values.email.length >= 7 && errors.email && (
+                    <View
+                      style={{
+                        width: '100%',
+                        flexDirection: 'row',
+                        justifyContent: I18nManager.isRTL
+                          ? 'flex-end'
+                          : 'flex-start',
+                      }}>
+                      <Text
+                        align="left"
+                        variant="semibold16"
+                        color={colors.error}>
+                        {errors.email}
+                      </Text>
+                    </View>
+                  )}
                 </Card>
               </View>
               <View style={{ alignItems: 'center', marginBottom: 50 }}>
@@ -122,7 +123,9 @@ const Login = ({ navigation }: StackNavigationProps<AuthRoutes, 'Login'>) => {
                   {loading ? (
                     <ActivityIndicator size="small" color={colors.white} />
                   ) : (
-                    <Text variant="white">{t('common.continue')}</Text>
+                    <Text variant="semibold16" color={colors.white}>
+                      {t('common.continue')}
+                    </Text>
                   )}
                 </Button>
               </View>

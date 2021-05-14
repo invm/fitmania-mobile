@@ -9,7 +9,7 @@ type Env = {
 const config: Env = {
   ENV: 'development',
   API_URL: {
-    development: 'http://192.168.43.27',
+    development: 'https://b25ebe58ade8.eu.ngrok.io/api',
     production: '',
   },
   VERSION: require('./package.json').version,

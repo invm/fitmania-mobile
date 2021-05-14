@@ -17,9 +17,9 @@ import { BORDER_RADIUS, colors, height, width } from '../../components/Theme';
 import Icon from '../../components/Icon';
 
 export const assets = [
-  require('../../../assets/images/onboarding1.png'),
-  require('../../../assets/images/onboarding2.png'),
-  require('../../../assets/images/onboarding3.png'),
+  require('../../../assets/images/welcome1.jpg'),
+  require('../../../assets/images/welcome3.jpg'),
+  require('../../../assets/images/welcome5.jpg'),
 ];
 
 const Onboarding = ({
@@ -32,7 +32,7 @@ const Onboarding = ({
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    navigation.addListener('beforeRemove', (e) => {
+    navigation.addListener('beforeRemove', e => {
       // Prevent default behavior of leaving the screen
       if (e.data.action.type === 'GO_BACK') {
         e.preventDefault();
@@ -84,8 +84,8 @@ const Onboarding = ({
   ];
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-        <FocusAwareStatusBar
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
+      <FocusAwareStatusBar
         barStyle="dark-content"
         backgroundColor={colors.white}
       />
@@ -118,7 +118,7 @@ const Onboarding = ({
               <TouchableOpacity
                 style={{ width: 50 }}
                 onPress={() => navigation.navigate('CreateProfile')}>
-                <Text variant="semi18" color={colors.primary}>
+                <Text variant="semibold16" color={colors.primary}>
                   {t('common.skip')}
                 </Text>
               </TouchableOpacity>
@@ -134,7 +134,7 @@ const Onboarding = ({
                 });
                 let backgroundColor = position.interpolate({
                   inputRange: [i - 1, i, i + 1],
-                  outputRange: ['grey', 'red', 'grey'],
+                  outputRange: ['grey', colors.primary, 'grey'],
                   extrapolate: 'clamp',
                 });
                 return (

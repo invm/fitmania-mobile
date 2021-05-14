@@ -66,11 +66,11 @@ const Register = ({
               style={{
                 paddingHorizontal: PADDING,
                 flex: 1,
-                paddingTop: 40,
+                paddingTop: 20,
                 justifyContent: 'space-between',
               }}>
               <View>
-                <View style={{ width: width * 0.6, paddingBottom: 60 }}>
+                <View style={{ width: width * 0.6, paddingBottom: 40 }}>
                   <Text lines={2} align="left" variant="regular16">
                     {t('auth.provide_email')}
                   </Text>
@@ -105,7 +105,7 @@ const Register = ({
                             ? 'flex-end'
                             : 'flex-start',
                         }}>
-                        <Text align="left" variant="error">
+                        <Text align="left" variant="semibold16">
                           {errors.email}
                         </Text>
                       </View>
@@ -121,7 +121,7 @@ const Register = ({
                   {loading ? (
                     <ActivityIndicator size="small" color={colors.white} />
                   ) : (
-                    <Text variant="white">{t('common.continue')}</Text>
+                    <Text variant="semibold16" color={colors.white}>{t('common.continue')}</Text>
                   )}
                 </Button>
               </View>

@@ -23,6 +23,7 @@
       "skip": "Skip"
     },
     "create_profile": {
+      "title": "Please enter some minimal information about yourself",
       "first_name": "First name",
       "last_name": "Last name"
     },
@@ -35,9 +36,30 @@
       "server_errors": {
         "A0": "Something went very wrong, please try again."
       },
+      "invalid_email": "Please insert a valid email address",
       "all_fields_are_required": "All fields are required",
       "required_field": "This field is required",
       "invalid_client_name": "Please provide a valid name without special characters"
+    },
+    "welcome_screen": {
+      "header": "Welcome to FitMania!",
+      "slogan": "Find a training partner today!",
+      "sign_in": "Sign In",
+      "create_account": "Create account"
+    },
+    "onboarding": {
+      "first": {
+        "title": "Find a partner!",
+        "subtext": "Join local workout sessions and meet new people!"
+      },
+      "second": {
+        "title": "Create events!",
+        "subtext": "Invite your friends, family and colleagues to train together!"
+      },
+      "third": {
+        "title": "Join local communities",
+        "subtext": " and train in groups around you!"
+      }
     }
   }
 }

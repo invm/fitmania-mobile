@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import { Text } from '../../../components';
-import { height, width } from '../../../components/Theme';
+import { colors, height, width } from '../../../components/Theme';
 
 type SlideProps = {
   slide: {
@@ -28,6 +28,7 @@ const Slide = ({
         <Image
           source={uri}
           style={{
+            borderRadius: width / 2,
             width: width,
             height: height,
             aspectRatio: width / height,
@@ -38,10 +39,15 @@ const Slide = ({
             align="center"
             style={styles.header}
             lines={2}
-            variant="welcomeHeader">
+            color={colors.primary}
+            variant="bold24">
             {title}
           </Text>
-          <Text align="center" variant="welcomeSubtext">
+          <Text
+            align="center"
+            variant="semibold20"
+            color={colors.primary}
+            lines={2}>
             {subtext}
           </Text>
         </View>

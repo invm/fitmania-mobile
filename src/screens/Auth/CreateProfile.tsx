@@ -39,12 +39,12 @@ const CreateProfile = ({
   }, [navigation]);
 
   const createProfileSchema = Yup.object().shape({
-    firstName: Yup.string()
+    name: Yup.string()
       .trim()
       .min(2, t('errors.invalid_client_name'))
       .max(40, t('errors.invalid_client_name'))
       .required(t('errors.required_field')),
-    lastName: Yup.string()
+    lastname: Yup.string()
       .trim()
       .min(2, t('errors.invalid_client_name'))
       .max(40, t('errors.invalid_client_name'))
@@ -52,25 +52,26 @@ const CreateProfile = ({
   });
 
   const createProfileHandler = async ({
-    firstName,
-    lastName,
+    name,
+    lastname,
   }: {
-    firstName: string;
-    lastName: string;
+    name: string;
+    lastname: string;
   }) => {
     setLoading(true);
 
-    if (!firstName || !lastName) {
+    if (!name || !lastname) {
       showMessage(t('errors.all_fields_are_required'));
     }
 
     try {
       let profileData = {
-        firstName,
-        lastName,
+        name,
+        lastname,
       };
       Keyboard.dismiss();
-      dispatch(createProfile(profileData));
+      await dispatch(createProfile(profileData));
+      setLoading(false);
     } catch (err) {
       setLoading(false);
       if (!err.data?.connectionAborted) {
@@ -96,8 +97,8 @@ const CreateProfile = ({
       />
       <Formik
         initialValues={{
-          firstName: '',
-          lastName: '',
+          name: '',
+          lastname: '',
         }}
         validationSchema={createProfileSchema}
         onSubmit={createProfileHandler}>
@@ -116,10 +117,15 @@ const CreateProfile = ({
               style={{
                 paddingHorizontal: PADDING,
                 flex: 1,
-                paddingTop: 50,
+                paddingTop: 20,
                 justifyContent: 'space-between',
               }}>
               <View>
+                <View style={{ marginBottom: 20 }}>
+                  <Text variant="semibold16" lines={2}>
+                    {t('create_profile.title')}
+                  </Text>
+                </View>
                 <Card
                   style={{
                     width: CONTENT_WIDTH,
@@ -128,26 +134,30 @@ const CreateProfile = ({
                     <Input
                       returnKeyType="next"
                       onChangeText={value =>
-                        setFieldValue('firstName', clearName(value))
+                        setFieldValue('name', clearName(value))
                       }
+                      placeHolderTextColor="#000"
                       placeholder={t('create_profile.first_name')}
-                      onBlur={() => setFieldTouched('firstName')}
-                      value={values.firstName}
-                      touched={touched.firstName}
-                      valid={!errors.firstName}
-                      error={errors.firstName}
+                      onBlur={() => setFieldTouched('name')}
+                      value={values.name}
+                      touched={touched.name}
+                      valid={!errors.name}
+                      error={errors.name}
                       maxLength={40}
                       style={{ textAlign: 'left', fontSize: 18, flex: 0 }}
                     />
-                    {values.firstName?.length >= 2 && errors.firstName && (
+                    {values.name?.length >= 2 && errors.name && (
                       <View
                         style={{
                           width: '100%',
                           alignItems: 'flex-start',
                           paddingVertical: 5,
                         }}>
-                        <Text align="left" variant="error">
-                          {errors.firstName}
+                        <Text
+                          align="left"
+                          variant="semibold16"
+                          color={colors.error}>
+                          {errors.name}
                         </Text>
                       </View>
                     )}
@@ -156,26 +166,29 @@ const CreateProfile = ({
                     <Input
                       returnKeyType="next"
                       onChangeText={value =>
-                        setFieldValue('lastName', clearName(value))
+                        setFieldValue('lastname', clearName(value))
                       }
                       placeholder={t('create_profile.last_name')}
-                      onBlur={() => setFieldTouched('lastName')}
-                      value={values.lastName}
-                      touched={touched.lastName}
-                      valid={!errors.lastName}
-                      error={errors.lastName}
+                      onBlur={() => setFieldTouched('lastname')}
+                      value={values.lastname}
+                      touched={touched.lastname}
+                      valid={!errors.lastname}
+                      error={errors.lastname}
                       maxLength={40}
                       style={{ textAlign: 'left', fontSize: 18, flex: 0 }}
                     />
-                    {values.lastName?.length >= 2 && errors.lastName && (
+                    {values.lastname?.length >= 2 && errors.lastname && (
                       <View
                         style={{
                           width: '100%',
                           alignItems: 'flex-start',
                           paddingVertical: 5,
                         }}>
-                        <Text align="left" variant="error">
-                          {errors.lastName}
+                        <Text
+                          align="left"
+                          variant="semibold16"
+                          color={colors.error}>
+                          {errors.lastname}
                         </Text>
                       </View>
                     )}
@@ -188,9 +201,11 @@ const CreateProfile = ({
                   variant="primary"
                   onPress={handleSubmit}>
                   {loading ? (
-                    <ActivityIndicator />
+                    <ActivityIndicator color={colors.white} />
                   ) : (
-                    <Text variant="white">{t('common.continue')}</Text>
+                    <Text variant="semibold16" color={colors.white}>
+                      {t('common.continue')}
+                    </Text>
                   )}
                 </Button>
               </View>
