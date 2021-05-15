@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   View,
   FlatList,
@@ -6,7 +6,6 @@ import {
   RefreshControl,
   StyleSheet,
   TouchableOpacity,
-  ActivityIndicator,
   Image,
 } from 'react-native';
 import { HomeRoutes, StackNavigationProps } from '../navigation';
@@ -21,9 +20,7 @@ import { Text, Card, FocusAwareStatusBar } from '../components';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux';
-import { getTags, setQuery } from '../redux/actions';
-import Icon from '../components/Icon';
-import { searchBusinesses } from '../redux/actions';
+import { search } from '../redux/actions';
 import { API_URL } from '../../env';
 
 const IMAGE_WIDTH = 90;
@@ -32,24 +29,12 @@ const IMAGE_HEIGHT = 90;
 const Search = ({}: StackNavigationProps<HomeRoutes, 'Search'>) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const {
-    loading,
-    results,
-    inputDirty,
-    searchExhausted,
-    query,
-    page,
-    tags,
-    tagsLoading,
-  } = useSelector((state: typeof RootState) => state.search);
-
-  useEffect(() => {
-    dispatch(getTags());
-  }, []);
+  const { loading, results, inputDirty, searchExhausted, query, page } =
+    useSelector((state: typeof RootState) => state.search);
 
   const expandList = async () => {
     if (!searchExhausted && query.length) {
-      dispatch(searchBusinesses(query, page));
+      dispatch(search(query, page));
     }
   };
 
@@ -60,8 +45,6 @@ const Search = ({}: StackNavigationProps<HomeRoutes, 'Search'>) => {
       name: string;
       tagline: string;
       _id: string;
-      rating: number;
-      reviewCount: number;
       image: string;
       primaryImage: {
         blurHash: string;
@@ -73,8 +56,6 @@ const Search = ({}: StackNavigationProps<HomeRoutes, 'Search'>) => {
       _id,
       name,
       tagline,
-      rating,
-      reviewCount,
       primaryImage: { path },
     } = item;
     return (
@@ -107,36 +88,9 @@ const Search = ({}: StackNavigationProps<HomeRoutes, 'Search'>) => {
               <Text variant="bold16" lines={1}>
                 {name}
               </Text>
-              <Text lines={1}>{tagline}</Text>
-              <View style={styles.tagline}>
-                <View style={styles.subtext}>
-                  {rating && reviewCount && (
-                    <>
-                      <Text
-                        lines={1}
-                        color={colors.darkGrey}
-                        variant="smallRegular">
-                        {item?.rating?.toFixed(1)}
-                      </Text>
-                      <Text
-                        lines={1}
-                        color={colors.darkGrey}
-                        variant="smallRegular">
-                        {' '}
-                        {`(${
-                          item?.reviewCount < 1000 ? item?.reviewCount : '999+'
-                        })`}{' '}
-                      </Text>
-                      <Icon
-                        name={'star'}
-                        size={14}
-                        style={{ height: 14, marginHorizontal: 5 }}
-                        color={colors.primary}
-                      />
-                    </>
-                  )}
-                </View>
-              </View>
+              <Text variant="semibold16" lines={1}>
+                {tagline}
+              </Text>
             </View>
           </Card>
         </View>
@@ -155,32 +109,6 @@ const Search = ({}: StackNavigationProps<HomeRoutes, 'Search'>) => {
         barStyle="dark-content"
       />
 
-      {tagsLoading ? (
-        <View style={styles.loader}>
-          <ActivityIndicator color={colors.primary} size="large" />
-        </View>
-      ) : (
-        <>
-          {!results?.length && !loading && (
-            <View style={styles.tags}>
-              {tags.map((tag, key) => {
-                return (
-                  <TouchableOpacity
-                    onPress={() => {
-                      dispatch(setQuery(tag));
-                      dispatch(searchBusinesses(tag, 0));
-                    }}
-                    key={key}
-                    style={styles.tag}>
-                    <Text variant="white">{tag}</Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-          )}
-        </>
-      )}
-
       <>
         <FlatList
           data={results}
@@ -191,7 +119,9 @@ const Search = ({}: StackNavigationProps<HomeRoutes, 'Search'>) => {
               return (
                 <>
                   <View style={styles.emptyList}>
-                    <Text>{t('common.no_results_found')}</Text>
+                    <Text variant="semibold16">
+                      {t('common.no_results_found')}
+                    </Text>
                   </View>
                 </>
               );
@@ -201,7 +131,7 @@ const Search = ({}: StackNavigationProps<HomeRoutes, 'Search'>) => {
             <RefreshControl
               refreshing={loading}
               onRefresh={() => {
-                if (query.length) dispatch(searchBusinesses(query, 0));
+                if (query.length) dispatch(search(query, 0));
               }}
               colors={['red']}
             />

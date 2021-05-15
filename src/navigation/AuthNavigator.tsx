@@ -33,8 +33,8 @@ const AuthNavigator = () => {
       screenOptions={{
         headerBackTitleVisible: false,
         gestureEnabled: false,
-        headerMode: 'screen',
       }}
+      headerMode="screen"
       initialRouteName={
         authenticated && user?.profileLoaded && !user?.profileCreated
           ? 'CreateProfile'

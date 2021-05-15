@@ -20,9 +20,13 @@ export type AuthRoutes = {
 };
 
 export type HomeRoutes = {
+  HomeTabsNavigator: undefined;
   Home: undefined;
   Search: undefined;
   Profile: undefined;
+  PostScreen: undefined;
 };
+
+export type AppRoutes = AuthRoutes & HomeRoutes & {};
 
 export { default } from './MainNavigator';

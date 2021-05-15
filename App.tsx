@@ -33,7 +33,7 @@ const App = () => {
           <MainNavigator />
         </SafeAreaProvider>
         <Toast
-          height={300}
+          height={200}
           config={toastConfig}
           ref={ref => Toast.setRef(ref)}
         />

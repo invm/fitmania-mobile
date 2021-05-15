@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { API_URL } from '../../env';
-import i18n from '../i18n';
 
 export interface RequestWrapperProps {
   headers?: object;

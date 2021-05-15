@@ -8,7 +8,9 @@ export const toastConfig = {
     <View style={styles.container}>
       <View style={styles.innerContainer}>
         <View style={[styles.row]}>
-          <Text style={styles.emojiContainer}>👍</Text>
+          <Text variant="semibold20" style={styles.emojiContainer}>
+            👍
+          </Text>
         </View>
         <View style={styles.dataContainer}>
           <View style={styles.textContainer}>
@@ -32,7 +34,9 @@ export const toastConfig = {
     <View style={styles.container}>
       <View style={styles.innerContainer}>
         <View style={[styles.row]}>
-          <Text style={styles.emojiContainer}>🤷‍♂️</Text>
+          <Text variant="semibold20" style={styles.emojiContainer}>
+            🤷‍♂️
+          </Text>
         </View>
         <View style={styles.dataContainer}>
           <View style={styles.textContainer}>
@@ -56,7 +60,9 @@ export const toastConfig = {
     <View style={styles.container}>
       <View style={styles.innerContainer}>
         <View style={[styles.row]}>
-          <Text style={styles.emojiContainer}>❗</Text>
+          <Text variant="semibold20" style={styles.emojiContainer}>
+            ❗
+          </Text>
         </View>
         <View style={styles.dataContainer}>
           <View style={styles.textContainer}>

@@ -13,7 +13,7 @@ interface userInitialState {
 }
 
 export const initialState: userInitialState = {
-  verifyingSession: false,
+  verifyingSession: true,
   authenticated: true,
   loading: false,
   user: {

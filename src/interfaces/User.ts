@@ -11,4 +11,11 @@ interface IUser {
   fcmToken?: string;
 }
 
+export interface IUserMin {
+  _id: string;
+  name: string;
+  avatar: string;
+  lastname: string;
+}
+
 export default IUser;

@@ -3,12 +3,9 @@ import {
   SEND_SEARCH,
   SET_INPUT,
   CLEAR_SEARCH,
-  GETTING_TAGS,
-  LOADED_TAGS,
   SET_QUERY,
 } from '../types/search';
 import Action from './Action';
-
 
 export const initialState = {
   loading: false,
@@ -16,8 +13,6 @@ export const initialState = {
   page: 0,
   searchExhausted: false,
   inputDirty: false,
-  tags: [],
-  tagsLoading: false,
   query: '',
 };
 
@@ -27,17 +22,6 @@ export default function (state = initialState, action: Action) {
       return {
         ...state,
         query: action.payload,
-      };
-    case GETTING_TAGS:
-      return {
-        ...state,
-        tagsLoading: true,
-      };
-    case LOADED_TAGS:
-      return {
-        ...state,
-        tagsLoading: false,
-        tags: action.payload,
       };
     case CLEAR_SEARCH:
       return {

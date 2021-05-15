@@ -2,6 +2,7 @@ import api, { Res, RequestWrapperProps } from './Api';
 import i18n from '../i18n';
 import AppError from './AppError';
 import { AUTHENTICATE } from '../redux/types/user';
+import { showMessage } from './utils';
 
 // All supported http methods of the system
 export const Methods = {
@@ -25,8 +26,6 @@ export const Request = async (
 ) => {
   let response: Res = await api(requestParams);
 
-  console.log('response', response);
-
   console.log(
     `Server request wrapper, ${requestParams.method} '${requestParams.endpoint}' result:`,
   );
@@ -34,6 +33,16 @@ export const Request = async (
     console.log(response.data);
   } else if (response) {
     console.log(`No data, showing status code instead: ${response.status}`);
+  }
+
+  if (response?.data?.msg) {
+    showMessage(i18n.t('common.success'), 'success', response.data.msg);
+  } else if (response?.data?.errors?.[0]?.msg) {
+    showMessage(
+      i18n.t('common.error'),
+      'success',
+      response?.data?.errors?.[0]?.msg,
+    );
   }
 
   if (response.success) {

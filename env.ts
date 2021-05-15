@@ -9,13 +9,14 @@ type Env = {
 const config: Env = {
   ENV: 'development',
   API_URL: {
-    development: 'https://b25ebe58ade8.eu.ngrok.io/api',
+    development: 'https://b854b3e76e05.eu.ngrok.io',
     production: '',
   },
   VERSION: require('./package.json').version,
 };
 
-export const API_URL = config.API_URL[config.ENV];
+export const API_URL = config.API_URL[config.ENV] + '/api';
+export const MEDIA_URL = config.API_URL[config.ENV] + '/media/';
 export const VERSION = config.VERSION;
 export const GOOGLE_API_KEY = '';
 export const ENV = config.ENV;

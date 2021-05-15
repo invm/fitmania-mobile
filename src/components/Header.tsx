@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  I18nManager,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
@@ -13,12 +7,12 @@ import Text from './Text';
 import Card from './Card';
 import Input from './Input';
 import { CONTENT_WIDTH, PADDING, colors, width } from './Theme';
-import { setQuery, searchBusinesses } from '../redux/actions';
+import { setQuery, search } from '../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { CLEAR_SEARCH, SET_INPUT } from '../redux/types/search';
 import { RootState } from '../redux';
 export const assets = [require('../../assets/images/logo.png')];
-import Icon from './Icon';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 let searchTimeout: any;
 
@@ -63,7 +57,7 @@ const Header = ({
       dispatch(setQuery(text));
       dispatch({ type: SET_INPUT, payload: true });
       searchTimeout = setTimeout(() => {
-        dispatch(searchBusinesses(text, 0));
+        dispatch(search(text, 0));
       }, 500);
     } else handleClearQuery();
   };
@@ -125,10 +119,7 @@ const Header = ({
                           action ? action() : navigation.goBack();
                         }}>
                         <Icon
-                          name={
-                            icon ||
-                            `arrow-${I18nManager.isRTL ? 'forward' : 'back'}`
-                          }
+                          name={icon || `arrow-back`}
                           color={
                             color === 'primary' ? colors.white : colors.dark
                           }

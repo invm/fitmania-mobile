@@ -14,7 +14,7 @@ import { FocusAwareStatusBar, Text } from '../../components/';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Slide from './components/Slide';
 import { BORDER_RADIUS, colors, height, width } from '../../components/Theme';
-import Icon from '../../components/Icon';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export const assets = [
   require('../../../assets/images/welcome1.jpg'),
@@ -176,10 +176,7 @@ const Onboarding = ({
                 }
               }}
               style={styles.roundButton}>
-              <Icon
-                name={`arrow-${I18nManager.isRTL ? 'back' : 'forward'}`}
-                color={colors.white}
-              />
+              <Icon size={24} name={`arrow-forward`} color={colors.white} />
             </TouchableOpacity>
           </View>
         </View>

@@ -199,7 +199,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     implementation project(':react-native-svg')
 
-    addUnimodulesDependencies([exclude: ['expo-face-detector']])
+    addUnimodulesDependencies([exclude: ['expo-face-detector','expo-permissions']])
 
     androidTestImplementation('com.wix:detox:+')
 

@@ -1,11 +1,8 @@
 import React from 'react';
-import {
-  GestureResponderEvent,
-  TouchableOpacity,
-} from 'react-native';
+import { GestureResponderEvent, TouchableOpacity } from 'react-native';
 import { colors } from '.';
-import Icon from './Icon';
 import Text from './Text';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 interface SmallButtonProps {
   onPress: (event: GestureResponderEvent) => void;
@@ -58,7 +55,11 @@ const SmallButton = ({
         style,
       ]}>
       {icon && <Icon name={icon} size={14} color={textColor} />}
-      {title && <Text color={textColor}>{title}</Text>}
+      {title && (
+        <Text variant="semibold16" color={textColor}>
+          {title}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 };

@@ -14,6 +14,8 @@ import {
 import SplashScreen from 'react-native-splash-screen';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
+import { verifySession } from '../redux/actions';
+import { useDispatch } from 'react-redux';
 
 const NAVIGATION_STATE_KEY = `NAVIGATION_STATE_KEY-${1}`;
 
@@ -54,6 +56,7 @@ const LoadAssets = ({
   const [isNavigationReady, setIsNavigationReady] = useState(!__DEV__);
   const [initialState, setInitialState] = useState<InitialState | undefined>();
   const ready = useLoadAssets(assets || [], fonts || {});
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const restoreState = async () => {
@@ -75,6 +78,13 @@ const LoadAssets = ({
       restoreState();
     }
   }, [isNavigationReady]);
+
+  useEffect(() => {
+    const verify = async () => {
+      await dispatch(verifySession());
+    };
+    verify();
+  }, []);
 
   const onStateChange = useCallback(async state => {
     AsyncStorage.setItem(NAVIGATION_STATE_KEY, JSON.stringify(state));
