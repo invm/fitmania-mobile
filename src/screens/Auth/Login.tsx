@@ -85,7 +85,7 @@ const Login = ({ navigation }: StackNavigationProps<AuthRoutes, 'Login'>) => {
                     testID="email"
                     returnKeyType="next"
                     accessibilityLabel="email"
-                    keyboardType="default"
+                    keyboardType="email-address"
                     onChangeText={e => setFieldValue('email', e)}
                     onBlur={() => setFieldTouched('email')}
                     value={values.email}

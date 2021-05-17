@@ -1,6 +1,7 @@
 export { default as LoadAssets } from './LoadAssets';
 export { default as FocusAwareStatusBar } from './FocusAwareStatusBar';
 export { default as Card } from './Card';
+export { default as BlurredImage } from './BlurredImage';
 export { default as Header } from './Header';
 export { default as Input } from './Input';
 export { default as Text } from './Text';

@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
-import { BORDER_RADIUS, colors } from './Theme';
+import { BORDER_RADIUS, colors, PADDING } from './Theme';
 
 const styles = StyleSheet.create({
   card: {
-    padding: 20,
+    padding: PADDING,
     borderRadius: BORDER_RADIUS.small,
     backgroundColor: colors.white,
     shadowColor: colors.dark,

@@ -2,7 +2,14 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { Home, Profile, PostScreen, Search } from '../screens';
+import {
+  Home,
+  Profile,
+  PostScreen,
+  Search,
+  CreatePost,
+  CreateEvent,
+} from '../screens';
 import { useTranslation } from 'react-i18next';
 import { colors, Text, Header } from '../components';
 import { AppRoutes, HomeRoutes } from '.';
@@ -16,8 +23,11 @@ const HomeStack = createStackNavigator<HomeRoutes>();
 const HomeTab = createBottomTabNavigator<AppRoutes>();
 
 const HomeNavigator = () => {
+  const { t } = useTranslation();
+
   return (
     <HomeStack.Navigator
+      mode="modal"
       screenOptions={{
         headerBackTitleVisible: false,
         gestureEnabled: false,
@@ -37,6 +47,24 @@ const HomeNavigator = () => {
           header: () => <Header canGoBack={true} />,
         }}
         component={PostScreen}
+      />
+      <HomeStack.Screen
+        name="CreatePost"
+        options={{
+          header: () => (
+            <Header canGoBack={true} title={t('screens.create_post')} />
+          ),
+        }}
+        component={CreatePost}
+      />
+      <HomeStack.Screen
+        name="CreateEvent"
+        options={{
+          header: () => (
+            <Header canGoBack={true} title={t('screens.create_event')} />
+          ),
+        }}
+        component={CreateEvent}
       />
     </HomeStack.Navigator>
   );

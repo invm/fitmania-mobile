@@ -7,7 +7,9 @@
       "create_profile": "Create profile",
       "home": "Home",
       "profile": "Profile",
-      "search": "Search"
+      "search": "Search",
+      "create_post": "Create Post",
+      "create_event": "Create Event"
     },
     "common": {
       "error": "Error",
@@ -36,6 +38,8 @@
       "server_errors": {
         "A0": "Something went very wrong, please try again."
       },
+      "value_too_shot": "Value is too short",
+      "value_too_long": "Value is too long",
       "invalid_email": "Please insert a valid email address",
       "all_fields_are_required": "All fields are required",
       "required_field": "This field is required",
@@ -60,6 +64,12 @@
         "title": "Join local communities",
         "subtext": " and train in groups around you!"
       }
+    },
+    "create_post": {
+      "title": "Share some thoughts or upload an image...",
+      "create_post": "Create Post",
+      "open_camera": "Open camera",
+      "open_gallery": "Open gallery"
     }
   }
 }

@@ -120,6 +120,7 @@ const Header = ({
                         }}>
                         <Icon
                           name={icon || `arrow-back`}
+                          size={25}
                           color={
                             color === 'primary' ? colors.white : colors.dark
                           }
@@ -177,7 +178,7 @@ const Header = ({
               <TouchableOpacity onPress={handleClearQuery}>
                 <Icon
                   name={'close-circle'}
-                  size={20}
+                  size={25}
                   style={{ marginStart: 10, height: 20 }}
                   color={colors.lightGrey}
                 />

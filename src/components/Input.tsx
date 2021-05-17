@@ -49,6 +49,7 @@ interface InputProps {
   testID?: string;
   accessibilityLabel?: string;
   multiline?: boolean;
+  autoFocus?: boolean;
   keyboardType?:
     | 'default'
     | 'email-address'
@@ -81,11 +82,12 @@ const Input = ({
   testID,
   keyboardType,
   multiline,
+  autoFocus,
 }: InputProps) => {
   return (
     <TextInput
       placeholder={placeholder}
-	  placeholderTextColor={colors.darkGrey}
+      placeholderTextColor={colors.darkGrey}
       {...{
         onChangeText,
         value,
@@ -99,6 +101,7 @@ const Input = ({
         testID,
         multiline,
         keyboardType,
+        autoFocus,
       }}
       style={[
         styles.input,

@@ -1,6 +1,8 @@
+import { toFormData } from './../../utils/utils';
 import { Methods, Request } from '../../utils/Wrapper';
 
 import * as types from '../types/posts';
+import { IObject } from '../../interfaces/Common';
 
 const POSTS_LIMIT = 10;
 
@@ -99,3 +101,95 @@ export const deletePost = (_id: string) => async (dispatch: Function) => {
     });
   }
 };
+
+export const createPost =
+  ({
+    display,
+    image,
+    text,
+    group,
+  }: {
+    text: string;
+    image: Blob;
+    display: 'all' | 'friends';
+    group?: string;
+  }) =>
+  async (dispatch: Function) => {
+    dispatch({ type: types.CREATE_POST_ATTEMPT });
+
+    let obj: IObject = { display, image, text };
+
+    if (group) obj['group'] = group;
+
+    const data = toFormData(obj);
+
+    let requestParams = {
+      method: Methods.POST,
+      endpoint: `/posts/`,
+      body: data,
+    };
+    try {
+      let res = await Request(dispatch, requestParams);
+
+      dispatch({
+        type: types.CREATE_POST_SUCCESS,
+        payload: {
+          data: res.data.data,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: types.CREATE_POST_FAIL,
+      });
+    }
+  };
+
+export const createEvent =
+  ({
+    display,
+    image,
+    text,
+    group,
+    event,
+  }: {
+    text: string;
+    image: Blob;
+    display: 'all' | 'friends';
+    group?: string;
+    event: {
+      eventType: string;
+      location: { coordinates: number[] };
+      startDate: Date;
+      limitParticipants: number;
+      pace: string;
+    };
+  }) =>
+  async (dispatch: Function) => {
+    dispatch({ type: types.CREATE_POST_ATTEMPT });
+
+    let obj: IObject = { display, image, text, event };
+
+    if (group) obj['group'] = group;
+
+    const data = toFormData(obj);
+
+    let requestParams = {
+      method: Methods.POST,
+      endpoint: `/posts/`,
+      body: data,
+    };
+    try {
+      let res = await Request(dispatch, requestParams);
+
+      dispatch({
+        type: types.CREATE_POST_SUCCESS,
+        payload: {
+          data: res.data.data,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: types.CREATE_POST_FAIL,
+      });
+    }
+  };

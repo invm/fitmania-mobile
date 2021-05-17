@@ -3,7 +3,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 export interface StackNavigationProps<
   ParamsList extends ParamListBase,
-  RouteName extends keyof ParamsList = string
+  RouteName extends keyof ParamsList = string,
 > {
   navigation: StackNavigationProp<ParamsList, RouteName>;
   route: RouteProp<ParamsList, RouteName>;
@@ -25,6 +25,8 @@ export type HomeRoutes = {
   Search: undefined;
   Profile: undefined;
   PostScreen: undefined;
+  CreateEvent: undefined;
+  CreatePost: undefined;
 };
 
 export type AppRoutes = AuthRoutes & HomeRoutes & {};

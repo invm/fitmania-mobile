@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, ViewStyle } from 'react-native';
 
-import { width as wWidth } from './Theme';
+import { PADDING, width as wWidth } from './Theme';
 
 import { BORDER_RADIUS, colors } from './Theme';
 import Touchable from './Touchable';
@@ -39,7 +39,7 @@ const Button = ({
         buttonStyles.button,
         buttonStyle,
         style,
-        { opacity: disabled ? 0.8 : 1, width: width || wWidth - 64 },
+        { opacity: disabled ? 0.8 : 1, width: width || wWidth - PADDING * 2 },
       ]}
       {...{ props, onPress, disabled, testID }}>
       {children}
@@ -62,7 +62,7 @@ const shadow = {
 
 const buttonStyles = StyleSheet.create({
   button: {
-    height: 50,
+    padding: PADDING,
     justifyContent: 'center',
     alignItems: 'center',
   },
