@@ -38,11 +38,11 @@ export const Request = async (
   if (response?.data?.msg) {
     showMessage(i18n.t('common.success'), 'success', response.data.msg);
   } else if (response?.data?.errors?.[0]?.msg) {
-    showMessage(
-      i18n.t('common.error'),
-      'success',
-      response?.data?.errors?.[0]?.msg,
-    );
+    throw new AppError({
+      message: response?.data?.errors?.[0]?.msg,
+      display: true,
+      code: response.data.errors[0].errorCode,
+    });
   }
 
   if (response.success) {

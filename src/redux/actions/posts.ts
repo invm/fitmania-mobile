@@ -6,6 +6,10 @@ import { IObject } from '../../interfaces/Common';
 
 const POSTS_LIMIT = 10;
 
+export const setOffset = (offset: number) => (dispatch: Function) => {
+  dispatch({ type: types.SET_OFFSET, payload: offset });
+};
+
 export const getPosts =
   ({ offset }: { offset: number }) =>
   async (dispatch: Function) => {
@@ -110,14 +114,14 @@ export const createPost =
     group,
   }: {
     text: string;
-    image: Blob;
+    image: any;
     display: 'all' | 'friends';
     group?: string;
   }) =>
   async (dispatch: Function) => {
     dispatch({ type: types.CREATE_POST_ATTEMPT });
 
-    let obj: IObject = { display, image, text };
+    let obj: IObject = { display, postImage: image, text };
 
     if (group) obj['group'] = group;
 
@@ -127,20 +131,23 @@ export const createPost =
       method: Methods.POST,
       endpoint: `/posts/`,
       body: data,
+      headers: {
+        'Content-Type': 'multipart/form-data; ',
+      },
     };
     try {
       let res = await Request(dispatch, requestParams);
 
       dispatch({
         type: types.CREATE_POST_SUCCESS,
-        payload: {
-          data: res.data.data,
-        },
+        payload: res.data.data,
       });
+      return true;
     } catch (error) {
       dispatch({
         type: types.CREATE_POST_FAIL,
       });
+      return false;
     }
   };
 
@@ -153,12 +160,12 @@ export const createEvent =
     event,
   }: {
     text: string;
-    image: Blob;
+    image?: any;
     display: 'all' | 'friends';
     group?: string;
     event: {
       eventType: string;
-      location: { coordinates: number[] };
+      location: { address: string; coordinates: number[] };
       startDate: Date;
       limitParticipants: number;
       pace: string;

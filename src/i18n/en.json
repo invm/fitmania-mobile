@@ -30,15 +30,18 @@
       "last_name": "Last name"
     },
     "auth": {
-      "provide_otp": "Please provide the 4 digit one time password that you've received to your email address:",
+      "provide_otp": "Please provide the 6 digit one time password that you've received to your email address:",
       "provide_email": "Please provide your email in order to receive a one time password",
-      "resendOTP": "Resend password"
+      "resendOTP": "Resend password",
+      "email": "Email",
+      "name": "First name",
+      "lastname": "Last name"
     },
     "errors": {
       "server_errors": {
         "A0": "Something went very wrong, please try again."
       },
-      "value_too_shot": "Value is too short",
+      "value_too_short": "Value is too short",
       "value_too_long": "Value is too long",
       "invalid_email": "Please insert a valid email address",
       "all_fields_are_required": "All fields are required",
@@ -70,6 +73,17 @@
       "create_post": "Create Post",
       "open_camera": "Open camera",
       "open_gallery": "Open gallery"
+    },
+    "create_event": {
+      "title": "Create an event, invite friends and groups and train together...",
+      "sport": "Sport",
+      "start_date": "Start date",
+      "limit_participants": "Limit participants",
+      "pace": "Pace",
+      "location": "Location"
+    },
+    "home": {
+      "no_more_posts": "No more posts..."
     }
   }
 }

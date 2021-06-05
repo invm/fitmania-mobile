@@ -8,7 +8,7 @@ interface BlurredImageProps {
   height: number;
 }
 
-const DEFAULT_BLURHASH = 'L7ExCE~p05,:0|wH$eJ.0MV@-TM{';
+const DEFAULT_BLURHASH = 'L7EWeA~p22,a0|ws$$J.0mla-ab{';
 
 const BlurredImage = ({ uri, width, height }: BlurredImageProps) => {
   const blurhashOpacity = useRef(new Animated.Value(1)).current;

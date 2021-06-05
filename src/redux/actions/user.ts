@@ -11,6 +11,7 @@ import store from '../index';
 import axios from 'axios';
 import messaging from '@react-native-firebase/messaging';
 import IUser from '../../interfaces/User';
+import { API_KEY } from '../../../sensitive';
 
 export const verifySession = () => async (dispatch: Function) => {
   try {
@@ -30,55 +31,68 @@ export const verifySession = () => async (dispatch: Function) => {
   await updateFcmToken(fcmToken);
 };
 
-export const register = (email: string) => async (dispatch: Function) => {
-  let requestParams = {
-    method: Methods.POST,
-    endpoint: `/register`,
-    body: {
-      email: email,
-    },
-  };
+export const register =
+  ({
+    email,
+    name,
+    lastname,
+  }: {
+    email: string;
+    name?: string | undefined;
+    lastname?: string | undefined;
+  }) =>
+  async (dispatch: Function) => {
+    let requestParams = {
+      method: Methods.POST,
+      endpoint: `/auth/register`,
+      body: {
+        email,
+        name,
+        lastname,
+      },
+    };
 
-  await Request(dispatch, requestParams);
-};
-
-export const login = (email: string) => async (dispatch: Function) => {
-  let requestParams = {
-    method: Methods.POST,
-    endpoint: `/auth/otp`,
-    body: {
-      email: email,
-    },
-  };
-
-  let res = await Request(dispatch, requestParams);
-
-  return (ENV !== 'production' && res?.data?.data?.otp) ?? null;
-};
-
-export const verifyOTP = (email: string, otp: string) => async (
-  dispatch: Function,
-) => {
-  let requestParams = {
-    method: Methods.POST,
-    endpoint: `/auth/login`,
-    body: {
-      email,
-      otp,
-    },
-  };
-
-  try {
     await Request(dispatch, requestParams);
-    dispatch(verifySession());
-  } catch (error) {
-    showMessage(
-      i18n.t('common.error'),
-      'error',
-      error.message, // The message is expected to already be translated by this point
-    );
-  }
-};
+  };
+
+export const login =
+  ({ email }: { email: string }) =>
+  async (dispatch: Function) => {
+    let requestParams = {
+      method: Methods.POST,
+      endpoint: `/auth/otp`,
+      body: {
+        email: email,
+      },
+    };
+
+    let res = await Request(dispatch, requestParams);
+
+    return (ENV !== 'production' && res?.data?.data?.otp) ?? null;
+  };
+
+export const verifyOTP =
+  (email: string, otp: string) => async (dispatch: Function) => {
+    let requestParams = {
+      method: Methods.POST,
+      endpoint: `/auth/login`,
+      body: {
+        email,
+        otp,
+      },
+    };
+
+    try {
+      await Request(dispatch, requestParams);
+      dispatch(verifySession());
+    } catch (error) {
+      showMessage(
+        i18n.t('common.error'),
+        'error',
+        error.message, // The message is expected to already be translated by this point
+      );
+    }
+  };
 
 export const logout = () => async (dispatch: Function) => {
   let requestParams = {
@@ -137,72 +151,69 @@ export const getProfile = () => async (dispatch: Function) => {
   }
 };
 
-export const createProfile = ({
-  name,
-  lastname,
-}: {
-  name: string;
-  lastname: string;
-}) => async (dispatch: Function) => {
-  let requestParams = {
-    method: Methods.PATCH,
-    endpoint: `/user`,
-    body: {
-      name,
-      lastname,
-    },
-  };
-
-  await Request(dispatch, requestParams);
-
-  await dispatch(getProfile());
-};
-
-export const updateProfile = (
-  profileData: object,
-  options: {
-    deleteProfilePicture?: boolean;
-    updateProfilePicture?: File;
-  },
-) => async (dispatch: Function) => {
-  if (options?.deleteProfilePicture) {
-    await dispatch(deleteProfilePicture());
-  }
-
-  if (options?.updateProfilePicture) {
-    await dispatch(uploadProfilePicture(options.updateProfilePicture));
-  }
-
-  if (profileData) {
+export const createProfile =
+  ({ name, lastname }: { name: string; lastname: string }) =>
+  async (dispatch: Function) => {
     let requestParams = {
       method: Methods.PATCH,
       endpoint: `/user`,
       body: {
-        ...profileData,
+        name,
+        lastname,
       },
     };
 
     await Request(dispatch, requestParams);
-  }
 
-  await dispatch(getProfile());
-};
-
-export const uploadProfilePicture = (file: File) => async (
-  dispatch: Function,
-) => {
-  let formData = new FormData();
-
-  formData.append('profilePicture', file);
-
-  let requestParams = {
-    method: Methods.PUT,
-    endpoint: `/profile/picture`,
-    body: formData,
+    await dispatch(getProfile());
   };
 
-  await Request(dispatch, requestParams);
-};
+export const updateProfile =
+  (
+    profileData: object,
+    options: {
+      deleteProfilePicture?: boolean;
+      updateProfilePicture?: File;
+    },
+  ) =>
+  async (dispatch: Function) => {
+    if (options?.deleteProfilePicture) {
+      await dispatch(deleteProfilePicture());
+    }
+
+    if (options?.updateProfilePicture) {
+      await dispatch(uploadProfilePicture(options.updateProfilePicture));
+    }
+
+    if (profileData) {
+      let requestParams = {
+        method: Methods.PATCH,
+        endpoint: `/user`,
+        body: {
+          ...profileData,
+        },
+      };
+
+      await Request(dispatch, requestParams);
+    }
+
+    await dispatch(getProfile());
+  };
+
+export const uploadProfilePicture =
+  (file: File) => async (dispatch: Function) => {
+    let formData = new FormData();
+
+    formData.append('profilePicture', file);
+
+    let requestParams = {
+      method: Methods.PUT,
+      endpoint: `/profile/picture`,
+      body: formData,
+    };
+
+    await Request(dispatch, requestParams);
+  };
 
 export const deleteProfilePicture = () => async (dispatch: Function) => {
   let requestParams = {
@@ -227,18 +238,26 @@ export const deleteProfilePicture = () => async (dispatch: Function) => {
 export const sendOTPorLogin = async ({
   sendEmail,
   sendCreds,
-  email,
+  data,
   setLoading,
   navigation,
   dispatch,
   OTP,
 }: {
-  sendEmail?: (email: string) => (dispatch: Function) => Promise<void>;
+  sendEmail?: ({
+    email,
+    name,
+    lastname,
+  }: {
+    email: string;
+    name?: string;
+    lastname?: string;
+  }) => (dispatch: Function) => Promise<void>;
   sendCreds?: (
     email: string,
     OTP: string,
   ) => (dispatch: Function) => Promise<void>;
-  email: string;
+  data: { email: string; name?: string; lastname?: string };
   setLoading: Dispatch<SetStateAction<boolean>>;
   navigation: StackNavigationProp<ParamListBase>;
   dispatch: Dispatch<any>;
@@ -246,14 +265,14 @@ export const sendOTPorLogin = async ({
 }) => {
   try {
     if (OTP && sendCreds) {
-      await dispatch(sendCreds(email, OTP)); // Assumed to be login
+      await dispatch(sendCreds(data.email, OTP)); // Assumed to be login
 
       await dispatch(getProfile()); // Profile is fetched in order to check if the user already created a profile, if so, skip the onboarding and profile creation
     } else if (sendEmail) {
-      let otp = await dispatch(sendEmail(email));
+      let otp = await dispatch(sendEmail(data));
       setLoading(false);
 
-      navigation.navigate('OtpConfirmation', { email, otp });
+      navigation.navigate('OtpConfirmation', { email: data.email, otp });
     }
   } catch (err) {
     // If connection has been aborted then there is no point in doing anything as the client is sent to the server dead screen
@@ -272,10 +291,19 @@ export const sendOTPorLogin = async ({
   }
 };
 export const updateFcmToken = async (fcmToken: string) => {
-  store.getState().user.authenticated &&
+  let cookie = await AsyncStorage.getItem('cookie');
+
+  cookie &&
+    store.getState().user.authenticated &&
     (await axios.patch(
       `${API_URL}/user`,
       { fcmToken },
-      { withCredentials: true },
+      {
+        withCredentials: true,
+        headers: {
+          'API-KEY': API_KEY,
+          cookie,
+        },
+      },
     ));
 };

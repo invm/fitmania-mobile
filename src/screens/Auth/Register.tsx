@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, I18nManager, ActivityIndicator, Keyboard } from 'react-native';
+import { View, ActivityIndicator, Keyboard } from 'react-native';
 import { AuthRoutes, StackNavigationProps } from '../../navigation';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -24,15 +24,33 @@ const Register = ({
   const [loading, setLoading] = useState(false);
 
   const registrationSchema = Yup.object().shape({
-    email: Yup.string().email().required(t('errors.required_field')),
+    name: Yup.string()
+      .min(2, t('errors.value_too_short'))
+      .max(50, t('errors.value_too_long'))
+      .required(t('errors.required_field')),
+    lastname: Yup.string()
+      .min(2, t('errors.value_too_short'))
+      .max(50, t('errors.value_too_long'))
+      .required(t('errors.required_field')),
+    email: Yup.string()
+      .email(t('errors.invalid_email'))
+      .required(t('errors.required_field')),
   });
 
-  const registrationHandler = async ({ email }: { email: string }) => {
+  const registrationHandler = async ({
+    email,
+    name,
+    lastname,
+  }: {
+    email: string;
+    name: string;
+    lastname: string;
+  }) => {
     setLoading(true);
     Keyboard.dismiss();
     await sendOTPorLogin({
       sendEmail: register,
-      email,
+      data: { email: email.toLowerCase(), name, lastname },
       setLoading,
       navigation,
       dispatch,
@@ -48,6 +66,8 @@ const Register = ({
       <Formik
         initialValues={{
           email: '',
+          name: '',
+          lastname: '',
         }}
         validationSchema={registrationSchema}
         onSubmit={registrationHandler}>
@@ -84,16 +104,14 @@ const Register = ({
                   <View>
                     <Input
                       testID="email"
+                      placeholder={t('auth.email')}
                       returnKeyType="next"
-                      onChangeText={e =>
-                        setFieldValue('email', e.replace(/\D/, ''))
-                      }
+                      onChangeText={e => setFieldValue('email', e)}
                       onBlur={() => setFieldTouched('email')}
                       value={values.email}
                       touched={touched.email}
                       valid={!errors.email}
                       error={errors.email}
-                      maxLength={10}
                       style={{ textAlign: 'left', fontSize: 18, flex: 0 }}
                     />
                     {values.email?.length >= 5 && errors.email && (
@@ -101,12 +119,67 @@ const Register = ({
                         style={{
                           width: '100%',
                           flexDirection: 'row',
-                          alignItems: I18nManager.isRTL
-                            ? 'flex-end'
-                            : 'flex-start',
+                          alignItems: 'flex-start',
                         }}>
-                        <Text align="left" variant="semibold16">
+                        <Text
+                          align="left"
+                          variant="semibold16"
+                          color={colors.error}>
                           {errors.email}
+                        </Text>
+                      </View>
+                    )}
+                    <Input
+                      testID="name"
+                      placeholder={t('auth.name')}
+                      returnKeyType="next"
+                      onChangeText={e => setFieldValue('name', e)}
+                      onBlur={() => setFieldTouched('name')}
+                      value={values.name}
+                      touched={touched.name}
+                      valid={!errors.name}
+                      error={errors.name}
+                      style={{ textAlign: 'left', fontSize: 18, flex: 0 }}
+                    />
+                    {touched.name && errors.name && (
+                      <View
+                        style={{
+                          width: '100%',
+                          flexDirection: 'row',
+                          alignItems: 'flex-start',
+                        }}>
+                        <Text
+                          align="left"
+                          variant="semibold16"
+                          color={colors.error}>
+                          {errors.name}
+                        </Text>
+                      </View>
+                    )}
+                    <Input
+                      testID="lastname"
+                      placeholder={t('auth.lastname')}
+                      returnKeyType="next"
+                      onChangeText={e => setFieldValue('lastname', e)}
+                      onBlur={() => setFieldTouched('lastname')}
+                      value={values.lastname}
+                      touched={touched.lastname}
+                      valid={!errors.lastname}
+                      error={errors.lastname}
+                      style={{ textAlign: 'left', fontSize: 18, flex: 0 }}
+                    />
+                    {touched.lastname && errors.lastname && (
+                      <View
+                        style={{
+                          width: '100%',
+                          flexDirection: 'row',
+                          alignItems: 'flex-start',
+                        }}>
+                        <Text
+                          align="left"
+                          variant="semibold16"
+                          color={colors.error}>
+                          {errors.lastname}
                         </Text>
                       </View>
                     )}
@@ -121,7 +194,9 @@ const Register = ({
                   {loading ? (
                     <ActivityIndicator size="small" color={colors.white} />
                   ) : (
-                    <Text variant="semibold16" color={colors.white}>{t('common.continue')}</Text>
+                    <Text variant="semibold16" color={colors.white}>
+                      {t('common.continue')}
+                    </Text>
                   )}
                 </Button>
               </View>

@@ -59,7 +59,7 @@ const OtpConfirmation = ({
     setOTPExpired(false);
     await sendOTPorLogin({
       sendEmail: login,
-      email,
+      data: { email },
       setLoading,
       navigation,
       dispatch,
@@ -76,7 +76,7 @@ const OtpConfirmation = ({
     setLoading(true);
     let result = await sendOTPorLogin({
       sendCreds: verifyOTP,
-      email,
+      data: { email },
       setLoading,
       navigation,
       dispatch,

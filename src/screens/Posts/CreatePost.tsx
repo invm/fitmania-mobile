@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import {
   Keyboard,
@@ -12,18 +12,26 @@ import { HomeRoutes, StackNavigationProps } from '../../navigation';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
-import { createPost } from '../../redux/actions/posts';
+import { createPost, getPosts } from '../../redux/actions/posts';
 import * as ImagePicker from 'expo-image-picker';
+import { BORDER_RADIUS, width } from '../../components/Theme';
+import { showMessage } from '../../utils/utils';
 
-const CreatePost = ({}: StackNavigationProps<HomeRoutes, 'CreatePost'>) => {
+const CreatePost = ({
+  navigation,
+}: StackNavigationProps<HomeRoutes, 'CreatePost'>) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState({
+    uri: '',
+    type: 'image/jpg',
+    name: 'image.jpg',
+  });
 
   const PostSchema = Yup.object().shape({
     text: Yup.string()
-      .min(2, t('errors.value_too_shot'))
+      .min(2, t('errors.value_too_short'))
       .max(280, t('errors.value_too_long'))
       .required(t('errors.required_field')),
     display: Yup.string(),
@@ -38,41 +46,64 @@ const CreatePost = ({}: StackNavigationProps<HomeRoutes, 'CreatePost'>) => {
   }) => {
     setLoading(true);
     Keyboard.dismiss();
-    await dispatch(createPost({ display, text, image }));
+    try {
+      await dispatch(createPost({ display, text, image }));
+      await dispatch(getPosts({ offset: 0 }));
+      setLoading(false);
+      setImage({ uri: '', type: 'image/jpg', name: 'image.jpg' });
+      navigation.navigate('Home');
+    } catch (error) {
+      dispatch(showMessage(t('common.error'), 'error', error?.message));
+      setLoading(false);
+    }
   };
 
   const openGallery = async () => {
-
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      base64: false,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 0.6,
+      quality: 0.5,
+      allowsMultipleSelection: false,
     });
 
-    console.log(result);
-
     if (!result.cancelled) {
-      setImage(result.uri);
+      setImage({ uri: result.uri, type: 'image/jpg', name: 'image.jpg' });
     }
   };
 
   const openCamera = async () => {
-    await ImagePicker.requestCameraPermissionsAsync()
+    await ImagePicker.requestCameraPermissionsAsync();
 
     let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      base64: false,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 0.6,
+      quality: 0.5,
+      allowsMultipleSelection: false,
     });
 
-    console.log(result);
-
     if (!result.cancelled) {
-      setImage(result.uri);
+      setImage({ uri: result.uri, type: 'image/jpg', name: 'image.jpg' });
     }
   };
+
+  useEffect(() => {
+    if (loading) {
+      navigation.addListener('beforeRemove', e => {
+        // Prevent default behavior of leaving the screen
+        if (e.data.action.type === 'GO_BACK') {
+          e.preventDefault();
+        }
+      });
+      Keyboard.dismiss();
+    }
+    return () => {
+      navigation.removeListener('beforeRemove', () => {});
+    };
+  }, [navigation, loading]);
 
   return (
     <View style={styles.container}>
@@ -110,6 +141,7 @@ const CreatePost = ({}: StackNavigationProps<HomeRoutes, 'CreatePost'>) => {
                   <Input
                     returnKeyType="next"
                     accessibilityLabel="text"
+                    placeholder="Text"
                     keyboardType="default"
                     onChangeText={e => setFieldValue('text', e)}
                     onBlur={() => setFieldTouched('text')}
@@ -139,44 +171,37 @@ const CreatePost = ({}: StackNavigationProps<HomeRoutes, 'CreatePost'>) => {
                   )}
                 </Card>
 
-                {!!image && (
-                  <Image
-                    source={{ uri: image }}
-                    style={{ width: 200, height: 200 }}
-                  />
+                {!!image.uri && (
+                  <View style={styles.imageContainer}>
+                    <Image source={{ uri: image.uri }} style={styles.image} />
+                  </View>
                 )}
-
-                <View
-                  style={{
-                    paddingVertical: PADDING * 2,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Button
-                    variant="secondary"
-                    width={'45%'}
-                    onPress={openCamera}>
-                    {loading ? (
-                      <ActivityIndicator size="small" color={colors.white} />
-                    ) : (
+                {!loading && (
+                  <View
+                    style={{
+                      paddingVertical: PADDING * 2,
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <Button
+                      variant="secondary"
+                      width={'45%'}
+                      onPress={openCamera}>
                       <Text variant="semibold16" color={colors.white}>
                         {t('create_post.open_camera')}
                       </Text>
-                    )}
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    width={'45%'}
-                    onPress={openGallery}>
-                    {loading ? (
-                      <ActivityIndicator size="small" color={colors.white} />
-                    ) : (
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      width={'45%'}
+                      onPress={openGallery}>
                       <Text variant="semibold16" color={colors.white}>
                         {t('create_post.open_gallery')}
                       </Text>
-                    )}
-                  </Button>
-                </View>
+                    </Button>
+                  </View>
+                )}
+
                 <View style={{ paddingVertical: PADDING }}>
                   <Button
                     testID="continue_button"
@@ -208,5 +233,15 @@ const styles = StyleSheet.create({
   container: {
     padding: PADDING,
     flex: 1,
+  },
+  imageContainer: {
+    marginTop: PADDING,
+    borderRadius: BORDER_RADIUS.small,
+    overflow: 'hidden',
+  },
+  image: {
+    width: width - PADDING * 2,
+    height: ((width - PADDING * 2) * 3) / 4,
+    borderRadius: BORDER_RADIUS.small,
   },
 });

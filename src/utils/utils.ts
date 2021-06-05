@@ -51,7 +51,9 @@ export const stripObject = (obj: { [any: string]: any }) => {
 };
 
 const buildFormData = (formData: FormData, data: any, parentKey?: string) => {
-  if (
+  if (data && typeof data === 'object' && data?.uri) {
+    formData.append(parentKey ?? '', data);
+  } else if (
     data &&
     typeof data === 'object' &&
     !(data instanceof Date) &&

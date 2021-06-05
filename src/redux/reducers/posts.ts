@@ -18,6 +18,8 @@ export const initialState: postsInitialState = {
 
 export default function (state = initialState, action: Action) {
   switch (action.type) {
+    case types.CREATE_POST_SUCCESS:
+      return { ...state, posts: [...state.posts, action.payload] };
     case types.GET_POSTS_ATTEMPT:
       return { ...state, postsLoading: true };
     case types.GET_POSTS_FAIL:

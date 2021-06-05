@@ -1,5 +1,8 @@
 import axios from 'axios';
 import { API_URL } from '../../env';
+import { API_KEY } from '../../sensitive';
+import CookieManager from '@react-native-cookies/cookies';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface RequestWrapperProps {
   headers?: object;
@@ -18,6 +21,7 @@ let instance = axios.create({
   withCredentials: true,
   headers: {
     Accept: '*/*',
+    'API-KEY': API_KEY,
   },
 });
 
@@ -40,11 +44,20 @@ export default async function requestWrapper({
   let res: Res;
 
   try {
+    let cookie = await AsyncStorage.getItem('cookie');
+    if (cookie) instance.defaults.headers.common.cookie = cookie;
+
     // @ts-ignore
     let response = await instance?.[method](
       API_URL + endpoint,
       method === 'DELETE' ? { data: body } : body,
     );
+
+    if (response.headers?.['set-cookie']?.[0]) {
+      await CookieManager.clearAll();
+      delete instance.defaults.headers.common.cookie;
+      await AsyncStorage.setItem('cookie', response.headers['set-cookie'][0]);
+    }
 
     res = response;
     res.success = true; // Indicator for the caller to know that the request was processed successfully.

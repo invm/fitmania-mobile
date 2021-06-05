@@ -39,7 +39,7 @@ const Button = ({
         buttonStyles.button,
         buttonStyle,
         style,
-        { opacity: disabled ? 0.8 : 1, width: width || wWidth - PADDING * 2 },
+        { opacity: disabled ? 0.6 : 1, width: width || wWidth - PADDING * 2 },
       ]}
       {...{ props, onPress, disabled, testID }}>
       {children}

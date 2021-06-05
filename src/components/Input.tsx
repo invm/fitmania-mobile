@@ -11,12 +11,13 @@ import { colors } from './Theme';
 
 const styles = StyleSheet.create({
   input: {
-    borderBottomColor: colors.lightGrey,
+    borderBottomColor: colors.primary,
     borderBottomWidth: 1,
     height: 50,
     flex: 1,
     padding: 0,
     color: colors.black,
+    textAlign: 'left',
   },
 });
 
@@ -103,11 +104,9 @@ const Input = ({
         keyboardType,
         autoFocus,
       }}
-      style={[
-        styles.input,
-        { textAlign: I18nManager.isRTL ? 'right' : 'left' },
-        style,
-      ]}
+      selectionColor={colors.primary}
+      caretHidden={false}
+      style={[styles.input, style, {}]}
     />
   );
 };

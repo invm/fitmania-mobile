@@ -1,11 +1,17 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { colors, PADDING, Text } from '../../components';
 import { HomeRoutes, StackNavigationProps } from '../../navigation';
 import { RootState } from '../../redux';
-import { getPosts } from '../../redux/actions/posts';
+import { getPosts, setOffset } from '../../redux/actions/posts';
 import HomeHeaderButtons from './components/HomeHeaderButtons';
 
 import Post from './components/Post';
@@ -38,6 +44,16 @@ const Home = ({ navigation }: StackNavigationProps<HomeRoutes, 'Home'>) => {
           <FlatList
             data={posts}
             keyExtractor={({ _id }) => _id}
+            refreshControl={
+              <RefreshControl
+                refreshing={postsLoading}
+                onRefresh={() => {
+                  dispatch(setOffset(0));
+                  dispatch(getPosts({ offset: 0 }));
+                }}
+                colors={[colors.primary]}
+              />
+            }
             renderItem={({ item: post }) => <Post {...{ post }} />}
             onEndReached={expandList}
             ListHeaderComponent={<HomeHeaderButtons {...{ navigation }} />}
@@ -45,8 +61,10 @@ const Home = ({ navigation }: StackNavigationProps<HomeRoutes, 'Home'>) => {
           />
         </>
       )}
-      {postsExhausted && (
-        <Text variant="regular16">{t('home.no_more_posts')}</Text>
+      {postsExhausted && !postsLoading && (
+        <View style={{ paddingHorizontal: PADDING }}>
+          <Text variant="regular16">{t('home.no_more_posts')}</Text>
+        </View>
       )}
     </View>
   );
