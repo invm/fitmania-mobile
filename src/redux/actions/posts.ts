@@ -3,25 +3,31 @@ import { Methods, Request } from '../../utils/Wrapper';
 
 import * as types from '../types/posts';
 import { IObject } from '../../interfaces/Common';
+import { RootState } from '..';
 
-const POSTS_LIMIT = 10;
+const POSTS_LIMIT = 1;
 
-export const setOffset = (offset: number) => (dispatch: Function) => {
-  dispatch({ type: types.SET_OFFSET, payload: offset });
+export const resetPosts = () => (dispatch: Function) => {
+  dispatch({ type: types.RESET_POSTS });
 };
 
 export const getPosts =
-  ({ offset }: { offset: number }) =>
-  async (dispatch: Function) => {
+  (sports: string[] = []) =>
+  async (dispatch: Function, getState: () => typeof RootState) => {
     dispatch({ type: types.GET_POSTS_ATTEMPT });
+
+    const { offset } = getState().posts;
 
     let requestParams = {
       method: Methods.GET,
-      endpoint: `/posts?offset=${offset}&limit=${POSTS_LIMIT}`,
+      endpoint: `/posts?offset=${offset}&limit=${POSTS_LIMIT}${sports
+        .map(v => '&sports[]=' + v)
+        .join('')}`,
     };
+
     try {
       let res = await Request(dispatch, requestParams);
-
+      if (sports.length) await dispatch(resetPosts());
       dispatch({
         type: types.GET_POSTS_SUCCESS,
         payload: {
@@ -152,20 +158,17 @@ export const createPost =
   };
 
 export const createEvent =
-  ({
-    display,
-    image,
-    text,
-    group,
-    event,
-  }: {
+  (event: {
+    [key: string]: any;
     text: string;
     image?: any;
     display: 'all' | 'friends';
     group?: string;
     event: {
+      [key: string]: any;
       eventType: string;
-      location: { address: string; coordinates: number[] };
+      address: string;
+      coordinates: number[];
       startDate: Date;
       limitParticipants: number;
       pace: string;
@@ -174,11 +177,23 @@ export const createEvent =
   async (dispatch: Function) => {
     dispatch({ type: types.CREATE_POST_ATTEMPT });
 
-    let obj: IObject = { display, image, text, event };
+    const data = new FormData();
 
-    if (group) obj['group'] = group;
-
-    const data = toFormData(obj);
+    for (let dataKey in event) {
+      if (dataKey === 'event') {
+        // append nested object
+        for (let key in event[dataKey]) {
+          if (key === 'coordinates') {
+            event['event']['coordinates'].forEach((coord, i) => {
+              data.append(`event[location][coordinates][${i}]`, `${coord}`);
+            });
+          }
+          data.append(`event[${key}]`, event[dataKey][key]);
+        }
+      } else {
+        data.append(dataKey, event[dataKey]);
+      }
+    }
 
     let requestParams = {
       method: Methods.POST,

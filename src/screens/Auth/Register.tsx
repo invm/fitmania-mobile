@@ -106,6 +106,7 @@ const Register = ({
                       testID="email"
                       placeholder={t('auth.email')}
                       returnKeyType="next"
+                      keyboardType="email-address"
                       onChangeText={e => setFieldValue('email', e)}
                       onBlur={() => setFieldTouched('email')}
                       value={values.email}

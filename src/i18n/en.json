@@ -9,7 +9,8 @@
       "profile": "Profile",
       "search": "Search",
       "create_post": "Create Post",
-      "create_event": "Create Event"
+      "create_event": "Create Event",
+      "post_filters": "Post filters"
     },
     "common": {
       "error": "Error",
@@ -22,7 +23,10 @@
       "version": "version",
       "logout": "Logout",
       "continue": "Continue",
-      "skip": "Skip"
+      "skip": "Skip",
+      "hello1": "Hello, ",
+      "hello2": "Hi! ",
+      "hello3": "Hey, "
     },
     "create_profile": {
       "title": "Please enter some minimal information about yourself",

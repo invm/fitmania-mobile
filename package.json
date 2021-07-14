@@ -10,7 +10,8 @@
     "ios": "react-native run-ios",
     "detox": "detox test -c android.sim.debug",
     "e2e": "concurrently \"npm start\"  \"npm run detox\" ",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0",
+    "android-linux": "react-native bundle --platform android --dev true --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res && react-native run-android"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.13.4",
@@ -45,6 +46,7 @@
     "react-native-actions-sheet": "^0.4.7",
     "react-native-blurhash": "^1.1.4",
     "react-native-code-push": "^7.0.0",
+    "react-native-collapsible": "^1.6.0",
     "react-native-confirmation-code-field": "^7.1.0",
     "react-native-dropdown-picker": "^5.1.19",
     "react-native-gesture-handler": "^1.8.0",

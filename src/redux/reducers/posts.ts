@@ -7,6 +7,8 @@ export interface postsInitialState {
   postsExhausted: boolean;
   postsLoading: boolean;
   offset: number;
+  singlePostId: string;
+  singlePostLoading: boolean;
 }
 
 export const initialState: postsInitialState = {
@@ -14,10 +16,19 @@ export const initialState: postsInitialState = {
   postsLoading: false,
   postsExhausted: false,
   offset: 0,
+  singlePostId: '',
+  singlePostLoading: false,
 };
 
-export default function (state = initialState, action: Action) {
+export default function state(state = initialState, action: Action) {
   switch (action.type) {
+    case types.RESET_POSTS:
+      return {
+        ...state,
+        offset: 0,
+        posts: [],
+        postsExhausted: false,
+      };
     case types.CREATE_POST_SUCCESS:
       return { ...state, posts: [...state.posts, action.payload] };
     case types.GET_POSTS_ATTEMPT:
@@ -27,12 +38,10 @@ export default function (state = initialState, action: Action) {
     case types.GET_POSTS_SUCCESS:
       return {
         ...state,
-        posts: action.payload.data,
+        posts: [...state.posts, ...action.payload.data],
         postsLoading: false,
         postsExhausted: action.payload.postsExhausted,
-        offset: !action.payload.postsExhausted
-          ? state.offset + 1
-          : state.offset,
+        offset: !action.payload.postsExhausted ? state.offset + 1 : state.offset,
       };
     default:
       return state;

@@ -30,12 +30,12 @@ const CreateEvent = ({
 }: StackNavigationProps<HomeRoutes, 'CreateEvent'>) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const ref = useRef<FormikProps<any>>();
+  const ref = useRef<FormikProps<any>>(null);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState({
     uri: '',
-    type: 'image/jpg',
-    name: 'image.jpg',
+    type: '',
+    name: '',
   });
 
   const [sportOpen, setSportOpen] = useState(false);
@@ -159,10 +159,10 @@ const CreateEvent = ({
           },
         }),
       );
-      await dispatch(getPosts({ offset: 0 }));
-      setLoading(false);
-      setImage({ uri: '', type: 'image/jpg', name: 'image.jpg' });
-      navigation.navigate('Home');
+      // await dispatch(getPosts({ offset: 0 }));
+      // setLoading(false);
+      // setImage({ uri: '', type: 'image/jpg', name: 'image.jpg' });
+      // navigation.navigate('Home');
     } catch (error) {
       dispatch(showMessage(t('common.error'), 'error', error?.message));
       setLoading(false);
@@ -227,7 +227,7 @@ const CreateEvent = ({
         </Text>
 
         <Formik
-          ref={ref}
+          innerRef={ref}
           initialValues={{
             text: '',
             display: 'all',
@@ -327,7 +327,7 @@ const CreateEvent = ({
                         keyboardShouldPersistTaps="handled"
                         enablePoweredByContainer={false}
                         debounce={300}
-                        listViewDisplayed={false}
+                        listViewDisplayed={'auto'}
                         textInputProps={{
                           numberOfLines: 1,
                           maxLength: 70,
@@ -434,7 +434,7 @@ const CreateEvent = ({
                   <View style={{ paddingVertical: PADDING }}>
                     <Button
                       testID="continue_button"
-                      disabled={!isValid || !dirty || loading}
+                      // disabled={!isValid || !dirty || loading}
                       variant="primary"
                       width={'100%'}
                       onPress={handleSubmit}>

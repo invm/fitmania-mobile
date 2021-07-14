@@ -12,6 +12,7 @@ import { assets as AuthAssets } from './src/screens/Auth';
 import './src/i18n/index';
 
 import { toastConfig } from './src/utils/ToastConfig';
+import { LogBox } from 'react-native';
 
 require('./src/utils/initFirebase');
 
@@ -24,6 +25,8 @@ const fonts = {
 const assets = [...AuthAssets];
 
 enableScreens();
+
+LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 
 const App = () => {
   return (

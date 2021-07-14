@@ -2,14 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import {
-  Home,
-  Profile,
-  PostScreen,
-  Search,
-  CreatePost,
-  CreateEvent,
-} from '../screens';
+import * as SCREENS from '../screens';
 import { useTranslation } from 'react-i18next';
 import { colors, Text, Header } from '../components';
 import { AppRoutes, HomeRoutes } from '.';
@@ -31,6 +24,7 @@ const HomeNavigator = () => {
       screenOptions={{
         headerBackTitleVisible: false,
         gestureEnabled: false,
+        headerShown: false,
       }}
       headerMode="screen"
       initialRouteName="HomeTabsNavigator">
@@ -46,7 +40,7 @@ const HomeNavigator = () => {
         options={{
           header: () => <Header canGoBack={true} />,
         }}
-        component={PostScreen}
+        component={SCREENS.PostScreen}
       />
       <HomeStack.Screen
         name="CreatePost"
@@ -55,7 +49,7 @@ const HomeNavigator = () => {
             <Header canGoBack={true} title={t('screens.create_post')} />
           ),
         }}
-        component={CreatePost}
+        component={SCREENS.CreatePost}
       />
       <HomeStack.Screen
         name="CreateEvent"
@@ -64,7 +58,7 @@ const HomeNavigator = () => {
             <Header canGoBack={true} title={t('screens.create_event')} />
           ),
         }}
-        component={CreateEvent}
+        component={SCREENS.CreateEvent}
       />
     </HomeStack.Navigator>
   );
@@ -76,7 +70,7 @@ function ProfileStackScreen() {
     <ProfileScreenStack.Navigator>
       <ProfileScreenStack.Screen
         name="Profile"
-        component={Profile}
+        component={SCREENS.Profile}
         options={{
           header: () => <Header color="white" title={t('screens.profile')} />,
         }}
@@ -88,13 +82,15 @@ function ProfileStackScreen() {
 function HomeStackScreen() {
   const { t } = useTranslation();
   return (
-    <HomeScreenStack.Navigator>
+    <HomeScreenStack.Navigator headerMode="screen">
       <HomeScreenStack.Screen
         name="Home"
-        component={Home}
-        options={{
-          header: () => <Header color="white" title={t('screens.home')} />,
-        }}
+        component={SCREENS.Home}
+        options={
+          {
+            // header: () => <Header color="white" title={t('screens.home')} />,
+          }
+        }
       />
     </HomeScreenStack.Navigator>
   );
@@ -104,7 +100,7 @@ function SearchStackScreen() {
     <SearchScreenStack.Navigator>
       <SearchScreenStack.Screen
         name="Search"
-        component={Search}
+        component={SCREENS.Search}
         options={{
           header: () => <Header searchBar />,
         }}

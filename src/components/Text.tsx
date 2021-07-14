@@ -4,7 +4,7 @@ import { StyleSheet, Text as RNText, TextStyle } from 'react-native';
 import { colors } from './Theme';
 
 type TextProps = {
-  variant:
+  variant?:
     | 'regular14'
     | 'regular16'
     | 'medium12'
@@ -30,7 +30,7 @@ type TextProps = {
 };
 
 const Text = ({
-  variant,
+  variant = "regular16",
   props,
   children,
   style,

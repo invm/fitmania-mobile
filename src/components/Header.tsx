@@ -27,6 +27,10 @@ interface HeaderProps {
   color?: 'white' | 'primary' | 'transparent';
   subtitle?: string;
   searchBar?: boolean;
+  rightIcons?: {
+    icon: string;
+    action: () => void;
+  }[];
 }
 
 export const HEADER_HEIGHT = 60;
@@ -38,10 +42,10 @@ const Header = ({
   action,
   icon,
   noShadow,
-  logo,
   color,
   subtitle,
   searchBar,
+  rightIcons,
 }: HeaderProps) => {
   const { top } = useSafeAreaInsets();
   const navigation = useNavigation();
@@ -103,14 +107,8 @@ const Header = ({
                   : HEADER_HEIGHT + top,
                 justifyContent: 'center',
               }}>
-              <View
-                style={[
-                  styles.innerContainer,
-                  {
-                    // paddingTop: top ? top / 1.8 : 0,
-                  },
-                ]}>
-                <View style={styles.textContainer}>
+              <View style={[styles.innerContainer]}>
+                <View style={[styles.textContainer]}>
                   <View style={styles.innerTextContainer}>
                     {canGoBack && (
                       <TouchableOpacity
@@ -138,17 +136,20 @@ const Header = ({
                       </Text>
                     </View>
                   </View>
-                  <View
-                    style={{
-                      width: CONTENT_WIDTH,
-                      flexDirection: 'row-reverse',
-                      justifyContent: 'space-between',
-                    }}>
-                    {!!logo && (
-                      <View>
-                        <Image style={styles.img} source={assets[0]} />
-                      </View>
-                    )}
+                  <View style={{ flexDirection: 'row' }}>
+                    {rightIcons?.map(icon => (
+                      <TouchableOpacity
+                        key={icon.icon}
+                        style={styles.iconContainer}
+                        onPress={icon.action}>
+                        <Icon
+                          name={icon.icon}
+                          size={25}
+                          style={{ marginStart: 10 }}
+                          color={colors.black}
+                        />
+                      </TouchableOpacity>
+                    ))}
                   </View>
                 </View>
               </View>
@@ -200,12 +201,18 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     width: '100%',
+    height: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   backIconContainer: {
     paddingEnd: 15,
+  },
+  iconContainer: {
+    padding: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   innerTextContainer: {
     flexDirection: 'row',
@@ -230,7 +237,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: 45,
     width: '100%',
   },
   queryInput: {
@@ -246,14 +252,14 @@ const styles = StyleSheet.create({
     aspectRatio: LOGO_WIDTH / 27,
   },
   innerContainer: {
-    width: CONTENT_WIDTH,
+    flex: 1,
+    paddingHorizontal: PADDING,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   container: {
     width: width,
-    paddingHorizontal: PADDING,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.white,

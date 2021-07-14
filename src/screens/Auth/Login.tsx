@@ -32,7 +32,7 @@ const Login = ({ navigation }: StackNavigationProps<AuthRoutes, 'Login'>) => {
     Keyboard.dismiss();
     await sendOTPorLogin({
       sendEmail: login,
-      email,
+      data: { email },
       setLoading,
       navigation,
       dispatch,

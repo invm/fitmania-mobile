@@ -63,7 +63,7 @@ const buildFormData = (formData: FormData, data: any, parentKey?: string) => {
       buildFormData(
         formData,
         data[key],
-        parentKey ? `${parentKey}[${key}]` : key,
+        parentKey ? `${parentKey}` : key,
       );
     });
   } else {
