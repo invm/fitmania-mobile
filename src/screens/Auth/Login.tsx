@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { colors, CONTENT_WIDTH, PADDING, width } from '../../components/Theme';
 import { useDispatch } from 'react-redux';
 import { login, sendOTPorLogin } from '../../redux/actions';
+import { ENV } from '../../../env';
 
 const Login = ({ navigation }: StackNavigationProps<AuthRoutes, 'Login'>) => {
   const { t } = useTranslation();
@@ -47,7 +48,7 @@ const Login = ({ navigation }: StackNavigationProps<AuthRoutes, 'Login'>) => {
       />
       <Formik
         initialValues={{
-          email: '',
+          email: ENV === 'development' ? 'mike@mail.com' : '',
         }}
         validationSchema={loginSchema}
         onSubmit={loginHandler}>
@@ -117,7 +118,7 @@ const Login = ({ navigation }: StackNavigationProps<AuthRoutes, 'Login'>) => {
               <View style={{ alignItems: 'center', marginBottom: 50 }}>
                 <Button
                   testID="continue_button"
-                  disabled={!isValid || !dirty || loading}
+                  disabled={!isValid || loading}
                   variant="primary"
                   onPress={handleSubmit}>
                   {loading ? (

@@ -3,6 +3,8 @@ import { API_URL } from '../../env';
 import { API_KEY } from '../../sensitive';
 import CookieManager from '@react-native-cookies/cookies';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import store from '../redux';
+import { logout } from '../redux/actions';
 
 export interface RequestWrapperProps {
   headers?: object;
@@ -17,7 +19,7 @@ export interface Res {
 
 let instance = axios.create({
   baseURL: API_URL,
-  timeout: 10000,
+  timeout: 30000,
   withCredentials: true,
   headers: {
     Accept: '*/*',
@@ -62,10 +64,13 @@ export default async function requestWrapper({
     res = response;
     res.success = true; // Indicator for the caller to know that the request was processed successfully.
   } catch (err) {
-    if (err.code === 'ECONNABORTED') {
+    if (err?.response?.status === 401) {
+      // @ts-ignore
+      store.getState()?.user?.authenticated && store.dispatch(logout());
+    }
+    if (err.message === 'Network Error') {
       return {
-        success: false,
-        status: 999,
+        data: { message: 'Network Error' },
       };
     }
 

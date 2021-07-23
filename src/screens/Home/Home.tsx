@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
@@ -40,11 +40,17 @@ const Home = ({ navigation }: StackNavigationProps<HomeRoutes, 'Home'>) => {
   const [sportsFilter, setSportsFilter] = useState<string[]>([]);
 
   useEffect(() => {
-    dispatch(getPosts(sportsFilter));
+    if (sportsFilter.length && !postsLoading) {
+      dispatch(resetPosts());
+      dispatch(getPosts(sportsFilter));
+    } else if (!postsLoading) {
+      dispatch(resetPosts());
+      dispatch(getPosts());
+    }
   }, [dispatch, sportsFilter]);
 
   const expandList = () => {
-    !postsExhausted && dispatch(getPosts());
+    !postsExhausted && !postsLoading && dispatch(getPosts());
   };
 
   const toggleFilters = () => {
@@ -91,9 +97,7 @@ const Home = ({ navigation }: StackNavigationProps<HomeRoutes, 'Home'>) => {
           <HomeHeaderButtons {...{ navigation }} />
         </Collapsible>
         <Collapsible collapsed={filtersCollapsed}>
-          <View style={{ paddingHorizontal: PADDING }}>
-            <PostsFilters {...{ sportsFilter, handleSportPress }} />
-          </View>
+          <PostsFilters {...{ sportsFilter, handleSportPress }} />
         </Collapsible>
         <FlatList
           data={posts}
@@ -103,20 +107,22 @@ const Home = ({ navigation }: StackNavigationProps<HomeRoutes, 'Home'>) => {
               refreshing={refreshing}
               onRefresh={async () => {
                 setRefreshing(true);
-                await dispatch(resetPosts());
-                await dispatch(getPosts());
+                dispatch(resetPosts());
+                dispatch(getPosts(sportsFilter));
                 setRefreshing(false);
               }}
               colors={[colors.primary]}
             />
           }
-          renderItem={({ item: post }) => <Post {...{ post }} />}
+          renderItem={({ item: post }) => (
+            <Post {...{ post, userId: user._id }} />
+          )}
           onEndReached={expandList}
           onEndReachedThreshold={0.5}
           ListFooterComponent={
-            <View style={{ height: 100 }}>
+            <View style={{ height: 100, paddingTop: PADDING }}>
               {postsLoading && !refreshing && (
-                <ActivityIndicator size="small" color={colors.primary} />
+                <ActivityIndicator size="large" color={colors.primary} />
               )}
             </View>
           }

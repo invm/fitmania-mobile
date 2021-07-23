@@ -69,7 +69,7 @@ const OtpConfirmation = ({
 
   const loginHandler = async () => {
     if (!OTPValid) {
-      showMessage('Invalid password', undefined, 'Please try again');
+      showMessage('Invalid password', 'error', 'Please try again');
       return;
     }
     Keyboard.dismiss();

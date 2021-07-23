@@ -1,4 +1,5 @@
-import { IUserMin } from "./User";
+import IEvent from './Event';
+import { IUserMin } from './User';
 
 interface IPost {
   _id: string;
@@ -8,7 +9,7 @@ interface IPost {
   sharedBy: string[];
   text?: string;
   image?: string;
-  event?: string;
+  event?: IEvent;
   comments: string[];
   likes: string[];
   created_at: Date;

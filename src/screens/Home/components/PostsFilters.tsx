@@ -25,8 +25,9 @@ const PostsFilters = ({
 }: PostsFiltersProps) => {
   return (
     <View style={styles.container}>
-      {Object.keys(sports).map(sport => (
+      {Object.keys(sports).map((sport, i) => (
         <TouchableOpacity
+          key={sport + i}
           onPress={() => handleSportPress(sport)}
           style={styles.checkbox}>
           <View style={styles.iconContainer}>

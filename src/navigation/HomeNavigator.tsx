@@ -45,6 +45,7 @@ const HomeNavigator = () => {
       <HomeStack.Screen
         name="CreatePost"
         options={{
+          headerShown: true,
           header: () => (
             <Header canGoBack={true} title={t('screens.create_post')} />
           ),
@@ -54,6 +55,7 @@ const HomeNavigator = () => {
       <HomeStack.Screen
         name="CreateEvent"
         options={{
+          headerShown: true,
           header: () => (
             <Header canGoBack={true} title={t('screens.create_event')} />
           ),

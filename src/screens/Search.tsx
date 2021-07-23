@@ -61,8 +61,6 @@ const Search = ({}: StackNavigationProps<HomeRoutes, 'Search'>) => {
     return (
       <TouchableOpacity
         onPress={() => {
-          console.log('_id', _id);
-
           // return navigation.navigate('Business', {
           //   _id,
           //   blurHash,
@@ -108,7 +106,6 @@ const Search = ({}: StackNavigationProps<HomeRoutes, 'Search'>) => {
         backgroundColor={colors.white}
         barStyle="dark-content"
       />
-
       <>
         <FlatList
           data={results}

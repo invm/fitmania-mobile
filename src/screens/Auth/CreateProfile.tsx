@@ -61,7 +61,7 @@ const CreateProfile = ({
     setLoading(true);
 
     if (!name || !lastname) {
-      showMessage(t('errors.all_fields_are_required'));
+      showMessage(t('errors.all_fields_are_required'), 'error');
     }
 
     try {

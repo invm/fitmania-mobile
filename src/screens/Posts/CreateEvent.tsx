@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { createRef, useEffect, useRef, useState } from 'react';
 import DropDownPicker, { ValueType } from 'react-native-dropdown-picker';
 import * as Yup from 'yup';
 import {
@@ -9,21 +9,35 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
-import { Button, Card, colors, Input, PADDING, Text } from '../../components';
+import {
+  Button,
+  Card,
+  colors,
+  FocusAwareStatusBar,
+  Input,
+  PADDING,
+  Text,
+} from '../../components';
 import { HomeRoutes, StackNavigationProps } from '../../navigation';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Formik, FormikProps } from 'formik';
-import { createEvent, getPosts } from '../../redux/actions/posts';
+import { createPost, getPosts, resetPosts } from '../../redux/actions/posts';
 import * as ImagePicker from 'expo-image-picker';
 import { BORDER_RADIUS, width } from '../../components/Theme';
-import { showMessage } from '../../utils/utils';
+import { DATE_FORMAT, showMessage } from '../../utils/utils';
 import { GOOGLE_API_KEY } from '../../../sensitive';
 import {
   GooglePlaceData,
   GooglePlaceDetail,
   GooglePlacesAutocomplete,
 } from 'react-native-google-places-autocomplete';
+import DateTimePicker from '../../components/DateTimePicker';
+import ActionSheet from 'react-native-actions-sheet';
+import moment from 'moment';
+import Checkbox from '../../components/Checkbox';
+
+const startDateActionSheetRef = createRef<ActionSheet>();
 
 const CreateEvent = ({
   navigation,
@@ -49,22 +63,27 @@ const CreateEvent = ({
     { label: 'Hiking', value: 'Hiking' },
     { label: 'Tennis', value: 'Tennis' },
   ]);
+  const [displayOpen, setDisplayOpen] = useState(false);
+  const [display, setDisplay] = useState<ValueType | ValueType[] | null>('all');
+  const [displayItems, setDisplayItems] = useState([
+    { label: 'All', value: 'all' },
+    { label: 'Friends only', value: 'friends' },
+  ]);
 
   const [limitOpen, setLimitOpen] = useState(false);
-  const [limit, setLimit] = useState<ValueType | ValueType[] | null>(1);
+  const [limit, setLimit] = useState<ValueType | ValueType[] | null>(2);
   const [limitItems, setLimitItems] = useState([
     ...Array(50)
       .fill('')
-      .map((v, i) => ({ value: i + 1, label: `${i + 1}` })),
+      .map((_, i) => ({ value: i + 2, label: `${i + 2}` })),
   ]);
 
   const [paceOpen, setPaceOpen] = useState(false);
   const [pace, setPace] = useState<ValueType | ValueType[] | null>('Easy');
   const [paceItems, setPaceItems] = useState([
-    { value: 'Slow', label: 'Slow' },
     { value: 'Easy', label: 'Easy' },
+    { value: 'Medium', label: 'Medium' },
     { value: 'Fast', label: 'Fast' },
-    { value: 'Crazy', label: 'Crazy' },
   ]);
 
   useEffect(() => {
@@ -79,15 +98,16 @@ const CreateEvent = ({
       .min(2, t('errors.value_too_short'))
       .max(280, t('errors.value_too_long'))
       .required(t('errors.required_field')),
-    display: Yup.string(),
-    eventType: Yup.string().required(t('errors.required_field')),
+    // display: Yup.string(),
+    // eventType: Yup.string().required(t('errors.required_field')),
     startDate: Yup.string().required(t('errors.required_field')),
-    limitParticipants: Yup.number()
-      .min(1)
-      .max(50)
-      .required(t('errors.required_field')),
-    pace: Yup.string().required(t('errors.required_field')),
+    // limitParticipants: Yup.number()
+    //   .min(2)
+    //   .max(50)
+    //   .required(t('errors.required_field')),
+    // pace: Yup.string().required(t('errors.required_field')),
     address: Yup.string().required(t('errors.required_field')),
+    openEvent: Yup.boolean().required(t('errors.required_field')),
     coordinates: Yup.array()
       .of(Yup.number())
       .required(t('errors.required_field')),
@@ -112,59 +132,46 @@ const CreateEvent = ({
       : [];
 
     if (locality && coords?.length) {
-      ref?.current?.setFieldValue(
-        'address',
-        data?.structured_formatting?.main_text,
-      );
+      ref?.current?.setFieldValue('address', details?.formatted_address);
       setFieldValue('coordinates', coords);
     }
   };
 
   const createEventHandler = async ({
-    display,
     text,
-    eventType,
     startDate,
-    limitParticipants,
-    pace,
     coordinates,
     address,
+    openEvent,
   }: {
     text: string;
-    display: 'all' | 'friends';
-    eventType: string;
     startDate: Date;
-    limitParticipants: number;
-    pace: string;
     coordinates: number[];
     address: string;
+    openEvent: boolean;
   }) => {
     setLoading(true);
     Keyboard.dismiss();
     try {
-      await dispatch(
-        createEvent({
-          display,
-          text,
-          image,
-          event: {
-            eventType,
-            startDate,
-            limitParticipants,
-            pace,
-            location: {
-              coordinates,
-              address,
-            },
-          },
-        }),
-      );
-      // await dispatch(getPosts({ offset: 0 }));
-      // setLoading(false);
-      // setImage({ uri: '', type: 'image/jpg', name: 'image.jpg' });
-      // navigation.navigate('Home');
+      await createPost({
+        text,
+        startDate,
+        coordinates,
+        address,
+        openEvent,
+        display: (display ?? 'all').toString(),
+        eventType: sport?.toString(),
+        pace: pace?.toString(),
+        limitParticipants: Number(limit),
+        ...(image.uri && { image }),
+      });
+      await dispatch(resetPosts());
+      await dispatch(getPosts());
+      setLoading(false);
+      image.uri && setImage({ uri: '', type: 'image/jpg', name: 'image.jpg' });
+      navigation.navigate('Home');
     } catch (error) {
-      dispatch(showMessage(t('common.error'), 'error', error?.message));
+      showMessage(t('common.error'), 'error', error?.message);
       setLoading(false);
     }
   };
@@ -225,18 +232,18 @@ const CreateEvent = ({
         <Text variant="semibold16" lines={3}>
           {t('create_event.title')}
         </Text>
-
+        <FocusAwareStatusBar
+          backgroundColor={colors.white}
+          barStyle="dark-content"
+        />
         <Formik
           innerRef={ref}
           initialValues={{
             text: '',
-            display: 'all',
-            eventType: 'Running',
-            startDate: new Date(),
-            limitParticipants: 1,
-            pace: 'Medium',
+            startDate: new Date(moment().add(2, 'days').format()),
             coordinates: [],
             address: '',
+            openEvent: true,
           }}
           validationSchema={PostSchema}
           onSubmit={createEventHandler}>
@@ -246,9 +253,9 @@ const CreateEvent = ({
             values,
             errors,
             setFieldTouched,
+            setFieldValue,
             isValid,
             dirty,
-            setFieldValue,
           }) => (
             <>
               <View
@@ -263,57 +270,130 @@ const CreateEvent = ({
                       paddingVertical: 10,
                     }}>
                     <View>
-                      <Text variant="semibold16" color={colors.darkGrey}>
-                        {t('create_event.sport')}
-                      </Text>
-                      <DropDownPicker
-                        open={sportOpen}
-                        value={sport}
-                        items={sportItems}
-                        setOpen={setSportOpen}
-                        setValue={setSport}
-                        setItems={setSportItems}
-                        modalProps={{
-                          animationType: 'slide',
-                        }}
-                        searchable
-                        showArrowIcon
-                        listMode="MODAL"
-                      />
-                      <Text variant="semibold16" color={colors.darkGrey}>
-                        {t('create_event.pace')}
-                      </Text>
-                      <DropDownPicker
-                        open={paceOpen}
-                        value={pace}
-                        items={paceItems}
-                        setOpen={setPaceOpen}
-                        setValue={setPace}
-                        setItems={setPaceItems}
-                        modalProps={{
-                          animationType: 'slide',
-                        }}
-                        searchable
-                        showArrowIcon
-                        listMode="MODAL"
-                      />
-                      <Text variant="semibold16" color={colors.darkGrey}>
-                        {t('create_event.limit_participants')}
-                      </Text>
-                      <DropDownPicker
-                        open={limitOpen}
-                        value={limit}
-                        items={limitItems}
-                        setOpen={setLimitOpen}
-                        setValue={setLimit}
-                        setItems={setLimitItems}
-                        modalProps={{
-                          animationType: 'slide',
-                        }}
-                        searchable
-                        showArrowIcon
-                        listMode="MODAL"
-                      />
+                      <View>
+                        <Text variant="semibold16" color={colors.darkGrey}>
+                          {t('create_event.start_date')}
+                        </Text>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                          }}>
+                          <Text>
+                            {moment(values.startDate).format(DATE_FORMAT)}
+                          </Text>
+                          <DateTimePicker
+                            label={t('common.change')}
+                            date={values.startDate}
+                            setDate={date => setFieldValue('startDate', date)}
+                            actionSheetRef={startDateActionSheetRef}
+                          />
+                        </View>
+                      </View>
+
+                      <View style={{ flexDirection: 'row' }}>
+                        <View style={{ flex: 1, paddingEnd: 4 }}>
+                          <Text variant="semibold16" color={colors.darkGrey}>
+                            {t('create_event.sport')}
+                          </Text>
+                          <DropDownPicker
+                            open={sportOpen}
+                            value={sport}
+                            items={sportItems}
+                            setOpen={setSportOpen}
+                            setValue={setSport}
+                            setItems={setSportItems}
+                            modalProps={{
+                              animationType: 'slide',
+                            }}
+                            showArrowIcon
+                            listMode="MODAL"
+                          />
+                        </View>
+                        <View style={{ flex: 1, paddingStart: 4 }}>
+                          <Text variant="semibold16" color={colors.darkGrey}>
+                            {t('create_event.display')}
+                          </Text>
+                          <DropDownPicker
+                            open={displayOpen}
+                            value={display}
+                            items={displayItems}
+                            setOpen={setDisplayOpen}
+                            setValue={setDisplay}
+                            setItems={setDisplayItems}
+                            modalProps={{
+                              animationType: 'slide',
+                            }}
+                            showArrowIcon
+                            listMode="MODAL"
+                          />
+                        </View>
+                      </View>
+                      <View style={{ flexDirection: 'row' }}>
+                        <View style={{ flex: 1, paddingEnd: 4 }}>
+                          <Text variant="semibold16" color={colors.darkGrey}>
+                            {t('create_event.pace')}
+                          </Text>
+                          <DropDownPicker
+                            open={paceOpen}
+                            value={pace}
+                            items={paceItems}
+                            setOpen={setPaceOpen}
+                            setValue={setPace}
+                            setItems={setPaceItems}
+                            modalProps={{
+                              animationType: 'slide',
+                            }}
+                            showArrowIcon
+                            listMode="MODAL"
+                          />
+                        </View>
+                        <View style={{ flex: 1, paddingStart: 4 }}>
+                          <Text variant="semibold16" color={colors.darkGrey}>
+                            {t('create_event.limit_participants')}
+                          </Text>
+                          <DropDownPicker
+                            open={limitOpen}
+                            value={limit}
+                            items={limitItems}
+                            setOpen={setLimitOpen}
+                            setValue={setLimit}
+                            setItems={setLimitItems}
+                            modalProps={{
+                              animationType: 'slide',
+                            }}
+                            showArrowIcon
+                            listMode="MODAL"
+                          />
+                        </View>
+                      </View>
+                    </View>
+                    <View style={{ paddingTop: 8 }}>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                        }}>
+                        <Text variant="semibold16" color={colors.darkGrey}>
+                          {t('create_event.everybody_can_join')}
+                        </Text>
+                        <Checkbox
+                          onPress={e => {
+                            setFieldValue('openEvent', e);
+                          }}
+                          selected={values.openEvent}
+                        />
+                      </View>
+
+                      {!values.openEvent && (
+                        <Text
+                          variant="medium14"
+                          lines={3}
+                          color={colors.darkGrey}>
+                          {t('create_event.close_event_details')}
+                        </Text>
+                      )}
                     </View>
                     <View style={{ height: 100 }}>
                       <GooglePlacesAutocomplete
@@ -433,8 +513,7 @@ const CreateEvent = ({
 
                   <View style={{ paddingVertical: PADDING }}>
                     <Button
-                      testID="continue_button"
-                      // disabled={!isValid || !dirty || loading}
+                      disabled={!isValid || !dirty || loading}
                       variant="primary"
                       width={'100%'}
                       onPress={handleSubmit}>

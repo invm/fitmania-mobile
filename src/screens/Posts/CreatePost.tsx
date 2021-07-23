@@ -7,12 +7,20 @@ import {
   ActivityIndicator,
   Image,
 } from 'react-native';
-import { Button, Card, colors, Input, PADDING, Text } from '../../components';
+import {
+  Button,
+  Card,
+  colors,
+  FocusAwareStatusBar,
+  Input,
+  PADDING,
+  Text,
+} from '../../components';
 import { HomeRoutes, StackNavigationProps } from '../../navigation';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
-import { createPost, getPosts } from '../../redux/actions/posts';
+import { createPost, getPosts, resetPosts } from '../../redux/actions/posts';
 import * as ImagePicker from 'expo-image-picker';
 import { BORDER_RADIUS, width } from '../../components/Theme';
 import { showMessage } from '../../utils/utils';
@@ -47,13 +55,18 @@ const CreatePost = ({
     setLoading(true);
     Keyboard.dismiss();
     try {
-      await dispatch(createPost({ display, text, image }));
-      await dispatch(getPosts({ offset: 0 }));
+      await createPost({
+        display,
+        text,
+        ...(image.uri && { image }),
+      });
+      await dispatch(resetPosts());
+      await dispatch(getPosts());
       setLoading(false);
-      setImage({ uri: '', type: 'image/jpg', name: 'image.jpg' });
+      image.uri && setImage({ uri: '', type: 'image/jpg', name: 'image.jpg' });
       navigation.navigate('Home');
     } catch (error) {
-      dispatch(showMessage(t('common.error'), 'error', error?.message));
+      showMessage(t('common.error'), 'error', error?.message)
       setLoading(false);
     }
   };
@@ -107,6 +120,10 @@ const CreatePost = ({
 
   return (
     <View style={styles.container}>
+      <FocusAwareStatusBar
+        backgroundColor={colors.white}
+        barStyle="dark-content"
+      />
       <Text variant="semibold16">{t('create_post.title')}</Text>
       <Formik
         initialValues={{

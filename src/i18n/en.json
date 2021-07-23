@@ -23,10 +23,20 @@
       "version": "version",
       "logout": "Logout",
       "continue": "Continue",
+      "change": "Change",
       "skip": "Skip",
       "hello1": "Hello, ",
       "hello2": "Hi! ",
       "hello3": "Hey, "
+    },
+    "components": {
+      "post": {
+        "open_event": "Everybody can join",
+        "private_event": "You may ask to join",
+        "joined": "joined",
+        "asked_to_join": "Asked to join",
+        "join": "Join"
+      }
     },
     "create_profile": {
       "title": "Please enter some minimal information about yourself",
@@ -81,6 +91,9 @@
     "create_event": {
       "title": "Create an event, invite friends and groups and train together...",
       "sport": "Sport",
+      "display": "Display to",
+      "everybody_can_join": "Everybody can join freely",
+      "close_event_details": "If you don't allow everybody to join, you will have to allow or reject everybody that asks to join your event.",
       "start_date": "Start date",
       "limit_participants": "Limit participants",
       "pace": "Pace",

@@ -1,6 +1,8 @@
-interface IEvent {
-  startDate?: Date;
-  eventType?:
+import { IUserMin } from "./User";
+
+export interface IEvent {
+  startDate: Date;
+  eventType:
     | 'Running'
     | 'Biking'
     | 'Soccer'
@@ -8,15 +10,16 @@ interface IEvent {
     | 'Rugby'
     | 'Hiking'
     | 'Tennis';
-  initiator?: string;
-  participants?: string[];
-  limitParticipants?: number;
-  pace?: string;
-  openEvent?: boolean;
-  rejectedParticipants?: string[];
-  pendingApprovalParticipants?: string[];
+  participants: IUserMin[];
+  limitParticipants: number;
+  pace: string;
+  openEvent: boolean;
+  rejectedParticipants: IUserMin[];
+  pendingApprovalParticipants: IUserMin[];
   created_at?: Date;
-  location?: { type: string; coordinates: number[] };
+  coordinates: number[];
+  address: string;
+  initiator?: string;
 }
 
 export default IEvent;

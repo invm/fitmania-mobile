@@ -1,11 +1,12 @@
-import { toFormData } from './../../utils/utils';
+import { showMessage, toFormData } from './../../utils/utils';
 import { Methods, Request } from '../../utils/Wrapper';
 
 import * as types from '../types/posts';
 import { IObject } from '../../interfaces/Common';
-import { RootState } from '..';
+import store, { RootState } from '..';
+import i18n from '../../i18n';
 
-const POSTS_LIMIT = 1;
+const POSTS_LIMIT = 5;
 
 export const resetPosts = () => (dispatch: Function) => {
   dispatch({ type: types.RESET_POSTS });
@@ -112,50 +113,64 @@ export const deletePost = (_id: string) => async (dispatch: Function) => {
   }
 };
 
-export const createPost =
-  ({
+export interface CreatePostFunctionProps {
+  text: string;
+  image?: any;
+  display: string;
+  group?: string;
+  eventType?: string;
+  pace?: string;
+  startDate?: Date;
+  openEvent?: boolean;
+  limitParticipants?: number;
+  address?: string;
+  coordinates?: number[];
+}
+
+export const createPost = async ({
+  display,
+  text,
+  image,
+  eventType,
+  limitParticipants,
+  openEvent,
+  pace,
+  startDate,
+  group,
+  coordinates,
+  address,
+}: CreatePostFunctionProps) => {
+  let obj: IObject = {
     display,
-    image,
     text,
-    group,
-  }: {
-    text: string;
-    image: any;
-    display: 'all' | 'friends';
-    group?: string;
-  }) =>
-  async (dispatch: Function) => {
-    dispatch({ type: types.CREATE_POST_ATTEMPT });
-
-    let obj: IObject = { display, postImage: image, text };
-
-    if (group) obj['group'] = group;
-
-    const data = toFormData(obj);
-
-    let requestParams = {
-      method: Methods.POST,
-      endpoint: `/posts/`,
-      body: data,
-      headers: {
-        'Content-Type': 'multipart/form-data; ',
-      },
-    };
-    try {
-      let res = await Request(dispatch, requestParams);
-
-      dispatch({
-        type: types.CREATE_POST_SUCCESS,
-        payload: res.data.data,
-      });
-      return true;
-    } catch (error) {
-      dispatch({
-        type: types.CREATE_POST_FAIL,
-      });
-      return false;
-    }
+    ...(image && { postImage: image }),
+    ...(eventType && { eventType }),
+    ...(limitParticipants && { limitParticipants }),
+    ...(openEvent !== undefined && { openEvent }),
+    ...(pace && { pace }),
+    ...(startDate && { startDate }),
+    ...(group && { group }),
+    ...(coordinates && { coordinates }),
+    ...(address && { address }),
   };
+
+  const data = toFormData(obj);
+
+  let requestParams = {
+    method: Methods.POST,
+    endpoint: `/posts/`,
+    body: data,
+    headers: {
+      'Content-Type': 'multipart/form-data; ',
+    },
+  };
+
+  try {
+    await Request(store.dispatch, requestParams);
+  } catch (error) {
+    throw new Error(error?.message);
+  }
+};
 
 export const createEvent =
   (event: {
