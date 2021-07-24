@@ -10,10 +10,11 @@ import { colors } from './Theme';
 
 const styles = StyleSheet.create({
   input: {
-    borderBottomColor: colors.primary,
-    borderBottomWidth: 1,
+    borderColor: colors.light,
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 4,
     height: 50,
-    padding: 0,
     color: colors.black,
     textAlign: 'left',
   },

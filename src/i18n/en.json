@@ -41,6 +41,10 @@
         "delete_alert": {
           "title": "Are you sure?",
           "subtitle": "Please confirm that you want to delete the post and any event and comments associated with it."
+        },
+        "delete_comment_alert": {
+          "title": "Are you sure?",
+          "subtitle": "Please confirm that you want to delete the comment."
         }
       }
     },

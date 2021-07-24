@@ -5,7 +5,6 @@ import {
   FlatList,
   Modal,
   StyleSheet,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import IPost from '../../../interfaces/Post';
@@ -36,6 +35,7 @@ import {
   updatePost,
 } from '../../../redux/actions/posts';
 import { useDispatch } from 'react-redux';
+import PostCommentSection from './subcomponents/PostCommentSecion';
 const actionSheetRef = createRef<ActionSheet>();
 
 const POST_IMAGE_WIDTH = width - PADDING * 2;
@@ -49,6 +49,8 @@ interface PostProps {
 
 const Post = ({ post, userId, listView }: PostProps) => {
   const { t } = useTranslation();
+  const [expanded, setExpanded] = useState(false);
+  const [commentToggle, setCommentToggle] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [eventLoading, setEventLoading] = useState(false);
   const [participantsCollapsed, setParticipantsCollapsed] = useState(true);
@@ -326,13 +328,17 @@ const Post = ({ post, userId, listView }: PostProps) => {
               <Icon size={24} name="information-circle-outline" />
             </Touchable>
           ) : (
-            <Touchable
-              onPress={() => {
-                actionSheetRef.current?.setModalVisible(true);
-              }}
-              style={styles.postHeaderRight}>
-              <Icon size={24} name="ellipsis-vertical" />
-            </Touchable>
+            <>
+              {post.author._id === userId && (
+                <Touchable
+                  onPress={() => {
+                    actionSheetRef.current?.setModalVisible(true);
+                  }}
+                  style={styles.postHeaderRight}>
+                  <Icon size={24} name="ellipsis-vertical" />
+                </Touchable>
+              )}
+            </>
           )}
         </View>
         <View style={styles.postContent}>
@@ -419,60 +425,91 @@ const Post = ({ post, userId, listView }: PostProps) => {
               </Touchable>
             </View>
           )}
-          {!editMode && (
-            <View style={styles.postActions}>
-              <View style={styles.postActions}>
-                {post.author._id !== userId && (
-                  <>
-                    <Touchable
-                      style={styles.editModeActionButton}
-                      onPress={() => {
-                        console.log(post?.likes?.includes(userId));
+          {likeShareLoading ? (
+            <View style={{ height: 40, paddingVertical: PADDING }}>
+              <ActivityIndicator size="small" color={colors.primary} />
+            </View>
+          ) : (
+            <View style={{ height: 40 }}>
+              {!editMode && (
+                <View style={styles.postActions}>
+                  <View style={styles.postActions}>
+                    {post.author._id !== userId && (
+                      <>
+                        <Touchable
+                          style={styles.editModeActionButton}
+                          onPress={() => {
+                            console.log(post?.likes?.includes(userId));
 
-                        post?.likes?.includes(userId)
-                          ? handleDislike(post._id)
-                          : handleLike(post._id);
-                      }}>
+                            post?.likes?.includes(userId)
+                              ? handleDislike(post._id)
+                              : handleLike(post._id);
+                          }}>
+                          <Icon
+                            size={24}
+                            name="thumbs-up"
+                            color={
+                              post?.likes?.includes(userId)
+                                ? colors.light
+                                : colors.darkGrey
+                            }
+                          />
+                        </Touchable>
+                        <Touchable
+                          style={styles.editModeActionButton}
+                          onPress={handleShare}>
+                          <Icon
+                            size={24}
+                            name="share-social-outline"
+                            color={
+                              post?.sharedBy?.includes(userId)
+                                ? colors.light
+                                : colors.darkGrey
+                            }
+                          />
+                        </Touchable>
+                      </>
+                    )}
+                  </View>
+                  <View style={styles.postActions}>
+                    <Touchable
+                      style={styles.editModeActionButton}
+                      onPress={() => setCommentToggle(s => !s)}>
                       <Icon
                         size={24}
-                        name="happy-outline"
-                        color={
-                          post?.likes?.includes(userId)
-                            ? colors.light
-                            : colors.darkGrey
-                        }
+                        name="chatbubble-ellipses-outline"
+                        color={colors.light}
                       />
                     </Touchable>
                     <Touchable
-                      style={styles.editModeActionButton}
-                      onPress={handleShare}>
+                      style={[
+                        styles.editModeActionButton,
+                        { flexDirection: 'row' },
+                      ]}
+                      onPress={() => setExpanded(s => !s)}>
+                      {!!post.comments.length && (
+                        <Text color={colors.light}>{post.comments.length}</Text>
+                      )}
                       <Icon
                         size={24}
-                        name="share-social-outline"
-                        color={
-                          post?.sharedBy?.includes(userId)
-                            ? colors.light
-                            : colors.darkGrey
-                        }
+                        name="chatbubbles-outline"
+                        color={colors.light}
                       />
                     </Touchable>
-                  </>
-                )}
-              </View>
-              <View style={styles.postActions}>
-                <Touchable
-                  style={styles.editModeActionButton}
-                  onPress={handlePostEdit}>
-                  <Icon size={24} name="save-outline" color={colors.light} />
-                </Touchable>
-                <Touchable
-                  style={styles.editModeActionButton}
-                  onPress={handlePostEdit}>
-                  <Icon size={24} name="save-outline" color={colors.light} />
-                </Touchable>
-              </View>
+                  </View>
+                </View>
+              )}
             </View>
           )}
+          <PostCommentSection
+            {...{
+              commentToggle,
+              expanded,
+              post,
+              setCommentToggle,
+              user: userId,
+            }}
+          />
         </View>
       </View>
       <ActionSheet
@@ -510,9 +547,6 @@ const Post = ({ post, userId, listView }: PostProps) => {
               </Touchable>
             </>
           )}
-          <Touchable style={styles.actionSheetButton}>
-            <Text>Like</Text>
-          </Touchable>
         </View>
       </ActionSheet>
     </>

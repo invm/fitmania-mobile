@@ -1,8 +1,11 @@
+import { IUserMin } from "./User";
+
 interface IComment {
-  post?: string;
-  user?: string;
+  _id: string;
+  post: string;
+  user: IUserMin;
   text: string;
-  created_at?: Date;
+  created_at: Date;
 }
 
 export default IComment;

@@ -314,3 +314,72 @@ export const dislikePost = (postId: string) => async (dispatch: Function) => {
     });
   }
 };
+
+export const createComment =
+  (postId: string, text: string) => async (dispatch: Function) => {
+    let requestParams = {
+      method: Methods.POST,
+      endpoint: `/posts/${postId}/comments`,
+      body: { text },
+    };
+
+    try {
+      await Request(dispatch, requestParams);
+
+      dispatch({
+        type: types.CREATE_COMMENT_SUCCESS,
+      });
+      dispatch(getPost(postId));
+    } catch (error) {
+      showMessage(i18n.t('common.error'), error?.message, 'error');
+      dispatch({
+        type: types.CREATE_COMMENT_FAIL,
+      });
+    }
+  };
+
+export const editComment =
+  (postId: string, commentId: string, text: string) =>
+  async (dispatch: Function) => {
+    let requestParams = {
+      method: Methods.PATCH,
+      endpoint: `/posts/${postId}/comments/${commentId}`,
+      body: { text },
+    };
+
+    try {
+      await Request(dispatch, requestParams);
+
+      dispatch({
+        type: types.UPDATE_COMMENT_SUCCESS,
+      });
+      dispatch(getPost(postId));
+    } catch (error) {
+      showMessage(i18n.t('common.error'), error?.message, 'error');
+      dispatch({
+        type: types.UPDATE_COMMENT_FAIL,
+      });
+    }
+  };
+
+export const deleteComment =
+  (postId: string, commentId: string) => async (dispatch: Function) => {
+    let requestParams = {
+      method: Methods.DELETE,
+      endpoint: `/posts/${postId}/comments/${commentId}`,
+    };
+
+    try {
+      await Request(dispatch, requestParams);
+
+      dispatch({
+        type: types.DELETE_COMMENT_SUCCESS,
+      });
+      dispatch(getPost(postId));
+    } catch (error) {
+      showMessage(i18n.t('common.error'), error?.message, 'error');
+      dispatch({
+        type: types.DELETE_COMMENT_FAIL,
+      });
+    }
+  };
