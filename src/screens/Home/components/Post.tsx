@@ -27,15 +27,22 @@ import Collapsible from 'react-native-collapsible';
 import { useNavigation } from '@react-navigation/native';
 import ActionSheet from 'react-native-actions-sheet';
 import {
+  admitToEvent,
+  askToJoinEvent,
   deletePost,
   dislikePost,
+  joinEvent,
+  leaveEvent,
   likePost,
+  rejectJoinRequest,
+  removeFromRejectedList,
   sharePost,
   unsharePost,
   updatePost,
 } from '../../../redux/actions/posts';
 import { useDispatch } from 'react-redux';
 import PostCommentSection from './subcomponents/PostCommentSecion';
+import SmallButton from '../../../components/SmallButton';
 const actionSheetRef = createRef<ActionSheet>();
 
 const POST_IMAGE_WIDTH = width - PADDING * 2;
@@ -54,6 +61,9 @@ const Post = ({ post, userId, listView }: PostProps) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [eventLoading, setEventLoading] = useState(false);
   const [participantsCollapsed, setParticipantsCollapsed] = useState(true);
+  const [awaitingApprovalCollapsed, setAwaitingApprovalCollapsed] =
+    useState(true);
+  const [rejectedCollapsed, setRejectedCollapsed] = useState(true);
   const navigation = useNavigation();
   const [editMode, setEditMode] = useState(false);
   const [likeShareLoading, setLikeShareLoading] = useState(false);
@@ -71,8 +81,9 @@ const Post = ({ post, userId, listView }: PostProps) => {
 
   const handleAskToJoinEvent = async () => {
     setEventLoading(true);
-    // dispatch(askToJoinEvent(post._id));
+    await dispatch(askToJoinEvent(post._id));
     setEventLoading(false);
+    setModalVisible(false);
   };
 
   const handlePostEdit = () => {
@@ -112,34 +123,36 @@ const Post = ({ post, userId, listView }: PostProps) => {
     setLikeShareLoading(false);
   };
 
-  // const handleAdmitToEvent = async (userId: string) => {
-  //   setEventLoading(true);
-  //   await dispatch(admitToEvent(post._id, userId));
-  //   setEventLoading(false);
-  // };
+  const handleAdmitToEvent = async (userId: string) => {
+    setEventLoading(true);
+    await dispatch(admitToEvent(post._id, userId));
+    setEventLoading(false);
+  };
 
-  // const handleRejectFromEvent = async (userId: string) => {
-  //   setEventLoading(true);
-  //   await dispatch(rejectJoinRequest(post._id, userId));
-  //   setEventLoading(false);
-  // };
+  const handleRejectFromEvent = async (userId: string) => {
+    setEventLoading(true);
+    await dispatch(rejectJoinRequest(post._id, userId));
+    setEventLoading(false);
+  };
 
-  // const handleRemoveFromRejected = async (userId: string) => {
-  //   setEventLoading(true);
-  //   await dispatch(removeFromRejectedList(post._id, userId));
-  //   setEventLoading(false);
-  // };
+  const handleRemoveFromRejected = async (userId: string) => {
+    setEventLoading(true);
+    await dispatch(removeFromRejectedList(post._id, userId));
+    setEventLoading(false);
+  };
 
   const handleJoinEvent = async () => {
     setEventLoading(true);
-    // await dispatch(joinEvent(post._id));
+    await dispatch(joinEvent(post._id));
     setEventLoading(false);
+    setModalVisible(false);
   };
 
   const handleLeaveEvent = async () => {
     setEventLoading(true);
-    // await dispatch(leaveEvent(post._id));
+    await dispatch(leaveEvent(post._id));
     setEventLoading(false);
+    setModalVisible(false);
   };
 
   const handlePostDelete = () => {
@@ -194,20 +207,112 @@ const Post = ({ post, userId, listView }: PostProps) => {
                   out of {post.event.limitParticipants} total invited.
                 </Text>
               </View>
-              <Touchable onPress={() => setParticipantsCollapsed(e => !e)}>
-                <Text>Participants</Text>
-              </Touchable>
+              <View style={{ padding: 8 }}>
+                <SmallButton
+                  onPress={() => setParticipantsCollapsed(e => !e)}
+                  color="secondary"
+                  title={t('components.post.participants')}
+                />
+              </View>
               <Collapsible collapsed={participantsCollapsed}>
                 <FlatList
-                  data={[{ _id: '1' }]}
+                  data={post.event.participants}
                   keyExtractor={item => item._id}
                   renderItem={({ item }) => (
                     <View>
-                      <Text>{item._id}</Text>
+                      <Text>{item.name}</Text>
                     </View>
                   )}
                 />
               </Collapsible>
+              {!!post.event.pendingApprovalParticipants.length && (
+                <>
+                  <View style={{ padding: 8 }}>
+                    <SmallButton
+                      onPress={() => setAwaitingApprovalCollapsed(e => !e)}
+                      color="secondary"
+                      title={t('components.post.awaiting_approval')}
+                    />
+                  </View>
+                  <Collapsible collapsed={awaitingApprovalCollapsed}>
+                    <FlatList
+                      data={post.event.pendingApprovalParticipants}
+                      keyExtractor={item => item._id}
+                      renderItem={({ item }) => (
+                        <View style={styles.userRow}>
+                          <Text variant="semibold16" color={colors.primary}>
+                            {item.name}
+                          </Text>
+                          <View style={{ display: 'flex' }}>
+                            {!eventLoading ? (
+                              <View style={styles.userRowButtons}>
+                                <View style={{ marginEnd: 4 }}>
+                                  <SmallButton
+                                    title={t('components.post.admit')}
+                                    onPress={() => handleAdmitToEvent(item._id)}
+                                  />
+                                </View>
+                                <View>
+                                  <SmallButton
+                                    title={t('components.post.reject')}
+                                    onPress={() =>
+                                      handleRejectFromEvent(item._id)
+                                    }
+                                  />
+                                </View>
+                              </View>
+                            ) : (
+                              <ActivityIndicator
+                                size="small"
+                                color={colors.primary}
+                              />
+                            )}
+                          </View>
+                        </View>
+                      )}
+                    />
+                  </Collapsible>
+                </>
+              )}
+              {!!post.event.rejectedParticipants.length && (
+                <>
+                  <View style={{ padding: 8 }}>
+                    <SmallButton
+                      onPress={() => setRejectedCollapsed(e => !e)}
+                      color="secondary"
+                      title={t('components.post.rejected')}
+                    />
+                  </View>
+                  <Collapsible collapsed={rejectedCollapsed}>
+                    <FlatList
+                      data={post.event.rejectedParticipants}
+                      keyExtractor={item => item._id}
+                      renderItem={({ item }) => (
+                        <View style={styles.userRow}>
+                          <Text>{item.name}</Text>
+                          <View style={{ display: 'flex' }}>
+                            {!eventLoading ? (
+                              <>
+                                <SmallButton
+                                  title={t('components.post.remove')}
+                                  onPress={() =>
+                                    handleRemoveFromRejected(item._id)
+                                  }
+                                />
+                              </>
+                            ) : (
+                              <ActivityIndicator
+                                size="small"
+                                color={colors.primary}
+                              />
+                            )}
+                          </View>
+                        </View>
+                      )}
+                    />
+                  </Collapsible>
+                </>
+              )}
               <View>
                 {new Date(post.event.startDate).getTime() -
                   new Date().getTime() >
@@ -236,9 +341,13 @@ const Post = ({ post, userId, listView }: PostProps) => {
                         ) === -1) ? (
                         <>
                           {!eventLoading ? (
-                            <Touchable onPress={handleJoinEvent}>
-                              <Text>{t('components.post.join')}</Text>
-                            </Touchable>
+                            <View style={{ padding: 8 }}>
+                              <SmallButton
+                                onPress={handleJoinEvent}
+                                color="secondary"
+                                title={t('components.post.join')}
+                              />
+                            </View>
                           ) : (
                             <ActivityIndicator
                               color={colors.primary}
@@ -267,9 +376,13 @@ const Post = ({ post, userId, listView }: PostProps) => {
                         ) === -1 && (
                           <>
                             {!eventLoading ? (
-                              <Touchable onPress={handleAskToJoinEvent}>
-                                <Text>{t('components.post.ask_to_join')}</Text>
-                              </Touchable>
+                              <View style={{ padding: 8 }}>
+                                <SmallButton
+                                  onPress={handleAskToJoinEvent}
+                                  color="secondary"
+                                  title={t('components.post.ask_to_join')}
+                                />
+                              </View>
                             ) : (
                               <ActivityIndicator
                                 color={colors.primary}
@@ -284,9 +397,11 @@ const Post = ({ post, userId, listView }: PostProps) => {
                         post.author._id !== userId && (
                           <>
                             {!eventLoading ? (
-                              <Touchable onPress={handleLeaveEvent}>
-                                <Text>{t('components.post.leave_event')}</Text>
-                              </Touchable>
+                              <SmallButton
+                                onPress={handleLeaveEvent}
+                                color="secondary"
+                                title={t('components.post.leave_event')}
+                              />
                             ) : (
                               <ActivityIndicator
                                 color={colors.primary}
@@ -556,6 +671,15 @@ const Post = ({ post, userId, listView }: PostProps) => {
 export default Post;
 
 const styles = StyleSheet.create({
+  userRow: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  userRowButtons: {
+    flexDirection: 'row',
+  },
   postActions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -607,7 +731,6 @@ const styles = StyleSheet.create({
     width: '95%',
     borderRadius: 20,
     padding: PADDING,
-    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

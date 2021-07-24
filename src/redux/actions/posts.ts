@@ -383,3 +383,133 @@ export const deleteComment =
       });
     }
   };
+
+export const joinEvent = (postId: string) => async (dispatch: Function) => {
+  let requestParams = {
+    method: Methods.GET,
+    endpoint: `/posts/${postId}/event/join/`,
+  };
+
+  try {
+    await Request(dispatch, requestParams);
+
+    dispatch({
+      type: types.JOIN_EVENT_SUCCESS,
+    });
+    dispatch(getPost(postId));
+  } catch (error) {
+    showMessage(i18n.t('common.error'), error?.message, 'error');
+    dispatch({
+      type: types.JOIN_EVENT_FAIL,
+    });
+  }
+};
+
+export const leaveEvent = (postId: string) => async (dispatch: Function) => {
+  let requestParams = {
+    method: Methods.GET,
+    endpoint: `/posts/${postId}/event/leave/`,
+  };
+
+  try {
+    await Request(dispatch, requestParams);
+
+    dispatch({
+      type: types.LEAVE_EVENT_SUCCESS,
+    });
+    dispatch(getPost(postId));
+  } catch (error) {
+    showMessage(i18n.t('common.error'), error?.message, 'error');
+    dispatch({
+      type: types.LEAVE_EVENT_FAIL,
+    });
+  }
+};
+
+export const askToJoinEvent =
+  (postId: string) => async (dispatch: Function) => {
+    let requestParams = {
+      method: Methods.GET,
+      endpoint: `/posts/${postId}/event/ask-to-join`,
+    };
+
+    try {
+      await Request(dispatch, requestParams);
+
+      dispatch({
+        type: types.ASKED_TO_JOIN_EVENT_SUCCESS,
+      });
+      dispatch(getPost(postId));
+    } catch (error) {
+      showMessage(i18n.t('common.error'), error?.message, 'error');
+      dispatch({
+        type: types.ASKED_TO_JOIN_EVENT_FAIL,
+      });
+    }
+  };
+
+export const admitToEvent =
+  (postId: string, userId: string) => async (dispatch: Function) => {
+    let requestParams = {
+      method: Methods.GET,
+      endpoint: `/posts/${postId}/event/allow/${userId}`,
+    };
+
+    try {
+      await Request(dispatch, requestParams);
+
+      dispatch({
+        type: types.ASKED_TO_JOIN_EVENT_SUCCESS,
+      });
+      dispatch(getPost(postId));
+    } catch (error) {
+      showMessage(i18n.t('common.error'), error?.message, 'error');
+      dispatch({
+        type: types.ASKED_TO_JOIN_EVENT_FAIL,
+      });
+    }
+  };
+
+export const rejectJoinRequest =
+  (postId: string, userId: string) => async (dispatch: Function) => {
+    let requestParams = {
+      method: Methods.GET,
+      endpoint: `/posts/${postId}/event/reject/${userId}`,
+    };
+
+    try {
+      await Request(dispatch, requestParams);
+
+      dispatch({
+        type: types.REJECT_FROM_EVENT_SUCCESS,
+      });
+      dispatch(getPost(postId));
+    } catch (error) {
+      showMessage(i18n.t('common.error'), error?.message, 'error');
+      dispatch({
+        type: types.REJECT_FROM_EVENT_FAIL,
+      });
+    }
+  };
+
+export const removeFromRejectedList =
+  (postId: string, userId: string) => async (dispatch: Function) => {
+    let requestParams = {
+      method: Methods.GET,
+      endpoint: `/posts/${postId}/event/remove-from-rejected/${userId}`,
+    };
+
+    try {
+      await Request(dispatch, requestParams);
+
+      dispatch({
+        type: types.REMOVE_FROM_REJECTED_SUCCESS,
+      });
+      dispatch(getPost(postId));
+    } catch (error) {
+      showMessage(i18n.t('common.error'), error?.message, 'error');
+      dispatch({
+        type: types.REMOVE_FROM_REJECTED_FAIL,
+      });
+    }
+  };
