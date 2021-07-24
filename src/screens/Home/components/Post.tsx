@@ -27,7 +27,14 @@ import { DATE_FORMAT, showMessage } from '../../../utils/utils';
 import Collapsible from 'react-native-collapsible';
 import { useNavigation } from '@react-navigation/native';
 import ActionSheet from 'react-native-actions-sheet';
-import { deletePost, updatePost } from '../../../redux/actions/posts';
+import {
+  deletePost,
+  dislikePost,
+  likePost,
+  sharePost,
+  unsharePost,
+  updatePost,
+} from '../../../redux/actions/posts';
 import { useDispatch } from 'react-redux';
 const actionSheetRef = createRef<ActionSheet>();
 
@@ -47,6 +54,7 @@ const Post = ({ post, userId, listView }: PostProps) => {
   const [participantsCollapsed, setParticipantsCollapsed] = useState(true);
   const navigation = useNavigation();
   const [editMode, setEditMode] = useState(false);
+  const [likeShareLoading, setLikeShareLoading] = useState(false);
   const [editedPost, setEditedPost] = useState({
     _id: post._id ?? '',
     text: post.text ?? '',
@@ -77,6 +85,29 @@ const Post = ({ post, userId, listView }: PostProps) => {
   const handlePostEditCancel = () => {
     setEditedPost(prevPostDetails);
     setEditMode(false);
+  };
+
+  const handleShare = async () => {
+    setLikeShareLoading(true);
+    if (post.sharedBy.includes(userId)) {
+      await dispatch(unsharePost(post._id));
+      setLikeShareLoading(false);
+    } else {
+      await dispatch(sharePost(post._id));
+      setLikeShareLoading(false);
+    }
+  };
+
+  const handleLike = async (_id: string) => {
+    setLikeShareLoading(true);
+    await dispatch(likePost(_id));
+    setLikeShareLoading(false);
+  };
+
+  const handleDislike = async (_id: string) => {
+    setLikeShareLoading(true);
+    await dispatch(dislikePost(_id));
+    setLikeShareLoading(false);
   };
 
   // const handleAdmitToEvent = async (userId: string) => {
@@ -388,6 +419,60 @@ const Post = ({ post, userId, listView }: PostProps) => {
               </Touchable>
             </View>
           )}
+          {!editMode && (
+            <View style={styles.postActions}>
+              <View style={styles.postActions}>
+                {post.author._id !== userId && (
+                  <>
+                    <Touchable
+                      style={styles.editModeActionButton}
+                      onPress={() => {
+                        console.log(post?.likes?.includes(userId));
+
+                        post?.likes?.includes(userId)
+                          ? handleDislike(post._id)
+                          : handleLike(post._id);
+                      }}>
+                      <Icon
+                        size={24}
+                        name="happy-outline"
+                        color={
+                          post?.likes?.includes(userId)
+                            ? colors.light
+                            : colors.darkGrey
+                        }
+                      />
+                    </Touchable>
+                    <Touchable
+                      style={styles.editModeActionButton}
+                      onPress={handleShare}>
+                      <Icon
+                        size={24}
+                        name="share-social-outline"
+                        color={
+                          post?.sharedBy?.includes(userId)
+                            ? colors.light
+                            : colors.darkGrey
+                        }
+                      />
+                    </Touchable>
+                  </>
+                )}
+              </View>
+              <View style={styles.postActions}>
+                <Touchable
+                  style={styles.editModeActionButton}
+                  onPress={handlePostEdit}>
+                  <Icon size={24} name="save-outline" color={colors.light} />
+                </Touchable>
+                <Touchable
+                  style={styles.editModeActionButton}
+                  onPress={handlePostEdit}>
+                  <Icon size={24} name="save-outline" color={colors.light} />
+                </Touchable>
+              </View>
+            </View>
+          )}
         </View>
       </View>
       <ActionSheet
@@ -437,6 +522,11 @@ const Post = ({ post, userId, listView }: PostProps) => {
 export default Post;
 
 const styles = StyleSheet.create({
+  postActions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   input: {
     height: 100,
     borderColor: colors.primary,
@@ -450,7 +540,6 @@ const styles = StyleSheet.create({
   },
   editModeActionButton: {
     marginHorizontal: 8,
-    backgroundColor: colors.grey,
     borderRadius: 40,
     width: 40,
     height: 40,
@@ -528,6 +617,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   headerText: { paddingLeft: PADDING / 2 },
-  postContent: { paddingVertical: PADDING / 2 },
+  postContent: { paddingTop: PADDING / 2 },
   postImage: { borderRadius: BORDER_RADIUS.small, overflow: 'hidden' },
 });

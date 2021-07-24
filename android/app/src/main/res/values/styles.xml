@@ -19,7 +19,7 @@
     </style>
 
 		<style name="AlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
-	    <item name="android:background">#FFFFFF</item>
+	    <item name="android:background">#ccc</item>
 	    <item name="android:textColor">#0068ff</item>
 			<item name="android:textColorPrimary">#0068ff</item>
 	    <item name="android:buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>

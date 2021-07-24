@@ -1,9 +1,10 @@
-import { toFormData } from './../../utils/utils';
+import { showMessage, toFormData } from './../../utils/utils';
 import { Methods, Request } from '../../utils/Wrapper';
 
 import * as types from '../types/posts';
 import { IObject } from '../../interfaces/Common';
 import store, { RootState } from '..';
+import i18n from '../../i18n';
 
 const POSTS_LIMIT = 5;
 
@@ -229,3 +230,87 @@ export const createEvent =
       });
     }
   };
+
+export const sharePost = (postId: string) => async (dispatch: Function) => {
+  let requestParams = {
+    method: Methods.GET,
+    endpoint: `/posts/${postId}/share`,
+  };
+
+  try {
+    await Request(dispatch, requestParams);
+
+    dispatch({
+      type: types.SHARE_POST_SUCCESS,
+    });
+    dispatch(getPost(postId));
+  } catch (error) {
+    showMessage(i18n.t('common.error'), error?.message, 'error');
+    dispatch({
+      type: types.SHARE_POST_FAIL,
+    });
+  }
+};
+
+export const unsharePost = (postId: string) => async (dispatch: Function) => {
+  let requestParams = {
+    method: Methods.GET,
+    endpoint: `/posts/${postId}/unshare`,
+  };
+
+  try {
+    await Request(dispatch, requestParams);
+
+    dispatch({
+      type: types.UNSHARE_POST_SUCCESS,
+    });
+    dispatch(getPost(postId));
+  } catch (error) {
+    showMessage(i18n.t('common.error'), error?.message, 'error');
+    dispatch({
+      type: types.UNSHARE_POST_FAIL,
+    });
+  }
+};
+
+export const likePost = (postId: string) => async (dispatch: Function) => {
+  let requestParams = {
+    method: Methods.GET,
+    endpoint: `/posts/${postId}/like`,
+  };
+
+  try {
+    await Request(dispatch, requestParams);
+
+    dispatch({
+      type: types.LIKE_POST_SUCCESS,
+    });
+    dispatch(getPost(postId));
+  } catch (error) {
+    showMessage(i18n.t('common.error'), error?.message, 'error');
+    dispatch({
+      type: types.LIKE_POST_FAIL,
+    });
+  }
+};
+
+export const dislikePost = (postId: string) => async (dispatch: Function) => {
+  let requestParams = {
+    method: Methods.GET,
+    endpoint: `/posts/${postId}/dislike`,
+  };
+
+  try {
+    await Request(dispatch, requestParams);
+
+    dispatch({
+      type: types.DISLIKE_POST_SUCCESS,
+    });
+    dispatch(getPost(postId));
+  } catch (error) {
+    showMessage(i18n.t('common.error'), error?.message, 'error');
+    dispatch({
+      type: types.DISLIKE_POST_FAIL,
+    });
+  }
+};
