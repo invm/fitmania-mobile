@@ -1,12 +1,51 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { colors, FocusAwareStatusBar, PADDING, Text } from '../../components';
+import { HomeRoutes, StackNavigationProps } from '../../navigation';
+import { RootState } from '../../redux';
+import { getPost, resetSinglePost } from '../../redux/actions/posts';
+import Post from '../Home/components/Post';
 
-interface PostScreenProps {}
+const PostScreen = ({
+  navigation,
+  route: {
+    params: { postId },
+  },
+}: StackNavigationProps<HomeRoutes, 'PostScreen'>) => {
+  const {
+    user: { user },
+    posts: { singlePost, singlePostLoading, singlePostId },
+  } = useSelector((state: typeof RootState) => state);
+  const dispatch = useDispatch();
 
-const PostScreen = ({}: PostScreenProps) => {
+  useEffect(() => {
+    if (postId) {
+      dispatch(getPost(postId));
+    } else {
+      navigation.navigate('Home');
+    }
+    return () => {
+      dispatch(resetSinglePost());
+    };
+  }, [postId, dispatch]);
+
   return (
     <View style={styles.container}>
-      <Text>PostScreen </Text>
+      <FocusAwareStatusBar />
+      {singlePostLoading ? (
+        <View style={styles.loader}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      ) : (
+        <>
+          {!!singlePost?._id && (
+            <View>
+              <Post {...{ post: singlePost, userId: user._id }} />
+            </View>
+          )}
+        </>
+      )}
     </View>
   );
 };
@@ -14,5 +53,11 @@ const PostScreen = ({}: PostScreenProps) => {
 export default PostScreen;
 
 const styles = StyleSheet.create({
-  container: {},
+  loader: {
+    paddingVertical: PADDING,
+  },
+  container: {
+    backgroundColor: colors.white,
+    flex: 1,
+  },
 });

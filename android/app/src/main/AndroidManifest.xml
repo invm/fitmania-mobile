@@ -47,7 +47,6 @@
       </service>
 
       <activity
-	      android:theme="@style/FitManiaTheme"
         android:name=".MainActivity"
         android:label="@string/app_name"
         android:screenOrientation="portrait"

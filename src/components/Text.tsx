@@ -16,6 +16,7 @@ type TextProps = {
     | 'semibold22'
     | 'semibold24'
     | 'bold16'
+    | 'bold18'
     | 'bold24';
   props?: any | any[];
   children?: React.ReactElement | string | string[] | number | TFunctionResult;
@@ -30,7 +31,7 @@ type TextProps = {
 };
 
 const Text = ({
-  variant = "regular16",
+  variant = 'regular16',
   props,
   children,
   style,
@@ -152,6 +153,10 @@ const textStyles = {
   bold16: {
     ...font.Assistant.bold,
     ...sizes[16],
+  },
+  bold18: {
+    ...font.Assistant.bold,
+    ...sizes[18],
   },
   bold24: {
     ...font.Assistant.bold,

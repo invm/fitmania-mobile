@@ -24,7 +24,7 @@ export type HomeRoutes = {
   Home: undefined;
   Search: undefined;
   Profile: undefined;
-  PostScreen: undefined;
+  PostScreen: { postId: string };
   CreateEvent: undefined;
   CreatePost: undefined;
 };

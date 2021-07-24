@@ -25,6 +25,8 @@
       "continue": "Continue",
       "change": "Change",
       "skip": "Skip",
+      "edit": "Edit",
+      "delete": "Delete",
       "hello1": "Hello, ",
       "hello2": "Hi! ",
       "hello3": "Hey, "
@@ -35,7 +37,11 @@
         "private_event": "You may ask to join",
         "joined": "joined",
         "asked_to_join": "Asked to join",
-        "join": "Join"
+        "join": "Join",
+        "delete_alert": {
+          "title": "Are you sure?",
+          "subtitle": "Please confirm that you want to delete the post and any event and comments associated with it."
+        }
       }
     },
     "create_profile": {
@@ -85,6 +91,7 @@
     "create_post": {
       "title": "Share some thoughts or upload an image...",
       "create_post": "Create Post",
+      "cant_create_empty_post": "Can not create an empty post",
       "open_camera": "Open camera",
       "open_gallery": "Open gallery"
     },

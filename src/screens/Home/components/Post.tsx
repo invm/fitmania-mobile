@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { createRef, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   Modal,
   StyleSheet,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import IPost from '../../../interfaces/Post';
@@ -16,13 +18,18 @@ import {
   PADDING,
   colors,
 } from '../../../components/Theme';
-import { Text, BlurredImage, Touchable } from '../../../components';
+import { Text, BlurredImage, Touchable, Input } from '../../../components';
 import LinearGradient from 'react-native-linear-gradient';
 import { useTranslation } from 'react-i18next';
 import { sports } from './PostsFilters';
 import moment from 'moment';
-import { DATE_FORMAT } from '../../../utils/utils';
+import { DATE_FORMAT, showMessage } from '../../../utils/utils';
 import Collapsible from 'react-native-collapsible';
+import { useNavigation } from '@react-navigation/native';
+import ActionSheet from 'react-native-actions-sheet';
+import { deletePost, updatePost } from '../../../redux/actions/posts';
+import { useDispatch } from 'react-redux';
+const actionSheetRef = createRef<ActionSheet>();
 
 const POST_IMAGE_WIDTH = width - PADDING * 2;
 const POST_IMAGE_HEIGHT = 250;
@@ -30,18 +37,46 @@ const POST_IMAGE_HEIGHT = 250;
 interface PostProps {
   post: IPost;
   userId: string;
+  listView?: boolean; // controls what actions to show
 }
 
-const Post = ({ post, userId }: PostProps) => {
+const Post = ({ post, userId, listView }: PostProps) => {
   const { t } = useTranslation();
   const [modalVisible, setModalVisible] = useState(false);
   const [eventLoading, setEventLoading] = useState(false);
   const [participantsCollapsed, setParticipantsCollapsed] = useState(true);
+  const navigation = useNavigation();
+  const [editMode, setEditMode] = useState(false);
+  const [editedPost, setEditedPost] = useState({
+    _id: post._id ?? '',
+    text: post.text ?? '',
+    image: post.image ?? '',
+  });
+  const [prevPostDetails] = useState({
+    _id: post._id ?? '',
+    text: post.text ?? '',
+    image: post.image ?? '',
+  });
+  const dispatch = useDispatch();
 
   const handleAskToJoinEvent = async () => {
     setEventLoading(true);
     // dispatch(askToJoinEvent(post._id));
     setEventLoading(false);
+  };
+
+  const handlePostEdit = () => {
+    if (editedPost.text.length) {
+      dispatch(updatePost(editedPost));
+      setEditMode(!editMode);
+    } else {
+      showMessage(t('common.error'), t('create_post.cant_create_empty_post'));
+    }
+  };
+
+  const handlePostEditCancel = () => {
+    setEditedPost(prevPostDetails);
+    setEditMode(false);
   };
 
   // const handleAdmitToEvent = async (userId: string) => {
@@ -72,6 +107,27 @@ const Post = ({ post, userId }: PostProps) => {
     setEventLoading(true);
     // await dispatch(leaveEvent(post._id));
     setEventLoading(false);
+  };
+
+  const handlePostDelete = () => {
+    Alert.alert(
+      t('components.post.delete_alert.title'),
+      t('components.post.delete_alert.subtitle'),
+      [
+        {
+          onPress: async () => {
+            await dispatch(deletePost(post._id));
+            navigation.navigate('Home');
+          },
+          style: 'destructive',
+          text: t('common.confirm'),
+        },
+        {
+          style: 'cancel',
+          text: t('common.cancel'),
+        },
+      ],
+    );
   };
 
   return (
@@ -230,9 +286,23 @@ const Post = ({ post, userId }: PostProps) => {
               <Text variant="medium12">{formatLongDate(post.created_at)}</Text>
             </View>
           </View>
-          <View style={styles.postHeaderRight}>
-            <Icon size={24} name="information-circle-outline" />
-          </View>
+          {listView ? (
+            <Touchable
+              onPress={() => {
+                navigation.navigate('PostScreen', { postId: post._id });
+              }}
+              style={styles.postHeaderRight}>
+              <Icon size={24} name="information-circle-outline" />
+            </Touchable>
+          ) : (
+            <Touchable
+              onPress={() => {
+                actionSheetRef.current?.setModalVisible(true);
+              }}
+              style={styles.postHeaderRight}>
+              <Icon size={24} name="ellipsis-vertical" />
+            </Touchable>
+          )}
         </View>
         <View style={styles.postContent}>
           {post.event && (
@@ -290,11 +360,76 @@ const Post = ({ post, userId }: PostProps) => {
               />
             </View>
           )}
-          <Text variant="regular16" lines={5}>
-            {post.text}
-          </Text>
+          {editMode ? (
+            <View>
+              <Input
+                multiline
+                style={styles.input}
+                value={editedPost.text}
+                onChangeText={text => setEditedPost(s => ({ ...s, text }))}
+              />
+            </View>
+          ) : (
+            <Text variant="regular16" lines={5}>
+              {post.text}
+            </Text>
+          )}
+          {editMode && (
+            <View style={styles.editModeActions}>
+              <Touchable
+                style={styles.editModeActionButton}
+                onPress={handlePostEdit}>
+                <Icon size={24} name="save-outline" color={colors.light} />
+              </Touchable>
+              <Touchable
+                style={styles.editModeActionButton}
+                onPress={handlePostEditCancel}>
+                <Icon size={24} name="close" color={colors.light} />
+              </Touchable>
+            </View>
+          )}
         </View>
       </View>
+      <ActionSheet
+        containerStyle={{ backgroundColor: colors.white }}
+        ref={actionSheetRef}>
+        <View style={styles.actionSheetContent}>
+          {post.author._id === userId && (
+            <>
+              <Touchable
+                onPress={() => {
+                  setEditMode(true);
+                  actionSheetRef?.current?.hide();
+                }}
+                style={styles.actionSheetButton}>
+                <View style={styles.button}>
+                  <Text
+                    align="center"
+                    variant="bold18"
+                    color={colors.secondary}>
+                    {t('common.edit')}
+                  </Text>
+                </View>
+              </Touchable>
+              <Touchable
+                onPress={handlePostDelete}
+                style={styles.actionSheetButton}>
+                <View style={styles.button}>
+                  <Text
+                    align="center"
+                    variant="bold18"
+                    color={colors.secondary}>
+                    {t('common.delete')}
+                  </Text>
+                </View>
+              </Touchable>
+            </>
+          )}
+          <Touchable style={styles.actionSheetButton}>
+            <Text>Like</Text>
+          </Touchable>
+        </View>
+      </ActionSheet>
     </>
   );
 };
@@ -302,6 +437,42 @@ const Post = ({ post, userId }: PostProps) => {
 export default Post;
 
 const styles = StyleSheet.create({
+  input: {
+    height: 100,
+    borderColor: colors.primary,
+    borderWidth: 1,
+    padding: 4,
+    borderRadius: 8,
+  },
+  editModeActions: {
+    flexDirection: 'row',
+    paddingVertical: PADDING,
+  },
+  editModeActionButton: {
+    marginHorizontal: 8,
+    backgroundColor: colors.grey,
+    borderRadius: 40,
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button: {
+    padding: 8,
+    borderRadius: 8,
+    borderColor: colors.secondary,
+    borderWidth: 1,
+    alignItems: 'center',
+  },
+  actionSheetContent: {
+    alignItems: 'center',
+    width: '100%',
+    paddingVertical: PADDING,
+  },
+  actionSheetButton: {
+    width: '95%',
+    marginVertical: 8,
+  },
   centeredView: {
     flex: 1,
     justifyContent: 'center',

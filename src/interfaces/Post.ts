@@ -1,5 +1,18 @@
-import IEvent from './Event';
+import IComment from './Comment';
 import { IUserMin } from './User';
+
+interface IEvent {
+  startDate: Date;
+  eventType: 'Running' | 'Biking' | 'Soccer' | 'Basketball' | 'Rugby' | 'Hiking' | 'Tennis';
+  participants: IUserMin[];
+  limitParticipants: number;
+  pace: string;
+  openEvent: boolean;
+  rejectedParticipants: IUserMin[];
+  pendingApprovalParticipants: IUserMin[];
+  created_at: Date;
+  location: { type: string; coordinates: number[] };
+}
 
 interface IPost {
   _id: string;
@@ -10,7 +23,7 @@ interface IPost {
   text?: string;
   image?: string;
   event?: IEvent;
-  comments: string[];
+  comments: IComment[];
   likes: string[];
   created_at: Date;
 }

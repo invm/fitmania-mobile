@@ -2,7 +2,6 @@ import React from 'react';
 import {
   StyleSheet,
   TextInput,
-  I18nManager,
   NativeSyntheticEvent,
   TextInputFocusEventData,
   TextStyle,
@@ -14,7 +13,6 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.primary,
     borderBottomWidth: 1,
     height: 50,
-    flex: 1,
     padding: 0,
     color: colors.black,
     textAlign: 'left',

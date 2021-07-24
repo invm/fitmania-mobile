@@ -1,15 +1,18 @@
-import { showMessage, toFormData } from './../../utils/utils';
+import { toFormData } from './../../utils/utils';
 import { Methods, Request } from '../../utils/Wrapper';
 
 import * as types from '../types/posts';
 import { IObject } from '../../interfaces/Common';
 import store, { RootState } from '..';
-import i18n from '../../i18n';
 
 const POSTS_LIMIT = 5;
 
 export const resetPosts = () => (dispatch: Function) => {
   dispatch({ type: types.RESET_POSTS });
+};
+
+export const resetSinglePost = () => (dispatch: Function) => {
+  dispatch({ type: types.RESET_SINGLE_POST });
 };
 
 export const getPosts =
@@ -51,13 +54,11 @@ export const getPost = (_id: string) => async (dispatch: Function) => {
     endpoint: `/posts/${_id}`,
   };
   try {
-    let res = await Request(dispatch, requestParams);
+    let { response } = await Request(dispatch, requestParams);
 
     dispatch({
       type: types.GET_POST_SUCCESS,
-      payload: {
-        data: res.data.data,
-      },
+      payload: response.data.data,
     });
   } catch (error) {
     dispatch({
@@ -69,7 +70,7 @@ export const getPost = (_id: string) => async (dispatch: Function) => {
 export const updatePost =
   ({ _id, text }: { _id: string; text: string }) =>
   async (dispatch: Function) => {
-    dispatch({ type: types.UPDATE_POST_ATTEMPT });
+    dispatch({ type: types.UPDATE_POST_ATTEMPT, payload: _id });
 
     let requestParams = {
       method: Methods.PATCH,
@@ -91,20 +92,18 @@ export const updatePost =
   };
 
 export const deletePost = (_id: string) => async (dispatch: Function) => {
-  dispatch({ type: types.DELETE_POST_ATTEMPT });
+  dispatch({ type: types.DELETE_POST_ATTEMPT, payload: _id });
 
   let requestParams = {
     method: Methods.DELETE,
     endpoint: `/posts/${_id}`,
   };
   try {
-    let res = await Request(dispatch, requestParams);
+    await Request(dispatch, requestParams);
 
     dispatch({
       type: types.DELETE_POST_SUCCESS,
-      payload: {
-        data: res.data.data,
-      },
+      payload: _id,
     });
   } catch (error) {
     dispatch({
