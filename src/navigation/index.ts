@@ -27,6 +27,7 @@ export type HomeRoutes = {
   PostScreen: { postId: string };
   CreateEvent: undefined;
   CreatePost: undefined;
+  EditProfile: undefined;
 };
 
 export type AppRoutes = AuthRoutes & HomeRoutes & {};

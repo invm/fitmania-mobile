@@ -123,7 +123,7 @@ const CreateProfile = ({
               <View>
                 <View style={{ marginBottom: 20 }}>
                   <Text variant="semibold16" lines={2}>
-                    {t('create_profile.title')}
+                    {t('profile.title')}
                   </Text>
                 </View>
                 <Card
@@ -137,7 +137,7 @@ const CreateProfile = ({
                         setFieldValue('name', clearName(value))
                       }
                       placeHolderTextColor="#000"
-                      placeholder={t('create_profile.first_name')}
+                      placeholder={t('profile.first_name')}
                       onBlur={() => setFieldTouched('name')}
                       value={values.name}
                       touched={touched.name}
@@ -168,7 +168,7 @@ const CreateProfile = ({
                       onChangeText={value =>
                         setFieldValue('lastname', clearName(value))
                       }
-                      placeholder={t('create_profile.last_name')}
+                      placeholder={t('profile.last_name')}
                       onBlur={() => setFieldTouched('lastname')}
                       value={values.lastname}
                       touched={touched.lastname}

@@ -18,7 +18,7 @@ import {
   deleteComment,
   editComment,
 } from '../../../../redux/actions/posts';
-import { DATE_FORMAT } from '../../../../utils/utils';
+import { DATE_TIME_FORMAT } from '../../../../utils/utils';
 
 interface PostItemProps {
   post: IPost;
@@ -134,7 +134,7 @@ const PostCommentSection = ({
                     {comment.user?.name} {comment.user?.lastname}
                   </Text>
                   <Text variant="semibold14" color={colors.light}>
-                    {moment(comment.created_at).format(DATE_FORMAT)}
+                    {moment(comment.created_at).format(DATE_TIME_FORMAT)}
                   </Text>
                 </View>
                 <View>

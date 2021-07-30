@@ -25,7 +25,7 @@ import { Formik, FormikProps } from 'formik';
 import { createPost, getPosts, resetPosts } from '../../redux/actions/posts';
 import * as ImagePicker from 'expo-image-picker';
 import { BORDER_RADIUS, width } from '../../components/Theme';
-import { DATE_FORMAT, showMessage } from '../../utils/utils';
+import { DATE_TIME_FORMAT, showMessage } from '../../utils/utils';
 import { GOOGLE_API_KEY } from '../../../sensitive';
 import {
   GooglePlaceData,
@@ -280,7 +280,7 @@ const CreateEvent = ({
                             justifyContent: 'space-between',
                           }}>
                           <Text>
-                            {moment(values.startDate).format(DATE_FORMAT)}
+                            {moment(values.startDate).format(DATE_TIME_FORMAT)}
                           </Text>
                           <DateTimePicker
                             label={t('common.change')}

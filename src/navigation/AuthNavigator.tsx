@@ -77,7 +77,7 @@ const AuthNavigator = () => {
           gestureEnabled: false,
           header: ({ navigation }) => (
             <Header
-              title={t('screens.create_profile')}
+              title={t('screens.profile')}
               canGoBack
               icon={'logout'}
               action={() => {

@@ -12,8 +12,8 @@ const styles = StyleSheet.create({
   input: {
     borderColor: colors.light,
     borderWidth: 1,
-    borderRadius: 8,
-    padding: 4,
+    borderRadius: 16,
+    padding: 8,
     height: 50,
     color: colors.black,
     textAlign: 'left',

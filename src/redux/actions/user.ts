@@ -4,7 +4,7 @@ import * as types from '../types/user';
 import { Dispatch, SetStateAction } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { showMessage } from '../../utils/utils';
+import { showMessage, toFormData } from '../../utils/utils';
 import i18n from '../../i18n';
 import { API_URL, ENV } from './../../../env';
 import store from '../index';
@@ -12,6 +12,8 @@ import axios from 'axios';
 import messaging from '@react-native-firebase/messaging';
 import IUser from '../../interfaces/User';
 import { API_KEY } from '../../../sensitive';
+
+export const POSTS_LIMIT = 10;
 
 export const verifySession = () => async (dispatch: Function) => {
   try {
@@ -169,35 +171,20 @@ export const createProfile =
   };
 
 export const updateProfile =
-  (
-    profileData: object,
-    options: {
-      deleteProfilePicture?: boolean;
-      updateProfilePicture?: File;
-    },
-  ) =>
-  async (dispatch: Function) => {
-    if (options?.deleteProfilePicture) {
-      await dispatch(deleteProfilePicture());
-    }
+  (profileData: object) => async (dispatch: Function) => {
+    let body = toFormData(profileData);
 
-    if (options?.updateProfilePicture) {
-      await dispatch(uploadProfilePicture(options.updateProfilePicture));
-    }
-
-    if (profileData) {
-      let requestParams = {
-        method: Methods.PATCH,
-        endpoint: `/user`,
-        body: {
-          ...profileData,
-        },
-      };
-
+    let requestParams = {
+      method: Methods.PATCH,
+      endpoint: `/user`,
+      body,
+    };
+    try {
       await Request(dispatch, requestParams);
+      await dispatch(getProfile());
+    } catch (error) {
+      showMessage(i18n.t('common.error'), error?.message, 'error');
     }
-
-    await dispatch(getProfile());
   };
 
 export const uploadProfilePicture =
@@ -306,4 +293,13 @@ export const updateFcmToken = async (fcmToken: string) => {
         },
       },
     ));
+};
+
+export const getUsersPosts = async (id: string, offset: number) => {
+  let requestParams = {
+    method: Methods.GET,
+    endpoint: `/posts?offset=${offset}&limit=${POSTS_LIMIT}&userId=${id}`,
+  };
+
+  return await Request(store.dispatch, requestParams);
 };

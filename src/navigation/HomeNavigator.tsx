@@ -1,11 +1,14 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  StackHeaderProps,
+} from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import * as SCREENS from '../screens';
 import { useTranslation } from 'react-i18next';
 import { colors, Text, Header } from '../components';
-import { AppRoutes, HomeRoutes } from '.';
+import navigation, { AppRoutes, HomeRoutes } from '.';
 import { TAB_BAR_HEIGHT } from '../screens/Home/Home';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -62,6 +65,16 @@ const HomeNavigator = () => {
         }}
         component={SCREENS.CreateEvent}
       />
+      <HomeStack.Screen
+        name="EditProfile"
+        options={{
+          headerShown: true,
+          header: () => (
+            <Header canGoBack={true} title={t('screens.edit_profile')} />
+          ),
+        }}
+        component={SCREENS.EditProfile}
+      />
     </HomeStack.Navigator>
   );
 };
@@ -74,7 +87,20 @@ function ProfileStackScreen() {
         name="Profile"
         component={SCREENS.Profile}
         options={{
-          header: () => <Header color="white" title={t('screens.profile')} />,
+          header: ({ navigation }: StackHeaderProps) => (
+            <Header
+              color="white"
+              title={t('screens.profile')}
+              rightIcons={[
+                {
+                  action: () => {
+                    navigation.navigate('EditProfile');
+                  },
+                  icon: 'create-outline',
+                },
+              ]}
+            />
+          ),
         }}
       />
     </ProfileScreenStack.Navigator>

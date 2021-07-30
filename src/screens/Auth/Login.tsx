@@ -94,7 +94,12 @@ const Login = ({ navigation }: StackNavigationProps<AuthRoutes, 'Login'>) => {
                     valid={!errors.email}
                     error={errors.email}
                     maxLength={100}
-                    style={{ textAlign: 'left', fontSize: 18, flex: 0 }}
+                    style={{
+                      textAlign: 'left',
+                      fontSize: 18,
+                      flex: 0,
+                      borderWidth: 0,
+                    }}
                   />
                   {values.email.length >= 7 && errors.email && (
                     <View

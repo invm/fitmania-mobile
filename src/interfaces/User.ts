@@ -3,18 +3,19 @@ interface IUser {
   name: string;
   email: string;
   lastname: string;
-  birthday?: Date;
+  birthday?: string;
   location?: string;
-  avatar?: string;
-  preferable?: string[];
-  undesirable?: string[];
+  image?: string;
+  preferable: string[];
+  undesirable: string[];
   fcmToken?: string;
+  [key: string]: any;
 }
 
 export interface IUserMin {
   _id: string;
   name: string;
-  avatar: string;
+  image: string;
   lastname: string;
 }
 

@@ -22,7 +22,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { useTranslation } from 'react-i18next';
 import { sports } from './PostsFilters';
 import moment from 'moment';
-import { DATE_FORMAT, showMessage } from '../../../utils/utils';
+import { DATE_TIME_FORMAT, showMessage } from '../../../utils/utils';
 import Collapsible from 'react-native-collapsible';
 import { useNavigation } from '@react-navigation/native';
 import ActionSheet from 'react-native-actions-sheet';
@@ -420,9 +420,9 @@ const Post = ({ post, userId, listView }: PostProps) => {
       <View key={post._id} style={styles.postContainer}>
         <View style={styles.postHeader}>
           <View style={styles.postHeaderLeft}>
-            <View style={styles.avatar}>
+            <View style={styles.image}>
               <BlurredImage
-                uri={MEDIA_URL + post.author.avatar}
+                uri={MEDIA_URL + post.author.image}
                 width={50}
                 height={50}
               />
@@ -488,7 +488,7 @@ const Post = ({ post, userId, listView }: PostProps) => {
                   {post.event.limitParticipants} {t('components.post.joined')}
                 </Text>
                 <Text variant="medium14" color={colors.white}>
-                  {moment(post.event.startDate).format(DATE_FORMAT)}
+                  {moment(post.event.startDate).format(DATE_TIME_FORMAT)}
                 </Text>
                 <Touchable
                   onPress={() => {
@@ -765,7 +765,7 @@ const styles = StyleSheet.create({
   },
   postHeaderLeft: { width: '90%', flexDirection: 'row' },
   postHeaderRight: { width: '10%', alignItems: 'flex-end' },
-  avatar: {
+  image: {
     width: 50,
     height: 50,
     borderRadius: 25,

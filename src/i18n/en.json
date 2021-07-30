@@ -4,13 +4,14 @@
       "register": "Register",
       "login": "Login",
       "confirmation": "Confirmation",
-      "create_profile": "Create profile",
+      "profile": "Create profile",
       "home": "Home",
       "profile": "Profile",
       "search": "Search",
-      "create_post": "Create Post",
-      "create_event": "Create Event",
-      "post_filters": "Post filters"
+      "create_post": "Create post",
+      "create_event": "Create event",
+      "post_filters": "Post filters",
+      "edit_profile": "Edit profile"
     },
     "common": {
       "error": "Error",
@@ -32,6 +33,10 @@
       "hello3": "Hey, "
     },
     "components": {
+      "image_upload": {
+        "gallery": "Gallery",
+        "camera": "Camera"
+      },
       "post": {
         "open_event": "Everybody can join",
         "private_event": "You may ask to join",
@@ -56,10 +61,17 @@
         }
       }
     },
-    "create_profile": {
+    "profile": {
       "title": "Please enter some minimal information about yourself",
       "first_name": "First name",
-      "last_name": "Last name"
+      "last_name": "Last name",
+      "location": "Location",
+      "birthday": "Birthday",
+      "email": "Email",
+      "select_preferable": "Selected preferred sports",
+      "select_undesirable": "Selected undesirable sports",
+      "preferable": "Preferable sports",
+      "undesirable": "Undesirable sports"
     },
     "auth": {
       "provide_otp": "Please provide the 6 digit one time password that you've received to your email address:",
@@ -78,7 +90,8 @@
       "invalid_email": "Please insert a valid email address",
       "all_fields_are_required": "All fields are required",
       "required_field": "This field is required",
-      "invalid_client_name": "Please provide a valid name without special characters"
+      "invalid_client_name": "Please provide a valid name without special characters",
+      "camera_permissions": "Please allow access to you camera and gallery"
     },
     "welcome_screen": {
       "header": "Welcome to FitMania!",
