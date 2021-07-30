@@ -295,6 +295,15 @@ export const updateFcmToken = async (fcmToken: string) => {
     ));
 };
 
+export const getUser = async (id: string) => {
+  let requestParams = {
+    method: Methods.GET,
+    endpoint: `/user/${id}`,
+  };
+
+  return await Request(store.dispatch, requestParams);
+};
+
 export const getUsersPosts = async (id: string, offset: number) => {
   let requestParams = {
     method: Methods.GET,

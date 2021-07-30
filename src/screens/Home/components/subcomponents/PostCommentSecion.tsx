@@ -130,7 +130,7 @@ const PostCommentSection = ({
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                   }}>
-                  <Text variant="semibold16" color={colors.primary}>
+                  <Text variant="bold24" color={colors.primary}>
                     {comment.user?.name} {comment.user?.lastname}
                   </Text>
                   <Text variant="semibold14" color={colors.light}>

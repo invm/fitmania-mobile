@@ -24,10 +24,13 @@ export type HomeRoutes = {
   Home: undefined;
   Search: undefined;
   Profile: undefined;
+  Groups: undefined;
+  Friends: undefined;
   PostScreen: { postId: string };
   CreateEvent: undefined;
   CreatePost: undefined;
   EditProfile: undefined;
+  UserProfile: { userId: string };
 };
 
 export type AppRoutes = AuthRoutes & HomeRoutes & {};

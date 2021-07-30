@@ -25,7 +25,6 @@ interface HeaderProps {
   noShadow?: boolean;
   props?: any | any[];
   color?: 'white' | 'primary' | 'transparent';
-  subtitle?: string;
   searchBar?: boolean;
   rightIcons?: {
     icon: string;
@@ -43,7 +42,6 @@ const Header = ({
   icon,
   noShadow,
   color,
-  subtitle,
   searchBar,
   rightIcons,
 }: HeaderProps) => {
@@ -92,7 +90,7 @@ const Header = ({
         style={[
           styles.container,
           {
-            height: subtitle ? HEADER_HEIGHT + 20 + top : HEADER_HEIGHT + top,
+            height: HEADER_HEIGHT + top,
             backgroundColor,
             paddingTop: top || 0,
           },
@@ -102,9 +100,7 @@ const Header = ({
           <>
             <View
               style={{
-                height: subtitle
-                  ? HEADER_HEIGHT + 20 + top
-                  : HEADER_HEIGHT + top,
+                height: HEADER_HEIGHT + top,
                 justifyContent: 'center',
               }}>
               <View style={[styles.innerContainer]}>
@@ -153,12 +149,6 @@ const Header = ({
                   </View>
                 </View>
               </View>
-              {!!subtitle && (
-                <View style={styles.subtitleContainer}>
-                  <View style={{ width: 40 }} />
-                  <Text variant="medium16">{subtitle}</Text>
-                </View>
-              )}
             </View>
           </>
         ) : (
@@ -166,7 +156,7 @@ const Header = ({
             style={[
               styles.searchHeaderContainer,
               {
-                // height: HEADER_HEIGHT + top,
+                height: HEADER_HEIGHT + top,
               },
             ]}>
             <Card style={styles.inputCard}>
@@ -180,7 +170,7 @@ const Header = ({
                 <Icon
                   name={'close-circle'}
                   size={25}
-                  style={{ marginStart: 10, height: 20 }}
+                  style={{ marginStart: 10, height: 25 }}
                   color={colors.lightGrey}
                 />
               </TouchableOpacity>
@@ -219,12 +209,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  subtitleContainer: {
-    width: '100%',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
+
   start: {
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -243,8 +228,8 @@ const styles = StyleSheet.create({
     height: 45,
     lineHeight: 24,
     fontSize: 18,
-    borderBottomWidth: 0,
     paddingVertical: 0,
+    flex: 1,
   },
   img: {
     width: LOGO_WIDTH,

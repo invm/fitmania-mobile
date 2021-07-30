@@ -4,14 +4,16 @@
       "register": "Register",
       "login": "Login",
       "confirmation": "Confirmation",
-      "profile": "Create profile",
       "home": "Home",
       "profile": "Profile",
       "search": "Search",
       "create_post": "Create post",
       "create_event": "Create event",
       "post_filters": "Post filters",
-      "edit_profile": "Edit profile"
+      "edit_profile": "Edit profile",
+      "user_profile": "User profile",
+      "groups": "Groups",
+      "friends": "Friends"
     },
     "common": {
       "error": "Error",

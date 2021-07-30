@@ -5,6 +5,7 @@ import {
   FlatList,
   Modal,
   StyleSheet,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import IPost from '../../../interfaces/Post';
@@ -419,7 +420,11 @@ const Post = ({ post, userId, listView }: PostProps) => {
       )}
       <View key={post._id} style={styles.postContainer}>
         <View style={styles.postHeader}>
-          <View style={styles.postHeaderLeft}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('UserProfile', { userId: post.author._id });
+            }}
+            style={styles.postHeaderLeft}>
             <View style={styles.image}>
               <BlurredImage
                 uri={MEDIA_URL + post.author.image}
@@ -433,7 +438,7 @@ const Post = ({ post, userId, listView }: PostProps) => {
               </Text>
               <Text variant="medium12">{formatLongDate(post.created_at)}</Text>
             </View>
-          </View>
+          </TouchableOpacity>
           {listView ? (
             <Touchable
               onPress={() => {

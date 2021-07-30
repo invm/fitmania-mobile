@@ -15,6 +15,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 const ProfileScreenStack = createStackNavigator<HomeRoutes>();
 const HomeScreenStack = createStackNavigator<HomeRoutes>();
 const SearchScreenStack = createStackNavigator<HomeRoutes>();
+const GroupsScreenStack = createStackNavigator<HomeRoutes>();
+const FriendsScreenStack = createStackNavigator<HomeRoutes>();
 const HomeStack = createStackNavigator<HomeRoutes>();
 const HomeTab = createBottomTabNavigator<AppRoutes>();
 
@@ -75,6 +77,14 @@ const HomeNavigator = () => {
         }}
         component={SCREENS.EditProfile}
       />
+      <HomeStack.Screen
+        name="UserProfile"
+        options={{
+          headerShown: true,
+          header: () => null,
+        }}
+        component={SCREENS.UserProfile}
+      />
     </HomeStack.Navigator>
   );
 };
@@ -123,6 +133,7 @@ function HomeStackScreen() {
     </HomeScreenStack.Navigator>
   );
 }
+
 function SearchStackScreen() {
   return (
     <SearchScreenStack.Navigator>
@@ -134,6 +145,36 @@ function SearchStackScreen() {
         }}
       />
     </SearchScreenStack.Navigator>
+  );
+}
+
+function GroupsStackScreen() {
+  const { t } = useTranslation();
+  return (
+    <GroupsScreenStack.Navigator>
+      <GroupsScreenStack.Screen
+        name="Groups"
+        component={SCREENS.Groups}
+        options={{
+          header: () => <Header title={t('screens.groups')} />,
+        }}
+      />
+    </GroupsScreenStack.Navigator>
+  );
+}
+
+function FriendsStackScreen() {
+  const { t } = useTranslation();
+  return (
+    <FriendsScreenStack.Navigator>
+      <FriendsScreenStack.Screen
+        name="Friends"
+        component={SCREENS.Friends}
+        options={{
+          header: () => <Header title={t('screens.friends')} />,
+        }}
+      />
+    </FriendsScreenStack.Navigator>
   );
 }
 
@@ -186,6 +227,46 @@ const HomeTabsNavigator = () => {
           ),
         }}
         component={HomeStackScreen}
+      />
+      <HomeTab.Screen
+        name="Groups"
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              size={25}
+              name={'earth-outline'}
+              color={focused ? colors.primary : colors.dark}
+            />
+          ),
+          tabBarLabel: ({ focused }) => (
+            <Text
+              variant="medium12"
+              color={focused ? colors.primary : colors.dark}>
+              {t('screens.groups')}
+            </Text>
+          ),
+        }}
+        component={GroupsStackScreen}
+      />
+      <HomeTab.Screen
+        name="Friends"
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              size={25}
+              name={'people-outline'}
+              color={focused ? colors.primary : colors.dark}
+            />
+          ),
+          tabBarLabel: ({ focused }) => (
+            <Text
+              variant="medium12"
+              color={focused ? colors.primary : colors.dark}>
+              {t('screens.friends')}
+            </Text>
+          ),
+        }}
+        component={FriendsStackScreen}
       />
       <HomeTab.Screen
         name="Search"
