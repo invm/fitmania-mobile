@@ -5,12 +5,14 @@ import thunk from 'redux-thunk';
 import * as Reducers from './reducers';
 
 const root = combineReducers({
+  groups: Reducers.groups,
   user: Reducers.user,
   search: Reducers.search,
   posts: Reducers.posts,
 });
 
 export const RootState = {
+  groups: Reducers.groupsInitialState,
   user: Reducers.userInitialState,
   search: Reducers.searchInitialState,
   posts: Reducers.postsInitialState,

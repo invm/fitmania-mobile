@@ -21,7 +21,7 @@ import {
 import { Text, BlurredImage, Touchable, Input } from '../../../components';
 import LinearGradient from 'react-native-linear-gradient';
 import { useTranslation } from 'react-i18next';
-import { sports } from './PostsFilters';
+import { sports } from './SportFilters';
 import moment from 'moment';
 import { DATE_TIME_FORMAT, showMessage } from '../../../utils/utils';
 import Collapsible from 'react-native-collapsible';

@@ -22,7 +22,7 @@ import HomeHeaderButtons from './components/HomeHeaderButtons';
 import Collapsible from 'react-native-collapsible';
 
 import Post from './components/Post';
-import PostsFilters from './components/PostsFilters';
+import SportFilters from './components/SportFilters';
 
 export const TAB_BAR_HEIGHT = 50;
 
@@ -97,7 +97,7 @@ const Home = ({ navigation }: StackNavigationProps<HomeRoutes, 'Home'>) => {
           <HomeHeaderButtons {...{ navigation }} />
         </Collapsible>
         <Collapsible collapsed={filtersCollapsed}>
-          <PostsFilters {...{ sportsFilter, handleSportPress }} />
+          <SportFilters {...{ sportsFilter, handleSportPress }} />
         </Collapsible>
         <FlatList
           data={posts}

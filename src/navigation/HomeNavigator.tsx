@@ -48,6 +48,23 @@ const HomeNavigator = () => {
         component={SCREENS.PostScreen}
       />
       <HomeStack.Screen
+        name="GroupDetails"
+        options={{
+          headerShown: true,
+          header: () => <Header canGoBack={true} />,
+        }}
+        component={SCREENS.GroupDetails}
+      />
+      <HomeStack.Screen
+        name="CreateGroup"
+        options={{
+          headerShown: true,
+          // TODO:
+          header: () => <Header canGoBack={true} title="Create group" />,
+        }}
+        component={SCREENS.CreateGroup}
+      />
+      <HomeStack.Screen
         name="CreatePost"
         options={{
           headerShown: true,

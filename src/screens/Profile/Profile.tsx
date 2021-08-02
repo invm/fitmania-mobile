@@ -24,7 +24,7 @@ import { RootState } from '../../redux';
 import { getUsersPosts, POSTS_LIMIT } from '../../redux/actions';
 import { DATE_FORMAT } from '../../utils/utils';
 import Post from '../Home/components/Post';
-import { sports } from '../Home/components/PostsFilters';
+import { sports } from '../Home/components/SportFilters';
 
 interface ProfileProps {}
 

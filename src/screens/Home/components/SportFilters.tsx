@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { colors, PADDING, Text } from '../../../components';
 import { IObject } from '../../../interfaces/Common';
 
-interface PostsFiltersProps {
+interface SportFiltersProps {
   sportsFilter: string[];
   handleSportPress: (sport: string) => void;
 }
@@ -19,10 +19,10 @@ export const sports: IObject = {
   Tennis: 'tennisball-outline',
 };
 
-const PostsFilters = ({
+const SportFilters = ({
   sportsFilter,
   handleSportPress,
-}: PostsFiltersProps) => {
+}: SportFiltersProps) => {
   return (
     <View style={styles.container}>
       {Object.keys(sports).map((sport, i) => (
@@ -54,7 +54,7 @@ const PostsFilters = ({
   );
 };
 
-export default PostsFilters;
+export default SportFilters;
 
 const styles = StyleSheet.create({
   container: {

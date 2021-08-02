@@ -25,6 +25,8 @@ export type HomeRoutes = {
   Search: undefined;
   Profile: undefined;
   Groups: undefined;
+  GroupDetails: { groupId: string };
+  CreateGroup: undefined;
   Friends: undefined;
   PostScreen: { postId: string };
   CreateEvent: undefined;

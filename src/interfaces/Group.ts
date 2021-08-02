@@ -1,9 +1,12 @@
+import { IUserMin } from './User';
+
 interface IGroup {
-  title?: string;
-  sport?: string;
+  _id: string;
+  title: string;
+  sport: string;
   description?: string;
-  admin?: string;
-  users?: string[];
-  created_at?: Date;
+  admin: IUserMin;
+  users: IUserMin[];
+  created_at: Date;
 }
 export default IGroup;

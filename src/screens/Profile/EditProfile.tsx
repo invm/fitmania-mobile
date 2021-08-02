@@ -20,7 +20,7 @@ import {
   PADDING,
   Text,
 } from '../../components';
-import { sports } from '../Home/components/PostsFilters';
+import { sports } from '../Home/components/SportFilters';
 import { MEDIA_URL } from '../../../env';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useTranslation } from 'react-i18next';
