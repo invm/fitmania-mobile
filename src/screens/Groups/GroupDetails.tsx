@@ -12,16 +12,23 @@ import {
 } from '../../redux/actions/groups';
 import { HomeRoutes, StackNavigationProps } from '../../navigation';
 import { showMessage } from '../../utils/utils';
-import { ActivityIndicator, Alert, View } from 'react-native';
 import {
-  Card,
+  ActivityIndicator,
+  Alert,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+} from 'react-native';
+import {
   colors,
   Header,
   Text,
   FocusAwareStatusBar,
   PADDING,
+  BlurredImage,
 } from '../../components';
 import SmallButton from '../../components/SmallButton';
+import { MEDIA_URL } from '../../../env';
 
 const GroupDetails = ({
   navigation,
@@ -149,37 +156,32 @@ const GroupDetails = ({
               <Text variant="semibold16" color={colors.darkGrey}>
                 Group athletes
               </Text>
-              {/* <View>
+              <View>
                 {group.users.map(user => (
-                  <View key={user._id} >
-                    <Card >
-                      <View
-                        avatar={
-                          <Link to={`/user/${user._id}`}>
-                            <Avatar
-                              src={`${process.env.MEDIA}${user?.avatar}`}
-                              aria-label="user initials"
-                              className={classes.avatar}>
-                              {user?.name?.[0].toUpperCase()}
-                            </Avatar>
-                          </Link>
-                        }
-                        title={
-                          <Link to={`/user/${user._id}`}>
-                            {user.name} {user.lastname}
-                          </Link>
-                        }
-                        subheader={
-                          group?.admin._id === user._id ? 'Group admin' : ''
-                        }
-												>
-
-												</View>
-                    </Card>
+                  <View key={user._id} style={styles.user}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate('UserProfile', {
+                          userId: user._id,
+                        });
+                      }}
+                      style={styles.postHeaderLeft}>
+                      <View style={styles.image}>
+                        <BlurredImage
+                          uri={MEDIA_URL + user.image}
+                          width={50}
+                          height={50}
+                        />
+                      </View>
+                      <View style={styles.headerText}>
+                        <Text variant="bold18">
+                          {user.name} {user.lastname}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
                   </View>
                 ))}
-              </View> */}
-
+              </View>
               {/* TODO: move to i18n */}
               <Text variant="semibold16" color={colors.darkGrey}>
                 Group posts
@@ -199,5 +201,22 @@ const GroupDetails = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  user: {
+    padding: 4,
+    marginVertical: 8,
+  },
+  postHeaderLeft: { flexDirection: 'row' },
+  image: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    overflow: 'hidden',
+    borderColor: colors.grey,
+    borderWidth: 1,
+  },
+  headerText: { paddingLeft: PADDING / 2, justifyContent: 'center' },
+});
 
 export default GroupDetails;

@@ -4,24 +4,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux';
 import { FlatList, View, StyleSheet, RefreshControl } from 'react-native';
 import {
-  getFriendRequests,
-  resetFriendRequests,
+  getFriendsSuggestions,
+  resetSuggestions,
 } from '../../redux/actions/friends';
 import { colors, FocusAwareStatusBar, ItemSeparatorComponent, PADDING } from '../../components';
-import FriendRequest from './components/FriendRequest';
+import Friend from './components/Friend';
 
-const Friends = () => {
+const FriendsSuggestions = () => {
   const dispatch = useDispatch();
-  const { requests, requestsExhausted, requestsLoading } = useSelector(
+  const { friendsSuggestions, friendsSuggestionsLoading } = useSelector(
     (state: typeof RootState) => state.friends,
   );
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     (async () => {
-      if (!requestsExhausted && !requestsLoading) {
-        await dispatch(getFriendRequests());
-      }
+      if (!friendsSuggestions.length && !friendsSuggestionsLoading)
+        await dispatch(getFriendsSuggestions());
     })();
     // eslint-disable-next-line
   }, []);
@@ -33,7 +32,7 @@ const Friends = () => {
         barStyle="dark-content"
       />
       <FlatList
-        data={requests}
+        data={friendsSuggestions}
         contentContainerStyle={{ flex: 1 }}
         keyExtractor={({ _id }) => _id}
         ItemSeparatorComponent={ItemSeparatorComponent}
@@ -42,14 +41,14 @@ const Friends = () => {
             refreshing={refreshing}
             onRefresh={async () => {
               setRefreshing(true);
-              await dispatch(resetFriendRequests());
-              await dispatch(getFriendRequests());
+              await dispatch(resetSuggestions());
+              await dispatch(getFriendsSuggestions());
               setRefreshing(false);
             }}
             colors={[colors.primary]}
           />
         }
-        renderItem={({ item: request }) => <FriendRequest {...{ request }} />}
+        renderItem={({ item: user }) => <Friend {...{ user }} suggestion />}
       />
     </View>
   );
@@ -62,4 +61,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Friends;
+export default FriendsSuggestions;

@@ -1,13 +1,7 @@
 import moment from 'moment';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  ActivityIndicator,
-  FlatList,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useSelector } from 'react-redux';
 import { MEDIA_URL } from '../../../env';
@@ -28,8 +22,6 @@ import { getUser, getUsersPosts, POSTS_LIMIT } from '../../redux/actions';
 import { DATE_FORMAT } from '../../utils/utils';
 import Post from '../Home/components/Post';
 import { sports } from '../Home/components/SportFilters';
-
-interface UserProfileProps {}
 
 const UserProfile = ({
   route,

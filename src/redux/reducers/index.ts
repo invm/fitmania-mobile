@@ -1,4 +1,8 @@
 export {
+  default as friends,
+  initialState as friendsInitialState,
+} from './friends';
+export {
   default as groups,
   initialState as groupsInitialState,
 } from './groups';

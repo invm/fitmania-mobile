@@ -5,7 +5,6 @@ import { showMessage } from '../../utils/utils';
 import { useDispatch } from 'react-redux';
 import { ActivityIndicator, View } from 'react-native';
 import { Button, colors, Input, Text } from '../../components';
-import { sports } from '../Home/components/SportFilters';
 import DropDownPicker, { ValueType } from 'react-native-dropdown-picker';
 import { useTranslation } from 'react-i18next';
 

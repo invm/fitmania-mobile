@@ -1,12 +1,12 @@
 import React from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import Text from './Text';
 import Card from './Card';
 import Input from './Input';
-import { CONTENT_WIDTH, PADDING, colors, width } from './Theme';
+import { PADDING, colors, width } from './Theme';
 import { setQuery, search } from '../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { CLEAR_SEARCH, SET_INPUT } from '../redux/types/search';

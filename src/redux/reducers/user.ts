@@ -23,6 +23,8 @@ export const initialState: userInitialState = {
     name: '',
     lastname: '',
     email: '',
+    preferable: [],
+    undesirable: [],
   },
 };
 export default function (state = initialState, action: Action) {

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { colors, FocusAwareStatusBar, PADDING, Text } from '../../components';
+import { colors, FocusAwareStatusBar, PADDING } from '../../components';
 import { HomeRoutes, StackNavigationProps } from '../../navigation';
 import { RootState } from '../../redux';
 import { getPost, resetSinglePost } from '../../redux/actions/posts';
@@ -15,7 +15,7 @@ const PostScreen = ({
 }: StackNavigationProps<HomeRoutes, 'PostScreen'>) => {
   const {
     user: { user },
-    posts: { singlePost, singlePostLoading, singlePostId },
+    posts: { singlePost, singlePostLoading },
   } = useSelector((state: typeof RootState) => state);
   const dispatch = useDispatch();
 

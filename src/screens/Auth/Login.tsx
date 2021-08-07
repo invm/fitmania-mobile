@@ -59,7 +59,6 @@ const Login = ({ navigation }: StackNavigationProps<AuthRoutes, 'Login'>) => {
           errors,
           setFieldTouched,
           isValid,
-          dirty,
           setFieldValue,
         }) => (
           <>

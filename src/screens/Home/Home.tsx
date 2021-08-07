@@ -31,7 +31,7 @@ const Home = ({ navigation }: StackNavigationProps<HomeRoutes, 'Home'>) => {
   const dispatch = useDispatch();
   const {
     user: { user },
-    posts: { posts, postsLoading, postsExhausted, offset },
+    posts: { posts, postsLoading, postsExhausted },
   } = useSelector((state: typeof RootState) => state);
   const [buttonsCollapsed, setButtonsCollapsed] = useState(true);
   const [filtersCollapsed, setFiltersCollapsed] = useState(true);

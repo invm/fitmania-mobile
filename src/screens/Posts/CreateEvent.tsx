@@ -114,7 +114,7 @@ const CreateEvent = ({
   });
 
   const handleGoogleAutocompletePress = (
-    data: GooglePlaceData,
+    _: GooglePlaceData,
     details: GooglePlaceDetail | null,
     setFieldValue: (
       field: string,

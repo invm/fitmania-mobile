@@ -12,7 +12,6 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {
-  Button,
   colors,
   FocusAwareStatusBar,
   Header,
@@ -88,7 +87,7 @@ const Groups = ({ navigation }: StackNavigationProps<HomeRoutes, 'Groups'>) => {
           backgroundColor={colors.white}
         />
         <>
-          <View>
+          <View style={{ marginBottom: PADDING }}>
             <SmallButton
               title="Create group"
               onPress={() => navigation.navigate('CreateGroup')}
@@ -146,6 +145,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#eee',
     flex: 1,
+    padding: PADDING,
   },
 
   loader: {

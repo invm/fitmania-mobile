@@ -1,17 +1,11 @@
-import React, { createRef, useState } from 'react';
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native';
+import React, { createRef } from 'react';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { BORDER_RADIUS, colors, PADDING } from './Theme';
 import ActionSheet from 'react-native-actions-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Touchable from './Touchable';
 import Text from './Text';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 import { openImagePickerAsync } from '../utils/utils';
 import Icon from 'react-native-vector-icons/Ionicons';
 import BlurredImage from './BlurredImage';
@@ -33,7 +27,6 @@ interface ImageUploadProps {
 const ImageUpload = ({ img: { uri }, setImg }: ImageUploadProps) => {
   const { bottom } = useSafeAreaInsets();
   const { t } = useTranslation();
-  const dispatch = useDispatch();
 
   const open = () => ref.current?.setModalVisible(true);
   const close = () => ref.current?.hide();

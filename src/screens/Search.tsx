@@ -53,7 +53,7 @@ const Search = ({}: StackNavigationProps<HomeRoutes, 'Search'>) => {
     };
   }) => {
     const {
-      _id,
+      // _id,
       name,
       tagline,
       primaryImage: { path },

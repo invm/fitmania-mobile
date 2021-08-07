@@ -5,6 +5,7 @@ export { default as BlurredImage } from './BlurredImage';
 export { default as Header } from './Header';
 export { default as ImageUpload } from './ImageUpload';
 export { default as Input } from './Input';
+export { default as ItemSeparatorComponent } from './ItemSeparatorComponent';
 export { default as Text } from './Text';
 export { default as Button } from './Button';
 export { default as ScreenWrapper } from './ScreenWrapper';

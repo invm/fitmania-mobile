@@ -4,11 +4,12 @@ import {
   StackHeaderProps,
 } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 import * as SCREENS from '../screens';
 import { useTranslation } from 'react-i18next';
 import { colors, Text, Header } from '../components';
-import navigation, { AppRoutes, HomeRoutes } from '.';
+import { AppRoutes, HomeRoutes } from '.';
 import { TAB_BAR_HEIGHT } from '../screens/Home/Home';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -19,6 +20,7 @@ const GroupsScreenStack = createStackNavigator<HomeRoutes>();
 const FriendsScreenStack = createStackNavigator<HomeRoutes>();
 const HomeStack = createStackNavigator<HomeRoutes>();
 const HomeTab = createBottomTabNavigator<AppRoutes>();
+const FriendsTabs = createMaterialTopTabNavigator<HomeRoutes>();
 
 const HomeNavigator = () => {
   const { t } = useTranslation();
@@ -135,7 +137,6 @@ function ProfileStackScreen() {
 }
 
 function HomeStackScreen() {
-  const { t } = useTranslation();
   return (
     <HomeScreenStack.Navigator headerMode="screen">
       <HomeScreenStack.Screen
@@ -186,7 +187,7 @@ function FriendsStackScreen() {
     <FriendsScreenStack.Navigator>
       <FriendsScreenStack.Screen
         name="Friends"
-        component={SCREENS.Friends}
+        component={FriendsTabsNavigator}
         options={{
           header: () => <Header title={t('screens.friends')} />,
         }}
@@ -194,6 +195,25 @@ function FriendsStackScreen() {
     </FriendsScreenStack.Navigator>
   );
 }
+
+const FriendsTabsNavigator = () => {
+  // TODO: move texts into i18n
+  return (
+    <FriendsTabs.Navigator>
+      <FriendsTabs.Screen name="Friends" component={SCREENS.Friends} />
+      <FriendsTabs.Screen
+        name="FriendsRequests"
+        options={{ title: 'requests' }}
+        component={SCREENS.FriendRequests}
+      />
+      <FriendsTabs.Screen
+        name="FriendsSuggestions"
+        options={{ title: 'suggestions' }}
+        component={SCREENS.FriendsSuggestions}
+      />
+    </FriendsTabs.Navigator>
+  );
+};
 
 const HomeTabsNavigator = () => {
   const { t } = useTranslation();
