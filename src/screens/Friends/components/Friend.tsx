@@ -53,6 +53,8 @@ const Friend = ({
     );
   };
 
+	// TODO: adjust ui for search view
+
   return (
     <View style={styles.post}>
       <View style={styles.header}>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
@@ -7,10 +7,8 @@ import Text from './Text';
 import Card from './Card';
 import Input from './Input';
 import { PADDING, colors, width } from './Theme';
-import { setQuery, search } from '../redux/actions';
+import { search } from '../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { CLEAR_SEARCH, SET_INPUT } from '../redux/types/search';
-import { RootState } from '../redux';
 export const assets = [require('../../assets/images/logo.png')];
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -49,17 +47,14 @@ const Header = ({
   const navigation = useNavigation();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const {
-    search: { query },
-  } = useSelector((state: typeof RootState) => state);
+  const [query, setQuery] = useState('');
 
   const handleSearchQuery = (text: string) => {
     clearTimeout(searchTimeout);
     if (text.length) {
-      dispatch(setQuery(text));
-      dispatch({ type: SET_INPUT, payload: true });
+      setQuery(text.replace(/\W/, ''));
       searchTimeout = setTimeout(() => {
-        dispatch(search(text, 0));
+        dispatch(search(text));
       }, 500);
     } else handleClearQuery();
   };
@@ -67,7 +62,6 @@ const Header = ({
   const handleClearQuery = () => {
     clearTimeout(searchTimeout);
     dispatch(setQuery(''));
-    dispatch({ type: CLEAR_SEARCH, payload: [] });
   };
 
   let backgroundColor;

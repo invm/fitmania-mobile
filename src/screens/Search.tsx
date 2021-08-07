@@ -1,104 +1,30 @@
 import React from 'react';
 import {
   View,
-  FlatList,
   I18nManager,
-  RefreshControl,
   StyleSheet,
-  TouchableOpacity,
-  Image,
+  ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import { HomeRoutes, StackNavigationProps } from '../navigation';
-import {
-  BORDER_RADIUS,
-  colors,
-  height,
-  PADDING,
-  width,
-} from '../components/Theme';
-import { Text, Card, FocusAwareStatusBar } from '../components';
-import { useTranslation } from 'react-i18next';
+import { BORDER_RADIUS, colors, PADDING } from '../components/Theme';
+import { FocusAwareStatusBar } from '../components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux';
-import { search } from '../redux/actions';
-import { API_URL } from '../../env';
+import Friend from './Friends/components/Friend';
+import GroupListItem from './Groups/components/GroupListItem';
 
-const IMAGE_WIDTH = 90;
 const IMAGE_HEIGHT = 90;
 
 const Search = ({}: StackNavigationProps<HomeRoutes, 'Search'>) => {
-  const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const { loading, results, inputDirty, searchExhausted, query, page } =
-    useSelector((state: typeof RootState) => state.search);
-
-  const expandList = async () => {
-    if (!searchExhausted && query.length) {
-      dispatch(search(query, page));
-    }
-  };
-
-  const renderItem = ({
-    item,
-  }: {
-    item: {
-      name: string;
-      tagline: string;
-      _id: string;
-      image: string;
-      primaryImage: {
-        blurHash: string;
-        path: string;
-      };
-    };
-  }) => {
-    const {
-      // _id,
-      name,
-      tagline,
-      primaryImage: { path },
-    } = item;
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          // return navigation.navigate('Business', {
-          //   _id,
-          //   blurHash,
-          // });
-        }}>
-        <View style={{ paddingHorizontal: PADDING }}>
-          <Card style={styles.card}>
-            <View style={styles.container}>
-              <Image
-                style={[
-                  {
-                    width: IMAGE_WIDTH,
-                    height: IMAGE_HEIGHT,
-                    aspectRatio: width / height,
-                    resizeMode: 'cover',
-                  },
-                ]}
-                source={{ uri: API_URL + path }}
-              />
-            </View>
-
-            <View style={styles.name}>
-              <Text variant="bold16" lines={1}>
-                {name}
-              </Text>
-              <Text variant="semibold16" lines={1}>
-                {tagline}
-              </Text>
-            </View>
-          </Card>
-        </View>
-      </TouchableOpacity>
-    );
-  };
+  const {
+    user: { user },
+    search: { usersLoading, users, groups, groupsLoading },
+  } = useSelector((state: typeof RootState) => state);
 
   return (
-    <View
-      style={{
+    <ScrollView
+      contentContainerStyle={{
         flex: 1,
         backgroundColor: colors.white,
       }}>
@@ -106,41 +32,26 @@ const Search = ({}: StackNavigationProps<HomeRoutes, 'Search'>) => {
         backgroundColor={colors.white}
         barStyle="dark-content"
       />
-      <>
-        <FlatList
-          data={results}
-          contentContainerStyle={{ flex: 1, paddingTop: 10 }}
-          renderItem={renderItem}
-          ListEmptyComponent={() => {
-            if (inputDirty && !loading)
-              return (
-                <>
-                  <View style={styles.emptyList}>
-                    <Text variant="semibold16">
-                      {t('common.no_results_found')}
-                    </Text>
-                  </View>
-                </>
-              );
-            return null;
-          }}
-          refreshControl={
-            <RefreshControl
-              refreshing={loading}
-              onRefresh={() => {
-                if (query.length) dispatch(search(query, 0));
-              }}
-              colors={['red']}
-            />
-          }
-          keyExtractor={item => item._id}
-          scrollEnabled
-          showsVerticalScrollIndicator={false}
-          onEndReachedThreshold={0.6}
-          onEndReached={expandList}
-        />
-      </>
-    </View>
+      <View style={{ padding: PADDING }}>
+        {usersLoading && (
+          <View style={{ paddingTop: 50 }}>
+            <ActivityIndicator size="large" color={colors.primary} />
+          </View>
+        )}
+        {/* {!usersLoading && !users.length && !groups.length && (
+          <View style={{ paddingTop: 50, textAlign: 'center' }}>
+            <h3>No result found</h3>
+          </View>
+        )} */}
+        {!usersLoading && users.map((user, key) => <Friend {...{ user }} />)}
+      </View>
+      <View style={{ padding: PADDING }}>
+        {!groupsLoading &&
+          groups.map((group, key) => {
+            return <GroupListItem {...{ group, user }} />;
+          })}
+      </View>
+    </ScrollView>
   );
 };
 
