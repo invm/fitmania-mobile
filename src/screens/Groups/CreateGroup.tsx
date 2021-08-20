@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { HomeRoutes, StackNavigationProps } from '../../navigation';
-import { createGroup, resetGroups } from '../../redux/actions/groups';
+import {
+  createGroup,
+  getGroups,
+  resetGroups,
+} from '../../redux/actions/groups';
 import { showMessage } from '../../utils/utils';
 import { useDispatch } from 'react-redux';
 import { ActivityIndicator, View } from 'react-native';
-import { Button, colors, Input, Text } from '../../components';
+import { Button, colors, Input, PADDING, Text } from '../../components';
 import DropDownPicker, { ValueType } from 'react-native-dropdown-picker';
 import { useTranslation } from 'react-i18next';
 
@@ -13,7 +17,6 @@ const CreateGroup = ({
 }: StackNavigationProps<HomeRoutes, 'CreateGroup'>) => {
   const [state, setState] = useState({
     title: '',
-    sport: '',
   });
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
@@ -33,9 +36,10 @@ const CreateGroup = ({
   const handleCreateGroup = async () => {
     if (state.title.length > 0 && sport) {
       setLoading(true);
-      await createGroup(state);
+      await createGroup({ title: state.title, sport: sport.toString() });
       setLoading(false);
       dispatch(resetGroups());
+      dispatch(getGroups([]));
       navigation.navigate('Groups');
     } else {
       // TODO: move texts into i18n
@@ -46,13 +50,16 @@ const CreateGroup = ({
   // TODO: move text into i18n
 
   return (
-    <View>
-      <View style={{ paddingTop: 20 }}>
+    <View style={{ flex: 1, padding: PADDING }}>
+      <View
+        style={{ flex: 1, paddingTop: 20, justifyContent: 'space-between' }}>
         <View>
           <View>
             {loading && <ActivityIndicator size="large" />}
+
             <Input
               value={state.title}
+              placeholder={t('components.group.group_name')}
               onChangeText={e => setState(s => ({ ...s, title: e }))}
             />
             <View>
@@ -76,7 +83,9 @@ const CreateGroup = ({
           </View>
         </View>
         <Button disabled={loading} onPress={handleCreateGroup}>
-          <Text>Create Group</Text>
+          <Text variant="semibold16" color={colors.white}>
+            Create Group
+          </Text>
         </Button>
       </View>
     </View>

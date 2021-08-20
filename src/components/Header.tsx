@@ -7,7 +7,7 @@ import Text from './Text';
 import Card from './Card';
 import Input from './Input';
 import { PADDING, colors, width } from './Theme';
-import { search } from '../redux/actions';
+import { clearSearch, search } from '../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 export const assets = [require('../../assets/images/logo.png')];
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -61,7 +61,8 @@ const Header = ({
 
   const handleClearQuery = () => {
     clearTimeout(searchTimeout);
-    dispatch(setQuery(''));
+    setQuery('');
+    dispatch(clearSearch());
   };
 
   let backgroundColor;

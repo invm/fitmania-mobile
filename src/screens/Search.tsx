@@ -9,7 +9,7 @@ import {
 import { HomeRoutes, StackNavigationProps } from '../navigation';
 import { BORDER_RADIUS, colors, PADDING } from '../components/Theme';
 import { FocusAwareStatusBar } from '../components';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../redux';
 import Friend from './Friends/components/Friend';
 import GroupListItem from './Groups/components/GroupListItem';
@@ -48,7 +48,7 @@ const Search = ({}: StackNavigationProps<HomeRoutes, 'Search'>) => {
       <View style={{ padding: PADDING }}>
         {!groupsLoading &&
           groups.map((group, key) => {
-            return <GroupListItem {...{ group, user }} />;
+            return <GroupListItem key={key} {...{ group, user }} />;
           })}
       </View>
     </ScrollView>
