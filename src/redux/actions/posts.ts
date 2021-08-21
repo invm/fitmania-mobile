@@ -512,3 +512,23 @@ export const removeFromRejectedList =
       });
     }
   };
+export const getGroupPosts = async (id: string, offset: number) => {
+  let requestParams = {
+    method: Methods.GET,
+    endpoint: `/groups/posts/${id}?offset=${offset}&limit=${POSTS_LIMIT}`,
+  };
+
+  try {
+    let res = await Request(store.dispatch, requestParams);
+    return {
+      data: res.data.data,
+      postsExhausted: res.data.data.length < POSTS_LIMIT,
+    };
+  } catch (error) {
+    showMessage(i18n.t('common.error'), error?.message, 'error');
+    return {
+      data: [],
+      postsExhausted: true,
+    };
+  }
+};

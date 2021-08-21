@@ -29,6 +29,9 @@ import {
 } from '../../components';
 import SmallButton from '../../components/SmallButton';
 import { MEDIA_URL } from '../../../env';
+import { getGroupPosts } from '../../redux/actions';
+import IPost from '../../interfaces/Post';
+import Post from '../Home/components/Post';
 
 const GroupDetails = ({
   navigation,
@@ -38,7 +41,10 @@ const GroupDetails = ({
   const [group, setGroup] = useState({} as IGroup);
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  // TODO: pull user from redux and redirect to own profile in case the user is listed
+  const [offset, setOffset] = useState(0);
+  const [groupPosts, setGroupPosts] = useState<IPost[]>([]);
+  const [exhausted, setExhausted] = useState(false);
+  const [groupPostsLoading, setGroupPostsLoading] = useState(false);
 
   const handleJoinGroup = async (groupId: string) => {
     setLoading(true);
@@ -59,6 +65,12 @@ const GroupDetails = ({
     setLoading(true);
     let _group = await getGroup(id);
     if (_group) setGroup(_group);
+    setGroupPostsLoading(true);
+    let _posts = await getGroupPosts(id, 0);
+    setGroupPosts(_posts.data);
+    setExhausted(_posts.postsExhausted);
+    if (!_posts.postsExhausted) setOffset(s => s++);
+    setGroupPostsLoading(false);
     setLoading(false);
   };
 
@@ -98,6 +110,17 @@ const GroupDetails = ({
         header: () => <Header canGoBack title={group.title} />,
       });
   }, [group?.title]);
+
+  const expandList = async () => {
+    if (!exhausted) {
+      setGroupPostsLoading(true);
+      let _posts = await getGroupPosts(group._id, offset);
+      setGroupPosts([...groupPosts, ..._posts.data]);
+      setExhausted(_posts.postsExhausted);
+      if (!_posts.postsExhausted) setOffset(s => s++);
+      setGroupPostsLoading(false);
+    }
+  };
 
   return (
     <View>
@@ -157,25 +180,27 @@ const GroupDetails = ({
                 Group athletes
               </Text>
               <View>
-                {group.users.map(user => (
-                  <View key={user._id} style={styles.user}>
+                {group.users.map(_user => (
+                  <View key={_user._id} style={styles.user}>
                     <TouchableOpacity
                       onPress={() => {
-                        navigation.navigate('UserProfile', {
-                          userId: user._id,
-                        });
+                        if (user._id !== _user._id)
+                          navigation.navigate('UserProfile', {
+                            userId: _user._id,
+                          });
+                        navigation.navigate('Profile');
                       }}
                       style={styles.postHeaderLeft}>
                       <View style={styles.image}>
                         <BlurredImage
-                          uri={MEDIA_URL + user.image}
+                          uri={MEDIA_URL + _user.image}
                           width={50}
                           height={50}
                         />
                       </View>
                       <View style={styles.headerText}>
                         <Text variant="bold18">
-                          {user.name} {user.lastname}
+                          {_user.name} {_user.lastname}
                         </Text>
                       </View>
                     </TouchableOpacity>
@@ -186,14 +211,16 @@ const GroupDetails = ({
               <Text variant="semibold16" color={colors.darkGrey}>
                 Group posts
               </Text>
-              {/* <View >
+              <View>
                 <View>
-                  {groupPostsLoading && <Spinner />}
+                  {groupPostsLoading && <ActivityIndicator />}
                   {!groupPostsLoading &&
                     groupPosts.length > 0 &&
-                    groupPosts.map((post) => <PostItem key={post._id} postItem={post} />)}
+                    groupPosts.map(post => (
+                      <Post key={post._id} {...{ post, userId: user._id }} />
+                    ))}
                 </View>
-              </View> */}
+              </View>
             </View>
           </>
         )}
