@@ -77,6 +77,10 @@ const Home = ({ navigation }: StackNavigationProps<HomeRoutes, 'Home'>) => {
       header: () => (
         <Header
           rightIcons={[
+            {
+              icon: 'notifications',
+              action: () => navigation.navigate('Notifications'),
+            },
             { icon: 'options-outline', action: () => toggleFilters() },
             { icon: 'paper-plane-outline', action: () => toggleButtons() },
           ]}

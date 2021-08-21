@@ -27,9 +27,10 @@ export type HomeRoutes = {
   Groups: undefined;
   GroupDetails: { groupId: string };
   CreateGroup: undefined;
-  Friends: undefined;
+  Friends: { screen?: keyof HomeRoutes };
   FriendsRequests: undefined;
   FriendsSuggestions: undefined;
+  Notifications: undefined;
   PostScreen: { postId: string };
   CreateEvent: undefined;
   CreatePost: undefined;

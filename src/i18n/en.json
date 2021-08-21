@@ -13,9 +13,13 @@
       "edit_profile": "Edit profile",
       "user_profile": "User profile",
       "groups": "Groups",
-      "friends": "Friends"
+      "friends": "Friends",
+      "notifications": "Notifications"
     },
     "common": {
+			"pull_down_to_refresh":"Pull down to refresh",
+      "view": "View",
+      "dismiss": "Dismiss",
       "error": "Error",
       "success": "Success",
       "confirm": "Confirm",

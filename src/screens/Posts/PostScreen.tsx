@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { colors, FocusAwareStatusBar, PADDING } from '../../components';
+import { colors, FocusAwareStatusBar, Header, PADDING } from '../../components';
 import { HomeRoutes, StackNavigationProps } from '../../navigation';
 import { RootState } from '../../redux';
 import { getPost, resetSinglePost } from '../../redux/actions/posts';
@@ -29,6 +29,19 @@ const PostScreen = ({
       dispatch(resetSinglePost());
     };
   }, [postId, dispatch]);
+
+  useEffect(() => {
+    if (singlePost?.author?.name)
+      navigation.setOptions({
+        headerShown: true,
+        header: () => (
+          <Header
+					canGoBack
+            title={`${singlePost.author.name} ${singlePost.author.lastname}`}
+          />
+        ),
+      });
+  }, [singlePost]);
 
   return (
     <View style={styles.container}>

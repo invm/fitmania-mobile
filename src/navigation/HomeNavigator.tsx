@@ -45,6 +45,7 @@ const HomeNavigator = () => {
       <HomeStack.Screen
         name="PostScreen"
         options={{
+          headerShown: true,
           header: () => <Header canGoBack={true} />,
         }}
         component={SCREENS.PostScreen}
@@ -104,6 +105,17 @@ const HomeNavigator = () => {
         }}
         component={SCREENS.UserProfile}
       />
+      <HomeStack.Screen
+        name="Notifications"
+        options={{
+          gestureEnabled: false,
+          headerShown: true,
+          header: () => (
+            <Header canGoBack={true} title={t('screens.notifications')} />
+          ),
+        }}
+        component={SCREENS.Notifications}
+      />
     </HomeStack.Navigator>
   );
 };
@@ -126,6 +138,10 @@ function ProfileStackScreen() {
                     navigation.navigate('EditProfile');
                   },
                   icon: 'create-outline',
+                },
+                {
+                  icon: 'notifications',
+                  action: () => navigation.navigate('Notifications'),
                 },
               ]}
             />
@@ -241,9 +257,6 @@ const HomeTabsNavigator = () => {
           height: TAB_BAR_HEIGHT,
         },
       }}
-      //   screenOptions={{
-      //     tabBarVisible: authenticated && !verifyingSession,
-      //   }}
       initialRouteName="Home">
       <HomeTab.Screen
         name="Home"

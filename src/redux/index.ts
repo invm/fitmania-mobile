@@ -7,17 +7,19 @@ import * as Reducers from './reducers';
 const root = combineReducers({
   friends: Reducers.friends,
   groups: Reducers.groups,
-  user: Reducers.user,
+  notifications: Reducers.notifications,
   search: Reducers.search,
   posts: Reducers.posts,
+  user: Reducers.user,
 });
 
 export const RootState = {
   friends: Reducers.friendsInitialState,
   groups: Reducers.groupsInitialState,
-  user: Reducers.userInitialState,
+  notifications: Reducers.notificationsInitialState,
   search: Reducers.searchInitialState,
   posts: Reducers.postsInitialState,
+  user: Reducers.userInitialState,
 };
 
 const middleware = [thunk];
