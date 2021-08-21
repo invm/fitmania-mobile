@@ -66,7 +66,7 @@ export default async function requestWrapper({
   } catch (err) {
     if (err?.response?.status === 401) {
       // @ts-ignore
-      store.getState()?.user?.authenticated && store.dispatch(logout());
+      store.getState()?.user?.user?._id && store.dispatch(logout());
     }
     if (err.message === 'Network Error') {
       return {

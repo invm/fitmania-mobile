@@ -17,7 +17,7 @@
       "notifications": "Notifications"
     },
     "common": {
-			"pull_down_to_refresh":"Pull down to refresh",
+      "pull_down_to_refresh": "Pull down to refresh",
       "view": "View",
       "dismiss": "Dismiss",
       "error": "Error",
@@ -44,6 +44,7 @@
         "camera": "Camera"
       },
       "post": {
+        "past_event": "Past event",
         "open_event": "Everybody can join",
         "private_event": "You may ask to join",
         "joined": "joined",

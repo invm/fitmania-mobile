@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   FlatList,
+  RefreshControl,
   StyleSheet,
   View,
 } from 'react-native';
@@ -34,6 +35,7 @@ const Profile = ({}: ProfileProps) => {
   const [postsLoading, setPostsLoading] = useState(false);
   const [offset, setOffset] = useState(0);
   const [exhausted, setExhausted] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchAndSetPosts = async (userId: string, offset: number) => {
     setPostsLoading(true);
@@ -72,6 +74,20 @@ const Profile = ({}: ProfileProps) => {
         keyExtractor={({ _id }) => _id}
         onEndReached={expandList}
         onEndReachedThreshold={0.5}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={async () => {
+              setRefreshing(true);
+              setPosts([]);
+              setOffset(0);
+              setExhausted(false);
+              fetchAndSetPosts(user._id, 0);
+              setRefreshing(false);
+            }}
+            colors={[colors.primary]}
+          />
+        }
         ListFooterComponent={
           <View style={{ height: 100, paddingTop: PADDING }}>
             {postsLoading && (

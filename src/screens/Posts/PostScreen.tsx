@@ -36,7 +36,7 @@ const PostScreen = ({
         headerShown: true,
         header: () => (
           <Header
-					canGoBack
+            canGoBack
             title={`${singlePost.author.name} ${singlePost.author.lastname}`}
           />
         ),
@@ -45,7 +45,10 @@ const PostScreen = ({
 
   return (
     <View style={styles.container}>
-      <FocusAwareStatusBar />
+      <FocusAwareStatusBar
+        barStyle="dark-content"
+        backgroundColor={colors.white}
+      />
       {singlePostLoading ? (
         <View style={styles.loader}>
           <ActivityIndicator size="large" color={colors.primary} />

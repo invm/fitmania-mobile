@@ -106,12 +106,12 @@ const OtpConfirmation = ({
    */
   const updateOTPHandler = (text: string) => {
     if (text === '') {
-      setOTP(text);
+      setOTP(text.replace(/\D/,''));
     } else {
       const inputValid = !isNaN(+text);
 
       if (inputValid) {
-        setOTP(text);
+        setOTP(text.replace(/\D/,''));
       }
     }
   };

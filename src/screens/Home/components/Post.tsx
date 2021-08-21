@@ -470,9 +470,15 @@ const Post = ({ post, userId, listView }: PostProps) => {
               style={styles.linearGradient}>
               <View style={styles.row}>
                 <Text variant="medium14" color={colors.white}>
-                  {post.event?.openEvent
-                    ? t('components.post.open_event')
-                    : t('components.post.private_event')}
+                  {moment(post.event.startDate).diff(moment.now()) > 0 ? (
+                    <>
+                      {post.event?.openEvent
+                        ? t('components.post.open_event')
+                        : t('components.post.private_event')}
+                    </>
+                  ) : (
+                    <>{t('components.post.past_event')}</>
+                  )}
                 </Text>
 
                 <View style={styles.row}>

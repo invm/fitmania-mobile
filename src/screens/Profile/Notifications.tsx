@@ -12,7 +12,7 @@ import {
   View,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { Text, Touchable } from '../../components';
+import { FocusAwareStatusBar, Text, Touchable } from '../../components';
 import { colors, PADDING } from '../../components/Theme';
 import { StackNavigationProps, AppRoutes } from '../../navigation';
 import { RootState } from '../../redux';
@@ -43,6 +43,10 @@ const Notification = ({
 
   return (
     <View style={styles.notificationContainer}>
+      <FocusAwareStatusBar
+        barStyle="dark-content"
+        backgroundColor={colors.white}
+      />
       <View style={styles.rightSideContainer}>
         <TouchableOpacity
           onPress={() => {

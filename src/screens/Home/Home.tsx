@@ -50,7 +50,7 @@ const Home = ({ navigation }: StackNavigationProps<HomeRoutes, 'Home'>) => {
   }, [dispatch, sportsFilter]);
 
   const expandList = () => {
-    !postsExhausted && !postsLoading && dispatch(getPosts());
+    !postsExhausted && !postsLoading && dispatch(getPosts(sportsFilter));
   };
 
   const toggleFilters = () => {

@@ -25,12 +25,12 @@ export const verifySession = () => async (dispatch: Function) => {
     await Request(dispatch, requestParams);
     dispatch({ type: types.AUTHENTICATE, payload: true });
     dispatch(getProfile());
+    const fcmToken = await messaging().getToken();
+    await AsyncStorage.setItem('fcmToken', fcmToken);
+    await updateFcmToken(fcmToken);
   } catch (error) {
     dispatch({ type: types.AUTHENTICATE, payload: false });
   }
-  const fcmToken = await messaging().getToken();
-  await AsyncStorage.setItem('fcmToken', fcmToken);
-  await updateFcmToken(fcmToken);
 };
 
 export const register =
