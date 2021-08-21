@@ -1,7 +1,14 @@
+import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, View, StyleSheet, Alert } from 'react-native';
+import {
+  ActivityIndicator,
+  View,
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+} from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch } from 'react-redux';
@@ -39,6 +46,7 @@ const PostCommentSection = ({
   const { t } = useTranslation();
   const [commentText, setCommentText] = useState('');
   const [creatingComment, setCreatingComment] = useState(false);
+  const navigation = useNavigation();
 
   const handleCommentText = (e: string) => {
     setCommentText(e);
@@ -124,7 +132,15 @@ const PostCommentSection = ({
           {expanded &&
             post?.comments?.length > 0 &&
             post?.comments.map(comment => (
-              <View key={comment._id}>
+              <TouchableOpacity
+                onPress={() => {
+                  comment.user._id !== user
+                    ? navigation.navigate('UserProfile', {
+                        userId: comment.user._id,
+                      })
+                    : navigation.navigate('Profile');
+                }}
+                key={comment._id}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -219,7 +235,7 @@ const PostCommentSection = ({
                     }}
                   />
                 </View>
-              </View>
+              </TouchableOpacity>
             ))}
         </View>
       </Collapsible>
