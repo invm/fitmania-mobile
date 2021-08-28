@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   StyleSheet,
   Animated,
@@ -6,6 +6,7 @@ import {
   ViewStyle,
   TextInputSubmitEditingEventData,
   NativeSyntheticEvent,
+	Keyboard,
 } from 'react-native';
 import {
   CodeField,
@@ -99,6 +100,12 @@ const CodeInput = ({
       </View>
     );
   };
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidHide', () => {
+      ref.current?.blur();
+    });
+  }, []);
 
   return (
     <CodeField

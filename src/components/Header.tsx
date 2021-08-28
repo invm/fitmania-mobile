@@ -51,18 +51,11 @@ const Header = ({
 
   const handleSearchQuery = (text: string) => {
     clearTimeout(searchTimeout);
-    if (text.length) {
-      setQuery(text.replace(/\W/, ''));
-      searchTimeout = setTimeout(() => {
-        dispatch(search(text));
-      }, 500);
-    } else handleClearQuery();
-  };
-
-  const handleClearQuery = () => {
-    clearTimeout(searchTimeout);
-    setQuery('');
-    dispatch(clearSearch());
+    setQuery(text.replace(/\W/, ''));
+    searchTimeout = setTimeout(() => {
+      dispatch(clearSearch());
+      text && dispatch(search(text));
+    }, 500);
   };
 
   let backgroundColor;
@@ -161,7 +154,11 @@ const Header = ({
                 value={query}
                 style={styles.queryInput}
               />
-              <TouchableOpacity onPress={handleClearQuery}>
+              <TouchableOpacity
+                onPress={() => {
+                  dispatch(clearSearch());
+                  setQuery('');
+                }}>
                 <Icon
                   name={'close-circle'}
                   size={25}

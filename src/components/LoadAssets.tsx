@@ -70,9 +70,9 @@ const LoadAssets = ({
         setInitialState(state);
       } finally {
         setIsNavigationReady(true);
-        SplashScreen.hide();
       }
     };
+    SplashScreen.hide();
 
     if (!isNavigationReady) {
       restoreState();

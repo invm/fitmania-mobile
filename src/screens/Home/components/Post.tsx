@@ -189,7 +189,11 @@ const Post = ({ post, userId, listView }: PostProps) => {
                   onPress={() => {
                     setModalVisible(false);
                   }}>
-                  <Icon size={24} name="close-circle-outline" />
+                  <Icon
+                    color={colors.black}
+                    size={24}
+                    name="close-circle-outline"
+                  />
                 </Touchable>
               </View>
               <View>
