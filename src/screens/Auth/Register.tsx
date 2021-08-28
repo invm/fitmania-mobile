@@ -113,7 +113,12 @@ const Register = ({
                       touched={touched.email}
                       valid={!errors.email}
                       error={errors.email}
-                      style={{ textAlign: 'left', fontSize: 18, flex: 0 }}
+                      style={{
+                        textAlign: 'left',
+                        fontSize: 18,
+                        marginBottom: 8,
+                        flex: 0,
+                      }}
                     />
                     {values.email?.length >= 5 && errors.email && (
                       <View
@@ -140,7 +145,12 @@ const Register = ({
                       touched={touched.name}
                       valid={!errors.name}
                       error={errors.name}
-                      style={{ textAlign: 'left', fontSize: 18, flex: 0 }}
+                      style={{
+                        textAlign: 'left',
+                        fontSize: 18,
+                        marginBottom: 8,
+                        flex: 0,
+                      }}
                     />
                     {touched.name && errors.name && (
                       <View
@@ -167,7 +177,12 @@ const Register = ({
                       touched={touched.lastname}
                       valid={!errors.lastname}
                       error={errors.lastname}
-                      style={{ textAlign: 'left', fontSize: 18, flex: 0 }}
+                      style={{
+                        textAlign: 'left',
+                        fontSize: 18,
+                        marginBottom: 8,
+                        flex: 0,
+                      }}
                     />
                     {touched.lastname && errors.lastname && (
                       <View

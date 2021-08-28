@@ -6,10 +6,11 @@ import {
   FlatList,
   RefreshControl,
   StyleSheet,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { MEDIA_URL } from '../../../env';
 import {
   BlurredImage,
@@ -21,7 +22,7 @@ import {
 } from '../../components';
 import IPost from '../../interfaces/Post';
 import { RootState } from '../../redux';
-import { getUsersPosts, POSTS_LIMIT } from '../../redux/actions';
+import { getUsersPosts, logout, POSTS_LIMIT } from '../../redux/actions';
 import { DATE_FORMAT } from '../../utils/utils';
 import Post from '../Home/components/Post';
 import { sports } from '../Home/components/SportFilters';
@@ -36,7 +37,7 @@ const Profile = ({}: ProfileProps) => {
   const [offset, setOffset] = useState(0);
   const [exhausted, setExhausted] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-
+  const dispatch = useDispatch();
   const fetchAndSetPosts = async (userId: string, offset: number) => {
     setPostsLoading(true);
     let { response } = await getUsersPosts(userId, offset);
@@ -139,6 +140,19 @@ const Profile = ({}: ProfileProps) => {
                   </Text>
                 </View>
               )}
+              <View>
+                <TouchableOpacity
+                  onPress={() => {
+                    dispatch(logout());
+                  }}>
+                  <Text
+                    variant="semibold20"
+                    color={colors.error}
+                    align="center">
+                    Logout
+                  </Text>
+                </TouchableOpacity>
+              </View>
               <View>
                 {Object.entries(sports).filter(
                   item => !user.preferable?.includes(item[0]),
