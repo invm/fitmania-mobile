@@ -33,9 +33,10 @@ const FriendsSuggestions = () => {
       />
       <FlatList
         data={friendsSuggestions}
-        contentContainerStyle={{ flex: 1 }}
         keyExtractor={({ _id }) => _id}
         ItemSeparatorComponent={ItemSeparatorComponent}
+				showsVerticalScrollIndicator={false}
+				ListFooterComponent={<View style={{ height: 200 }}/>}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}

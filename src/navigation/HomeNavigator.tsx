@@ -62,7 +62,6 @@ const HomeNavigator = () => {
         name="CreateGroup"
         options={{
           headerShown: true,
-          // TODO:
           header: () => <Header canGoBack={true} title="Create group" />,
         }}
         component={SCREENS.CreateGroup}
@@ -213,7 +212,6 @@ function FriendsStackScreen() {
 }
 
 const FriendsTabsNavigator = () => {
-  // TODO: move texts into i18n
   return (
     <FriendsTabs.Navigator>
       <FriendsTabs.Screen name="Friends" component={SCREENS.Friends} />

@@ -38,7 +38,6 @@ const GroupListItem = ({ group }: GroupListItemProps) => {
             title="Learn more"
             style={{ flex: 1, flexGrow: 0 }}
             onPress={() => {
-              // TODO: navigate to group
               navigation.navigate('GroupDetails', { groupId: group._id });
             }}
           />

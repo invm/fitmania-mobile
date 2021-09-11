@@ -121,6 +121,7 @@ const Home = ({ navigation }: StackNavigationProps<HomeRoutes, 'Home'>) => {
           renderItem={({ item: post }) => (
             <Post {...{ post, userId: user._id }} listView={true} />
           )}
+					showsVerticalScrollIndicator={false}
           onEndReached={expandList}
           onEndReachedThreshold={0.5}
           ListFooterComponent={

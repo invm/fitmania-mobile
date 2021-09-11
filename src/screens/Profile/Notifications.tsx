@@ -166,6 +166,7 @@ const Notifications = ({
         renderItem={({ item: notification }) => (
           <Notification {...{ notification, navigation }} />
         )}
+				ListFooterComponent={<View style={{ height: 200 }}/>}
         data={notifications}
         onEndReachedThreshold={0.1}
         onEndReached={() => expandList()}

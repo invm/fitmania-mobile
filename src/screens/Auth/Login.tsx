@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, I18nManager, ActivityIndicator, Keyboard } from 'react-native';
+import { View, I18nManager, ActivityIndicator } from 'react-native';
 import { AuthRoutes, StackNavigationProps } from '../../navigation';
 import { Formik } from 'formik';
 import * as Yup from 'yup';

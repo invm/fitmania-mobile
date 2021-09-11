@@ -42,12 +42,10 @@ const CreateGroup = ({
       dispatch(getGroups([]));
       navigation.navigate('Groups');
     } else {
-      // TODO: move texts into i18n
       showMessage('error', 'Please select a sport and give the group a title');
     }
   };
 
-  // TODO: move text into i18n
 
   return (
     <View style={{ flex: 1, padding: PADDING }}>

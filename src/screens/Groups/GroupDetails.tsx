@@ -81,7 +81,6 @@ const GroupDetails = ({
   }, [params?.groupId]);
 
   const handleDeleteGroup = async () => {
-    // TODO: add texts
     Alert.alert('title', 'subtitle', [
       {
         style: 'destructive',
@@ -97,10 +96,6 @@ const GroupDetails = ({
         text: 'no',
       },
     ]);
-    try {
-    } catch (error) {
-      showMessage(t('common.error'), 'error', error?.message);
-    }
   };
 
   useEffect(() => {
@@ -207,7 +202,6 @@ const GroupDetails = ({
                   </View>
                 ))}
               </View>
-              {/* TODO: move to i18n */}
               <Text variant="semibold16" color={colors.darkGrey}>
                 Group posts
               </Text>
@@ -219,6 +213,13 @@ const GroupDetails = ({
                     groupPosts.map(post => (
                       <Post key={post._id} {...{ post, userId: user._id }} />
                     ))}
+                </View>
+                <View style={{ alignItems: 'center' }}>
+                  <SmallButton
+                    title="Load more posts"
+                    style={{ flexGrow: 0 }}
+                    onPress={expandList}
+                  />
                 </View>
               </View>
             </View>
