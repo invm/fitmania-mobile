@@ -2,6 +2,8 @@
 
 **Find a training partner, open running groups, plan football games and train together with friends!**
 
+[Download android apk](https://drive.google.com/file/d/1xa9Pq22f2tDP3aZakOnBPBIK-jIalk8u/view?usp=sharing)
+
 ## Overview
 
 This repo is the mobile frontend for my FitMania full-stack project. FitMania is a social platform to interact with people with common sport preferences and hobbies. It consists from 3 different repositories, a Nodejs backend, a React web app and a React Native app.
