@@ -9,8 +9,8 @@ type Env = {
 const config: Env = {
   ENV: 'production',
   API_URL: {
-    development: 'https://f50e-2a10-800c-e7b7-0-dfce-13d1-8688-2ea2.eu.ngrok.io',
-    production: 'https://api.fitmania.tk',
+    development: '',
+    production: '',
   },
   VERSION: require('./package.json').version,
 };
