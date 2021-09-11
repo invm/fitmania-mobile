@@ -17,9 +17,11 @@ import { addFriend, removeFriend } from '../../../redux/actions/friends';
 const Friend = ({
   user,
   suggestion = false,
+  search = false,
 }: {
   user: IUser;
   suggestion?: boolean;
+  search?: boolean;
 }) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -53,7 +55,7 @@ const Friend = ({
     );
   };
 
-	// TODO: adjust ui for search view
+  // TODO: adjust ui for search view
 
   return (
     <View style={styles.post}>
@@ -81,7 +83,7 @@ const Friend = ({
             style={styles.postHeaderRight}>
             <Icon name="person-add-outline" color={colors.black} size={25} />
           </TouchableOpacity>
-        ) : (
+        ) : search ? null : (
           <TouchableOpacity
             onPress={handleRemoveFriend}
             style={styles.postHeaderRight}>

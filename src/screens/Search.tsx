@@ -31,7 +31,7 @@ const Search = ({}: StackNavigationProps<HomeRoutes, 'Search'>) => {
           </View>
         )}
         {!usersLoading &&
-          users.map(user => <Friend key={user._id} {...{ user }} />)}
+          users.map(user => <Friend key={user._id} search {...{ user }} />)}
       </View>
       <View style={{ padding: PADDING }}>
         {!groupsLoading &&

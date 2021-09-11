@@ -80,7 +80,7 @@ const Notification = ({
                 color={colors.grey}
                 variant="regular14"
                 style={{ paddingStart: PADDING }}>
-                {moment().from(notification.created_at)}
+                {moment().from(moment(notification.created_at), true)}
               </Text>
             </View>
             <Text
