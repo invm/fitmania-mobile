@@ -2,7 +2,7 @@
 
 **Find a training partner, open running groups, plan football games and train together with friends!**
 
-[Download android apk](https://drive.google.com/file/d/1xa9Pq22f2tDP3aZakOnBPBIK-jIalk8u/view?usp=sharing)
+[Download android apk](https://drive.google.com/file/d/10szFucuXkKDJYvqRdGPRXcurNdqlZqIl/view?usp=sharing)
 
 ## Overview
 
